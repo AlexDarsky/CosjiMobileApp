@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>61663A19-02C1-4A65-98CD-2B4DEA4B5249</string>
+	<key>IDESourceControlProjectName</key>
+	<string>CosjiApp</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>0E362E80-C2FD-4E82-983C-4C3A59CBAD2A</key>
+		<string>https://github.com/Darsky/CosjiApp.git</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>CosjiApp.xcodeproj/project.xcworkspace</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>0E362E80-C2FD-4E82-983C-4C3A59CBAD2A</key>
+		<string>../..</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>https://github.com/Darsky/CosjiApp.git</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>110</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>0E362E80-C2FD-4E82-983C-4C3A59CBAD2A</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>0E362E80-C2FD-4E82-983C-4C3A59CBAD2A</string>
+			<key>IDESourceControlWCCName</key>
+			<string>CosjiApp</string>
+		</dict>
+	</array>
+</dict>
+</plist>
