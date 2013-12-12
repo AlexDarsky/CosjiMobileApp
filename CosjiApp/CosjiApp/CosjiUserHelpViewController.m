@@ -40,17 +40,17 @@ static CosjiUserHelpViewController *shareCosjiUserHelpViewController = nil;
     self.view.backgroundColor=[UIColor colorWithPatternImage:[UIImage imageNamed:@"我的可及-系统设置-背景"]];
     self.customNavBar=[[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 45)];
     self.customNavBar.backgroundColor=[UIColor colorWithPatternImage:[UIImage imageNamed:@"工具栏背景"]];
-    UIButton *backBtn=[UIButton buttonWithType:UIButtonTypeCustom];
-    backBtn.frame=CGRectMake(11, 12, 13, 21);
-    [backBtn setBackgroundImage:[UIImage imageNamed:@"返回"] forState:UIControlStateNormal];
-    [backBtn addTarget:self  action:@selector(dismisThisViewController:) forControlEvents:UIControlEventTouchUpInside];
-    [self.customNavBar addSubview:backBtn];
     self.titleLabel=[[UILabel alloc] initWithFrame:CGRectMake(90, 0, 140, 40)];
     self.titleLabel.backgroundColor=[UIColor clearColor];
     self.titleLabel.textColor=[UIColor whiteColor];
     self.titleLabel.textAlignment=NSTextAlignmentCenter;
     [self.customNavBar addSubview:self.titleLabel];
-    [self.view addSubview:self.customNavBar];
+    UIButton *backBtn=[UIButton buttonWithType:UIButtonTypeCustom];
+    backBtn.frame=CGRectMake(11, 12, 60/2, 41/2);
+    [backBtn setBackgroundImage:[UIImage imageNamed:@"返回"] forState:UIControlStateNormal];
+    [backBtn addTarget:self  action:@selector(dismisThisViewController:) forControlEvents:UIControlEventTouchUpInside];
+    [self.customNavBar addSubview:backBtn];
+        [self.view addSubview:self.customNavBar];
     self.tableView=[[UITableView alloc] initWithFrame:CGRectMake(0, 45, 320, [UIScreen mainScreen].bounds.size.height-45) style:UITableViewStyleGrouped];
     self.tableView.dataSource=self;
     self.tableView.delegate=self;
@@ -107,6 +107,7 @@ static CosjiUserHelpViewController *shareCosjiUserHelpViewController = nil;
                 itemsArray=[NSMutableArray arrayWithArray:[tmpDic objectForKey:@"body"]];
                 NSLog(@"get items %d",[itemsArray count]);
                 dispatch_async(dispatch_get_main_queue(), ^{
+                    [SVProgressHUD dismiss];
                     [self.tableView reloadData];
                 });
                 
@@ -119,7 +120,6 @@ static CosjiUserHelpViewController *shareCosjiUserHelpViewController = nil;
         });
 
     }
-    [SVProgressHUD dismiss];
 }
 - (NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {

@@ -13,8 +13,8 @@
 {
     NSMutableArray *subjectsArray;
 }
-@property (weak, nonatomic) IBOutlet UITableView *tableView;
-@property (weak, nonatomic) IBOutlet UIView *customNavBar;
+@property (strong, nonatomic)  UITableView *tableView;
+@property (strong, nonatomic)  UIView *customNavBar;
 @property (strong,nonatomic) UITextField *searchField;
 @property (strong,nonatomic) UIButton *taoBtn;
 @property (strong,nonatomic) UIButton *tmallBtn;

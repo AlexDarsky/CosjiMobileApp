@@ -26,6 +26,7 @@
 }
 -(void)loadView
 {
+    [super loadView];
     UIView *primaryView=[[UIView alloc] initWithFrame:[UIScreen mainScreen].bounds];
     primaryView.backgroundColor=[UIColor whiteColor];
     self.view=primaryView;
@@ -34,7 +35,7 @@
     UIButton *dismissBtn=[UIButton buttonWithType:UIButtonTypeCustom];
     [dismissBtn addTarget:self action:@selector(dismisThisViewController:) forControlEvents:UIControlEventTouchUpInside];
     [dismissBtn setBackgroundImage:[UIImage imageNamed:@"返回"] forState:UIControlStateNormal];
-    dismissBtn.frame=CGRectMake(11, 12, 13, 21);
+    dismissBtn.frame=CGRectMake(11, 12, 60/2, 41/2);
     [self.customNavBar addSubview:dismissBtn];
     self.myTableView=[[UITableView alloc] initWithFrame:CGRectMake(0, 88, 320, [UIScreen mainScreen].bounds.size.height-108)];
     self.myTableView.delegate=self;

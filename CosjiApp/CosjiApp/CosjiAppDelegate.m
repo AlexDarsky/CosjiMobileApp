@@ -11,8 +11,7 @@
 #import "CosjiViewController.h"
 #import "CosjiSpecialActivityViewController.h"
 #import "CosjiTBViewController.h"
-#import "CosjiUserViewController.h";
-#import "CosjiViewStoreFanliController.h"
+#import "CosjiUserViewController.h"
 #define kAppKey             @"21428060"
 #define kAppSecret          @"dda4af6d892e2024c26cd621b05dd2d0"
 #define kAppRedirectURI     @"http://cosjii.com"
@@ -25,9 +24,9 @@
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     // Override point for customization after application launch.
     UITabBarController *rootTabBarController=[[UITabBarController alloc] init];
-    CosjiSpecialActivityViewController *specialActivityViewController=[[CosjiSpecialActivityViewController alloc] initWithNibName:@"CosjiSpecialActivityViewController" bundle:nil];
-    CosjiTBViewController *taoBaoFanliViewController=[[CosjiTBViewController alloc] initWithNibName:@"CosjiTBViewController" bundle:nil];
-    CosjiUserViewController *userViewController=[[CosjiUserViewController alloc] initWithNibName:@"CosjiUserViewController" bundle:nil];    
+    CosjiSpecialActivityViewController *specialActivityViewController=[[CosjiSpecialActivityViewController alloc] init];
+    CosjiTBViewController *taoBaoFanliViewController=[[CosjiTBViewController alloc] init];
+    CosjiUserViewController *userViewController=[[CosjiUserViewController alloc] init];    
     self.viewController=[[CosjiViewController alloc] init];
     UINavigationController *mainNavCon=[[UINavigationController alloc] initWithRootViewController:self.viewController];
     mainNavCon.navigationBarHidden=YES;
@@ -40,8 +39,8 @@
     [mainNavCon.tabBarItem setTitle:@"首页"];
     [tbFanliNavCon.tabBarItem setFinishedSelectedImage:[UIImage imageNamed:@"淘宝-动态"]  withFinishedUnselectedImage:[UIImage imageNamed:@"淘宝-默认"]];
     [tbFanliNavCon.tabBarItem setTitle:@"淘宝返利"];
-    [specialActivityViewController.tabBarItem setFinishedSelectedImage:[UIImage imageNamed:@"九元购-动态"] withFinishedUnselectedImage:[UIImage imageNamed:@"九元购-默认"]];
-    [specialActivityViewController.tabBarItem setTitle:@"独享九元包邮"];
+    [specialActivityViewController.tabBarItem setFinishedSelectedImage:[UIImage imageNamed:@"折 动态"] withFinishedUnselectedImage:[UIImage imageNamed:@"折 默认"]];
+    [specialActivityViewController.tabBarItem setTitle:@"折扣优惠"];
     [userViewController.tabBarItem setFinishedSelectedImage:[UIImage imageNamed:@"我的可及-动态"] withFinishedUnselectedImage:[UIImage imageNamed:@"我的可及-默认"]];
     [userViewController.tabBarItem setTitle:@"我的可及"];
     [rootTabBarController.tabBar setBackgroundImage:[UIImage imageNamed:@"导航条"]];

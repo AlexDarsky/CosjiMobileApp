@@ -8,6 +8,7 @@
 
 #import "CosjiSettingViewController.h"
 #import "CosjiUserHelpViewController.h"
+#import "CosjiGuideViewController.h"
 
 @interface CosjiSettingViewController ()
 
@@ -32,7 +33,7 @@
     self.myTableView=[[UITableView alloc] initWithFrame:CGRectMake(40, 0, 280,[UIScreen mainScreen].bounds.size.height-49)];
    // self.myTableView.backgroundColor=[UIColor colorWithPatternImage:[UIImage imageNamed:@"我的可及-系统设置-背景"]];
     self.myTableView.backgroundColor=[UIColor clearColor];
-    [self.myTableView setSeparatorStyle:UITableViewCellSeparatorStyleSingleLine];
+    [self.myTableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
     [self.myTableView setSeparatorColor:[UIColor grayColor]];
     self.myTableView.backgroundView=nil;
     self.myTableView.dataSource=self;
@@ -100,7 +101,7 @@
 {
     // static NSString *cellIdentifier = @"MyCell";
     UITableViewCell *cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:nil];
-    [cell setSelectionStyle:UITableViewCellSelectionStyleGray];
+    [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
     switch (indexPath.section) {
         case 0:
         {
@@ -119,7 +120,6 @@
                 [cell addSubview:iconImage];
                 [cell addSubview:cellLabel];
                 [cell addSubview:number];
-   
             }else
             {
                 UIImageView *iconImage=[[UIImageView alloc] initWithFrame:CGRectMake(10, 5, 34, 30)];
@@ -170,16 +170,26 @@
 
     return cell;
 }
+
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     switch (indexPath.section) {
         case 0:
         {
+            UITableViewCell *cell=[self.myTableView cellForRowAtIndexPath:indexPath];
+            if (grayImageView==nil)
+            {
+                grayImageView=[[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 320, 40)];
+                grayImageView.image=[UIImage imageNamed:@"gerenzhonxin shez"];
+            }
+            [cell addSubview:grayImageView];
             switch (indexPath.row) {
                 case 0:
                 {
-                    UIAlertView *alert=[[UIAlertView alloc] initWithTitle:@"模块" message:@"新手指南" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles: nil];
-                    [alert show];
+                    NSLog(@"返利教程");
+                    CosjiGuideViewController *guideViewController=[CosjiGuideViewController shareCosjiGuideViewController];
+                    [self presentViewController:guideViewController animated:YES completion:nil];
+                    
                 }
                     break;
                 case 1:
@@ -213,9 +223,52 @@
             break;
             
         default:
+        {
+            UITableViewCell *cell=[self.myTableView cellForRowAtIndexPath:indexPath];
+            if (grayImageView==nil)
+            {
+                grayImageView=[[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 320, 40)];
+                grayImageView.image=[UIImage imageNamed:@"gerenzhonxin shez"];
+            }
+            [cell addSubview:grayImageView];
+            switch (indexPath.row) {
+                case 0:
+                {
+                    NSLog(@"意见反馈");
+                    
+                }
+                    break;
+                case 1:
+                {
+                    NSLog(@"清除缓存");
+                    [CosjiFileManager quickCleanCacheFile];
+                    
+                }
+                    break;
+                case 2:
+                {
+                    NSLog(@"检测更新");
+
+                }
+                    break;
+                case 3:
+                {
+                    NSLog(@"流量节省模式");
+                }
+                    break;
+            }
+
+        }
+            
             break;
     }
 
+}
+-(void)viewDidDisappear:(BOOL)animated
+{
+    if (grayImageView!=nil) {
+        [grayImageView removeFromSuperview];
+    }
 }
 - (void)didReceiveMemoryWarning
 {

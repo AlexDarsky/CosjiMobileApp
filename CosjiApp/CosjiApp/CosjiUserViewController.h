@@ -11,25 +11,29 @@
 #import "CosjiSettingViewController.h"
 #import "CosjiFanLiListViewController.h"
 #import "CosjiAccountViewController.h"
+#import "CosjiGetCashViewController.h"
 
 @interface CosjiUserViewController : UIViewController<UITableViewDelegate,UITableViewDataSource>
 {
     
 }
-@property (weak, nonatomic) IBOutlet UIView *SliderBackView;
-@property (weak, nonatomic) IBOutlet UIView *MainBoard;
-@property (weak, nonatomic) IBOutlet UIView *customNavBar;
-@property (weak, nonatomic) IBOutlet UIView *userInfoView;
-@property (weak, nonatomic) IBOutlet UIView *loginView;
-@property (weak, nonatomic) IBOutlet UITableView *tableView;
-@property (weak, nonatomic) IBOutlet UILabel *userName;
-@property (weak, nonatomic) IBOutlet UIImageView *vipImage;
-@property (weak, nonatomic) IBOutlet UILabel *balanceLabel;
-@property (weak, nonatomic) IBOutlet UILabel *scoreLabel;
-@property (weak, nonatomic) IBOutlet UILabel *jifenbaoLabel;
+@property (strong, nonatomic)  UIView *MainBoard;
+@property (strong, nonatomic)  UIView *customNavBar;
+@property (strong, nonatomic)  UIView *userInfoView;
+@property (strong, nonatomic)  UITableView *tableView;
+@property (strong, nonatomic)  UILabel *userName;
+@property (strong, nonatomic) UIButton *tixianBtn;
+@property (strong, nonatomic) UIButton *tijifenbaoBtn;
+@property (strong, nonatomic) UIButton *qiandaoBtn;
+@property (strong,nonatomic) UIView *tixianLineView;
+@property (strong, nonatomic)  UIImageView *vipImage;
+@property (strong, nonatomic)  UILabel *balanceLabel;
+@property (strong, nonatomic)  UILabel *scoreLabel;
+@property (strong, nonatomic)  UILabel *jifenbaoLabel;
 @property (strong,nonatomic) UIImageView *userHeadImage;
 @property (strong,nonatomic) CosjiSettingViewController *settingViewController;
 @property (strong,nonatomic) CosjiFanLiListViewController *fanliListViewController;
 @property (strong,nonatomic) CosjiAccountViewController *accountViewController;
+@property (strong,nonatomic) CosjiGetCashViewController *getCashViewController;
 
 @end

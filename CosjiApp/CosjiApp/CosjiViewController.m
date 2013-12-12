@@ -13,6 +13,7 @@
 #import "CosjiServerHelper.h"
 #import "CosjiLoginViewController.h"
 #import "SVProgressHUD.h"
+#import "CosjiGuideViewController.h"
 
 
 #define kAppKey             @"21428060"
@@ -20,7 +21,10 @@
 #define kAppRedirectURI     @"http://cosjii.com"
 
 @interface CosjiViewController ()
-
+{
+    UILabel *qq;
+    UIButton *qiandaoBtn;
+}
 @end
 
 @implementation CosjiViewController
@@ -32,14 +36,15 @@ static UINavigationController* nc;
     UIView *primaryView=[[UIView alloc] initWithFrame:[UIScreen mainScreen].bounds];
     primaryView.backgroundColor=[UIColor colorWithRed:229.0/255.0 green:229.0/255.0 blue:229.0/255.0 alpha:100];
     self.view=primaryView;
-    self.CustomHeadView=[[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 48)];
-    [self.CustomHeadView layer].shadowPath =[UIBezierPath bezierPathWithRect:self.CustomHeadView.bounds].CGPath;
-    self.CustomHeadView.layer.shadowColor=[[UIColor blackColor] CGColor];
-    self.CustomHeadView.layer.shadowOffset=CGSizeMake(0,0);
-    self.CustomHeadView.layer.shadowRadius=10.0;
-    self.CustomHeadView.layer.shadowOpacity=1.0;
+    self.CustomHeadView=[[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 45)];
     self.CustomHeadView.backgroundColor=[UIColor colorWithPatternImage:[UIImage imageNamed:@"工具栏背景"]];
     [self.view addSubview:self.CustomHeadView];
+    UIImageView *llogoImage=[[UIImageView alloc] initWithFrame:CGRectMake(14, 8, 156/2, 65/2)];
+    llogoImage.image=[UIImage imageNamed:@"工具栏背景-标语"];
+    [self.CustomHeadView addSubview:llogoImage];
+    UIImageView *blogoImage=[[UIImageView alloc] initWithFrame:CGRectMake(129,13, 126/2, 42/2)];
+    blogoImage.image=[UIImage imageNamed:@"工具栏背景-logo"];
+    [self.CustomHeadView addSubview:blogoImage];
     self.mainTableView=[[UITableView alloc] initWithFrame:CGRectMake(0, 48, 320, [UIScreen mainScreen].bounds.size.height-48-49)];
     self.mainTableView.delegate=self;
     self.mainTableView.dataSource=self;
@@ -265,18 +270,19 @@ void TopImageFromURL( NSURL * URL, void (^imageBlock)(UIImage * image), void (^e
             break;
         case 2:
         {
-            height=78.0;
+            height=82.0;
         }
             break;
     }
     return height;
 }
+
 -(UIView*)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
     if (section==2) {
-        UIView *headerView=[[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 33)];
+        UIView *headerView=[[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 35)];
         headerView.backgroundColor=[UIColor clearColor];
-        UILabel *label=[[UILabel alloc] initWithFrame:CGRectMake(10, 0, 96, 33)];
+        UILabel *label=[[UILabel alloc] initWithFrame:CGRectMake(10, 0, 96, 35)];
         label.text=@"热门商城推荐";
         label.font=[UIFont fontWithName:@"Arial" size:14];
         label.backgroundColor=[UIColor clearColor];
@@ -290,10 +296,11 @@ void TopImageFromURL( NSURL * URL, void (^imageBlock)(UIImage * image), void (^e
     }else
         return nil;
 }
+
 -(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
     if (section==2) {
-        return 33;
+        return 35;
     }else
         return 0;
 }
@@ -317,25 +324,44 @@ void TopImageFromURL( NSURL * URL, void (^imageBlock)(UIImage * image), void (^e
         {
             [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
             
-            UIButton *qiandaoBtn=[UIButton buttonWithType:UIButtonTypeCustom];
-            qiandaoBtn.frame=CGRectMake(10, 0, 216/2, 56/2);
-            [qiandaoBtn addTarget:self action:@selector(qiandaoServer:) forControlEvents:UIControlEventTouchUpInside];
-            [qiandaoBtn setImage:[UIImage imageNamed:@"qiandaoBtn"] forState:UIControlStateNormal];
+            if (qiandaoBtn==nil) {
+                qiandaoBtn=[UIButton buttonWithType:UIButtonTypeCustom];
+                qiandaoBtn.frame=CGRectMake(10, 0, 218/2, 25);
+                [qiandaoBtn addTarget:self action:@selector(qiandaoServer:) forControlEvents:UIControlEventTouchUpInside];
+                [qiandaoBtn setBackgroundColor:[UIColor whiteColor]];
+                [qiandaoBtn setTitle:@"      签到赚线" forState:UIControlStateNormal];
+                qiandaoBtn.titleLabel.font=[UIFont fontWithName:@"Arial" size:12];
+                [qiandaoBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+                qq=[[UILabel alloc] initWithFrame:CGRectMake(30, -15, 30, 30)];
+                qq.backgroundColor=[UIColor clearColor];
+                qq.text=@"+15";
+                qq.textColor=[UIColor redColor];
+                qq.adjustsFontSizeToFitWidth=YES;
+                qq.alpha=0.0;
+                UIImageView *qiandaoImage=[[UIImageView alloc] initWithFrame:CGRectMake(5, 4, 18, 17)];
+                [qiandaoImage setImage:[UIImage imageNamed:@"首页-签到"]];
+                qiandaoImage.userInteractionEnabled=YES;
+                [qiandaoBtn addSubview:qiandaoImage];
+                [qiandaoBtn addSubview:qq];
+            }
             [cell addSubview:qiandaoBtn];
             UIButton *helperBtn=[UIButton buttonWithType:UIButtonTypeCustom];
-            helperBtn.frame=CGRectMake(10, 32, 162/2, 89/2);
-            [helperBtn addTarget:self action:@selector(qiandaoServer:) forControlEvents:UIControlEventTouchUpInside];
-            [helperBtn setImage:[UIImage imageNamed:@"fljc"] forState:UIControlStateNormal];
+            helperBtn.frame=CGRectMake(10, 32, 218/2, 120/2);
+            [helperBtn addTarget:self action:@selector(presentStoreBrowseViewController:) forControlEvents:UIControlEventTouchUpInside];
+            [helperBtn setImage:[UIImage imageNamed:@"返利教程图片"] forState:UIControlStateNormal];
+            helperBtn.tag=0;
             [cell addSubview:helperBtn];
             UIButton *juhuasuanBtn=[UIButton buttonWithType:UIButtonTypeCustom];
-            juhuasuanBtn.frame=CGRectMake(120, 10, 132/2, 138/2);
-            [juhuasuanBtn addTarget:self action:@selector(qiandaoServer:) forControlEvents:UIControlEventTouchUpInside];
-            [juhuasuanBtn setImage:[UIImage imageNamed:@"jhs"] forState:UIControlStateNormal];
+            juhuasuanBtn.frame=CGRectMake(125, 0, 176/2, 183/2);
+            [juhuasuanBtn addTarget:self action:@selector(presentStoreBrowseViewController:) forControlEvents:UIControlEventTouchUpInside];
+            [juhuasuanBtn setImage:[UIImage imageNamed:@"首页聚划算"] forState:UIControlStateNormal];
+            juhuasuanBtn.tag=1;
             [cell addSubview:juhuasuanBtn];
             UIButton *tmallBtn=[UIButton buttonWithType:UIButtonTypeCustom];
-            tmallBtn.frame=CGRectMake(200, 10, 132/2, 138/2);
-            [tmallBtn addTarget:self action:@selector(qiandaoServer:) forControlEvents:UIControlEventTouchUpInside];
-            [tmallBtn setImage:[UIImage imageNamed:@"tmao"] forState:UIControlStateNormal];
+            tmallBtn.frame=CGRectMake(130+180/2, 0, 176/2, 183/2);
+            [tmallBtn addTarget:self action:@selector(presentStoreBrowseViewController:) forControlEvents:UIControlEventTouchUpInside];
+            [tmallBtn setImage:[UIImage imageNamed:@"首页天猫"] forState:UIControlStateNormal];
+            tmallBtn.tag=2;
             [cell addSubview:tmallBtn];
 
         }
@@ -355,11 +381,39 @@ void TopImageFromURL( NSURL * URL, void (^imageBlock)(UIImage * image), void (^e
             if ([imageUrl1 rangeOfString:@"http://www.Cosji.com/"].location==NSNotFound) {
                 imageUrl1=[NSString stringWithFormat:@"http://www.Cosji.com/%@",imageUrl1];
             }
-            TopImageFromURL([NSURL URLWithString:imageUrl1], ^( UIImage * image )
-                            {
-                                [button1 setBackgroundImage:image forState:UIControlStateNormal];
-                            }, ^(void){
-                            });
+            //缓存图片
+            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0),
+             ^{
+             NSArray *paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
+             NSString *cachePath = [paths objectAtIndex:0];
+             BOOL isDir = YES;
+             NSString *dirName=[cachePath stringByAppendingPathComponent:@"cacheImages"];
+             if (![[NSFileManager defaultManager] fileExistsAtPath:dirName isDirectory:&isDir])
+             {
+             [[NSFileManager defaultManager] createDirectoryAtPath:dirName withIntermediateDirectories:YES attributes:nil error:nil];
+             }
+             NSString *filename = [dirName stringByAppendingPathComponent:[NSString stringWithFormat:@"%@",[storeDic1 objectForKey:@"id"]]];
+             if (![[NSFileManager defaultManager] fileExistsAtPath:filename])
+             {
+                 NSLog(@"download cacheImage %@",filename);
+                 NSData * data = [[NSData alloc] initWithContentsOfURL:[NSURL URLWithString:imageUrl1]];
+                 UIImage * cacheimage = [[UIImage alloc] initWithData:data];
+                 [UIImageJPEGRepresentation(cacheimage, 1.0) writeToFile:filename atomically:YES];
+                 dispatch_async(dispatch_get_main_queue(), ^{
+                     NSData *imageData=[NSData dataWithContentsOfFile:filename];
+                     [button1 setBackgroundImage:[UIImage imageWithData:imageData] forState:UIControlStateNormal];
+                 });
+             }else
+             {
+                 dispatch_async(dispatch_get_main_queue(), ^{
+                     NSLog(@"load cacheImage %@",filename);
+                     NSData *imageData=[NSData dataWithContentsOfFile:filename];
+                     [button1 setBackgroundImage:[UIImage imageWithData:imageData] forState:UIControlStateNormal];
+                 });
+             }
+             });
+            //缓存图片
+
             [button1 addTarget:self action:@selector(opRemenshangcheng:) forControlEvents:UIControlEventTouchUpInside];
             [btnView1 addSubview:button1];
             [cell addSubview:btnView1];
@@ -368,6 +422,7 @@ void TopImageFromURL( NSURL * URL, void (^imageBlock)(UIImage * image), void (^e
             label.backgroundColor=[UIColor lightTextColor];
             label.text=[NSString stringWithFormat:@"最高返利%@",[storeDic1 objectForKey:@"profit" ]];
             [btnView1 addSubview:label];
+            
             //商城中
             NSDictionary *storeDic2=[NSDictionary dictionaryWithDictionary:[storeListArray objectAtIndex:indexPath.row*3+1]];
             UIView *btnView2=[[UIView alloc] initWithFrame:CGRectMake(112.5, 0, 95, 55)];
@@ -381,11 +436,38 @@ void TopImageFromURL( NSURL * URL, void (^imageBlock)(UIImage * image), void (^e
                 imageUrl2=[NSString stringWithFormat:@"http://www.Cosji.com/%@",imageUrl2];
             }
 
-            TopImageFromURL([NSURL URLWithString:imageUrl2], ^( UIImage * image )
-                            {
-                                [button2 setBackgroundImage:image forState:UIControlStateNormal];
-                            }, ^(void){
-                            });
+            //缓存图片
+            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0),
+                           ^{
+                               NSArray *paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
+                               NSString *cachePath = [paths objectAtIndex:0];
+                               BOOL isDir = YES;
+                               NSString *dirName=[cachePath stringByAppendingPathComponent:@"cacheImages"];
+                               if (![[NSFileManager defaultManager] fileExistsAtPath:dirName isDirectory:&isDir])
+                               {
+                                   [[NSFileManager defaultManager] createDirectoryAtPath:dirName withIntermediateDirectories:YES attributes:nil error:nil];
+                               }
+                               NSString *filename = [dirName stringByAppendingPathComponent:[NSString stringWithFormat:@"%@",[storeDic2 objectForKey:@"id"]]];
+                               if (![[NSFileManager defaultManager] fileExistsAtPath:filename])
+                               {
+                                   NSLog(@"download cacheImage %@",filename);
+                                   NSData * data = [[NSData alloc] initWithContentsOfURL:[NSURL URLWithString:imageUrl2]];
+                                   UIImage * cacheimage = [[UIImage alloc] initWithData:data];
+                                   [UIImageJPEGRepresentation(cacheimage, 1.0) writeToFile:filename atomically:YES];
+                                   dispatch_async(dispatch_get_main_queue(), ^{
+                                       NSData *imageData=[NSData dataWithContentsOfFile:filename];
+                                       [button2 setBackgroundImage:[UIImage imageWithData:imageData] forState:UIControlStateNormal];
+                                   });
+                               }else
+                               {
+                                   dispatch_async(dispatch_get_main_queue(), ^{
+                                       NSLog(@"load cacheImage %@",filename);
+                                       NSData *imageData=[NSData dataWithContentsOfFile:filename];
+                                       [button2 setBackgroundImage:[UIImage imageWithData:imageData] forState:UIControlStateNormal];
+                                   });
+                               }
+                           });
+            //缓存图片
             [button2 addTarget:self action:@selector(opRemenshangcheng:) forControlEvents:UIControlEventTouchUpInside];
             UILabel *label2=[[UILabel alloc] initWithFrame:CGRectMake(0, 55, 95, 20)];
             label2.adjustsFontSizeToFitWidth=YES;
@@ -406,11 +488,38 @@ void TopImageFromURL( NSURL * URL, void (^imageBlock)(UIImage * image), void (^e
             if ([imageUrl3 rangeOfString:@"http://www.Cosji.com/"].location==NSNotFound) {
                 imageUrl3=[NSString stringWithFormat:@"http://www.Cosji.com/%@",imageUrl3];
             }
-            TopImageFromURL([NSURL URLWithString:imageUrl3], ^( UIImage * image )
-                            {
-                                [button3 setBackgroundImage:image forState:UIControlStateNormal];
-                            }, ^(void){
-                            });
+            //缓存图片
+            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0),
+                           ^{
+                               NSArray *paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
+                               NSString *cachePath = [paths objectAtIndex:0];
+                               BOOL isDir = YES;
+                               NSString *dirName=[cachePath stringByAppendingPathComponent:@"cacheImages"];
+                               if (![[NSFileManager defaultManager] fileExistsAtPath:dirName isDirectory:&isDir])
+                               {
+                                   [[NSFileManager defaultManager] createDirectoryAtPath:dirName withIntermediateDirectories:YES attributes:nil error:nil];
+                               }
+                               NSString *filename = [dirName stringByAppendingPathComponent:[NSString stringWithFormat:@"%@",[storeDic3 objectForKey:@"id"]]];
+                               if (![[NSFileManager defaultManager] fileExistsAtPath:filename])
+                               {
+                                   NSLog(@"download cacheImage %@",filename);
+                                   NSData * data = [[NSData alloc] initWithContentsOfURL:[NSURL URLWithString:imageUrl3]];
+                                   UIImage * cacheimage = [[UIImage alloc] initWithData:data];
+                                   [UIImageJPEGRepresentation(cacheimage, 1.0) writeToFile:filename atomically:YES];
+                                   dispatch_async(dispatch_get_main_queue(), ^{
+                                       NSData *imageData=[NSData dataWithContentsOfFile:filename];
+                                       [button3 setBackgroundImage:[UIImage imageWithData:imageData] forState:UIControlStateNormal];
+                                   });
+                               }else
+                               {
+                                   dispatch_async(dispatch_get_main_queue(), ^{
+                                       NSLog(@"load cacheImage %@",filename);
+                                       NSData *imageData=[NSData dataWithContentsOfFile:filename];
+                                       [button3 setBackgroundImage:[UIImage imageWithData:imageData] forState:UIControlStateNormal];
+                                   });
+                               }
+                           });
+            //缓存图片
             UILabel *label3=[[UILabel alloc] initWithFrame:CGRectMake(0, 55, 95, 20)];
             label3.adjustsFontSizeToFitWidth=YES;
             label3.backgroundColor=[UIColor lightTextColor];
@@ -432,10 +541,24 @@ void TopImageFromURL( NSURL * URL, void (^imageBlock)(UIImage * image), void (^e
 -(void)qiandaoServer:(id)sender
 {
     NSLog(@"qiandao");
-    UIButton *butn=(UIButton*)sender;
-    [butn.titleLabel setText:@"签到 +1"];
+    qq.alpha = 0.0f;
+    [UIView beginAnimations:@"fadeIn" context:nil];
+    [UIView setAnimationDuration:2];
+    qq.alpha = 1.0f;
+    CGFloat translation = -10;
+    qq.transform = CGAffineTransformMakeTranslation(0, translation);
+    [UIView commitAnimations];
+    [UIView beginAnimations:@"fadeIn" context:nil];
+    [UIView setAnimationDuration:2.5];
+    qq.alpha = 0.0f;
+    [qiandaoBtn setTitle:@"       已签到" forState:UIControlStateNormal];
+    qiandaoBtn.userInteractionEnabled=NO;
+    [UIView commitAnimations];
+    qq.transform = CGAffineTransformMakeTranslation(0, 0);
     
+
 }
+
 -(void)opRemenshangcheng:(id)sender
 {
     selectedIndex=[sender tag];
@@ -507,10 +630,42 @@ void TopImageFromURL( NSURL * URL, void (^imageBlock)(UIImage * image), void (^e
             NSLog(@"case 1");
         }
             break;
-            
     }
-
 }
+-(void)presentStoreBrowseViewController:(id)sender
+{
+    NSLog(@"%d",[sender tag]);
+    switch ([sender tag]) {
+        case 0:
+        {
+            CosjiGuideViewController *guideViewController=[CosjiGuideViewController shareCosjiGuideViewController];
+            [self presentViewController:guideViewController animated:YES completion:nil];
+        }
+            break;
+        case 1:
+        {
+            NSURL *url =[NSURL URLWithString:@"http://ju.m.taobao.com"];
+            NSURLRequest *request =[NSURLRequest requestWithURL:url];
+            [self presentViewController:self.storeBrowseViewController animated:YES completion:nil];
+            
+            //   [self.navigationController pushViewController:self.storeBrowseViewController animated:YES];
+            [self.storeBrowseViewController.webView loadRequest:request];
+            [self.storeBrowseViewController.storeName setText:@"已进入聚划算"];
+        }
+            break;
+        case 2:
+        {
+            NSURL *url =[NSURL URLWithString:@"http://m.tmall.com"];
+            NSURLRequest *request =[NSURLRequest requestWithURL:url];
+            [self presentViewController:self.storeBrowseViewController animated:YES completion:nil];
+            //  [self.navigationController pushViewController:self.storeBrowseViewController animated:YES];
+            [self.storeBrowseViewController.webView loadRequest:request];
+            [self.storeBrowseViewController.storeName setText:@"已进入天猫"];
+        }
+            break;
+    }
+}
+
 -(void)closeAuthView{
     [nc dismissModalViewControllerAnimated:YES];
     nc = nil;

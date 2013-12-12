@@ -27,30 +27,32 @@
 }
 -(void)loadView
 {
+    [super loadView];
     UIView *primary=[[UIView alloc] initWithFrame:[UIScreen mainScreen].bounds];
     self.view=primary;
     self.customNarBar=[[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 45)];
     self.customNarBar.backgroundColor=[UIColor colorWithPatternImage:[UIImage imageNamed:@"工具栏背景"]];
-    UIButton *backBtn=[UIButton buttonWithType:UIButtonTypeCustom];
-    backBtn.frame=CGRectMake(11, 12, 13, 21);
-    [backBtn setBackgroundImage:[UIImage imageNamed:@"返回"] forState:UIControlStateNormal];
-    [backBtn addTarget:self  action:@selector(exitThisView:) forControlEvents:UIControlEventTouchUpInside];
-    [self.customNarBar addSubview:backBtn];
     self.fanliTitle=[[UILabel alloc] initWithFrame:CGRectMake(90, 0, 140, 40)];
     self.fanliTitle.backgroundColor=[UIColor clearColor];
     self.fanliTitle.textColor=[UIColor whiteColor];
     self.fanliTitle.textAlignment=NSTextAlignmentCenter;
     [self.customNarBar addSubview:self.fanliTitle];
+    UIButton *backBtn=[UIButton buttonWithType:UIButtonTypeCustom];
+    backBtn.frame=CGRectMake(11, 12, 60/2, 41/2);
+    [backBtn setBackgroundImage:[UIImage imageNamed:@"返回"] forState:UIControlStateNormal];
+    [backBtn addTarget:self  action:@selector(exitThisView:) forControlEvents:UIControlEventTouchUpInside];
+    [self.customNarBar addSubview:backBtn];
     [self.view addSubview:self.customNarBar];
-    [self.view setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"我的可及-背景"]]];
+    [self.view setBackgroundColor:[UIColor colorWithRed:229.0/255.0 green:229.0/255.0 blue:229.0/255.0 alpha:100]];
     
     self.segmentCon=[[UISegmentedControl alloc] initWithItems:[NSArray arrayWithObjects:@"淘宝",@"拍拍",@"商城", nil]];
-    self.segmentCon.frame=CGRectMake(-5, 45, 330, 29);
+    self.segmentCon.frame=CGRectMake(-10, 45, 340, 29);
     self.segmentCon.multipleTouchEnabled=NO;
     [self.segmentCon setSelectedSegmentIndex:0];
+    dingdanMode=self.segmentCon.selectedSegmentIndex;
     [self.segmentCon addTarget:self action:@selector(loadFanLiListFor:) forControlEvents:UIControlEventValueChanged];
     [self.view addSubview:self.segmentCon];
-    self.listTableView=[[UITableView alloc] initWithFrame:CGRectMake(0, 70, 320, [UIScreen mainScreen].bounds.size.height-70) style:UITableViewStyleGrouped];
+    self.listTableView=[[UITableView alloc] initWithFrame:CGRectMake(0, 74, 320, [UIScreen mainScreen].bounds.size.height-74) style:UITableViewStyleGrouped];
     self.listTableView.dataSource=self;
     self.listTableView.delegate=self;
     self.listTableView.backgroundView=nil;
@@ -78,12 +80,13 @@
         [itemsArray removeAllObjects];
     }
     NSInteger Index = Seg.selectedSegmentIndex;
+    dingdanMode=Index;
     currentPage=1;
     NSDictionary *tmpDic=[NSDictionary dictionaryWithDictionary:[[NSUserDefaults standardUserDefaults] objectForKey:@"userInfo"]];
     NSDictionary *infoDic=[NSDictionary dictionaryWithDictionary:[tmpDic objectForKey:@"body"]];
     self.userID=[NSString stringWithFormat:@"%@",[infoDic objectForKey:@"userId"]];
     NSString *requestURL=[NSString stringWithFormat:@"/order/"];
-    switch (Index) {
+    switch (dingdanMode) {
             case 0:
             {
                 self.fanliTitle.text=[NSString stringWithFormat:@"淘宝返利"];
@@ -114,11 +117,13 @@
                 itemsArray=[NSMutableArray arrayWithArray:[recordDic objectForKey:@"record"]];
                 NSLog(@"get Store %d",[itemsArray count]);
                 dispatch_async(dispatch_get_main_queue(), ^{
+                    [SVProgressHUD dismiss];
                     [self.listTableView reloadData];
                 });
             
         }else
         {
+            [SVProgressHUD dismiss];
             UIAlertView *alert=[[UIAlertView alloc] initWithTitle:@"错误" message:@"服务器无法连接，请稍后再试" delegate:nil cancelButtonTitle:@"好的" otherButtonTitles: nil];
             [alert show];
         }
@@ -179,17 +184,17 @@ void FanLiItemImageDownloadURL( NSURL * URL, void (^imageBlock)(UIImage * image)
     switch (indexPath.row) {
         case 0:
         {
-            height=20.0;
+            height=52.0/2;
         }
             break;
         case 1:
         {
-            height=100.0;;
+            height=148.0/2;;
         }
             break;
         case 2:
         {
-            height=20.0;
+            height=68/2.0;
         }
             break;
 
@@ -200,20 +205,22 @@ void FanLiItemImageDownloadURL( NSURL * URL, void (^imageBlock)(UIImage * image)
 {
     // static NSString *cellIdentifier = @"MyCell";
     UITableViewCell *cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:nil];
-    [cell setSelectionStyle:UITableViewCellSelectionStyleGray];
+    [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
     NSDictionary *itemDic=[NSDictionary dictionaryWithDictionary:[itemsArray objectAtIndex:indexPath.section]];
     switch (indexPath.row) {
         case 0:
         {
-            UILabel *chengjiaoLabel=[[UILabel alloc] initWithFrame:CGRectMake(10, 0, 280, 20)];
+            UILabel *chengjiaoLabel=[[UILabel alloc] initWithFrame:CGRectMake(15, 5, 280, 20)];
             chengjiaoLabel.text=[NSString stringWithFormat:@"成交时间:%@",[NSString stringWithFormat:@"%@",[itemDic objectForKey:@"chargeTime"]]];
+            chengjiaoLabel.textColor=[UIColor lightGrayColor];
             chengjiaoLabel.backgroundColor=[UIColor clearColor];
-            chengjiaoLabel.font=[UIFont fontWithName:@"Arial" size:11];
+            chengjiaoLabel.font=[UIFont fontWithName:@"Arial" size:12];
             [cell addSubview:chengjiaoLabel];
         }
             break;
         case 1:
         {
+            
             UIImageView *itemImageView=[[UIImageView alloc] initWithFrame:CGRectMake(20, 5, 90, 90)];
             NSString *imageUrl=[NSString stringWithFormat:@"%@",[itemDic objectForKey:@"imgUrl"]];
             imageUrl=[imageUrl stringByReplacingOccurrencesOfString:@"\"" withString:@""];
@@ -224,32 +231,53 @@ void FanLiItemImageDownloadURL( NSURL * URL, void (^imageBlock)(UIImage * image)
                                  });
             [cell addSubview:itemImageView];
             UILabel *orderIDLabel=[[UILabel alloc] initWithFrame:CGRectMake(120, 10, 180, 20)];
-            orderIDLabel.text=[NSString stringWithFormat:@"订单号：%@",[itemDic objectForKey:@"orderNo"]];
             orderIDLabel.font=[UIFont fontWithName:@"Arial" size:11];
             orderIDLabel.backgroundColor=[UIColor clearColor];
             [cell addSubview:orderIDLabel];
-            UILabel *nameLabel=[[UILabel alloc] initWithFrame:CGRectMake(120, 20, 180, 60)];
-            nameLabel.text=[NSString stringWithFormat:@"%@",[itemDic objectForKey:@"name"]];
+            UILabel *nameLabel=[[UILabel alloc] initWithFrame:CGRectMake(120, 20, 180, 75/2)];
             nameLabel.numberOfLines=0;
             nameLabel.adjustsFontSizeToFitWidth=YES;
             nameLabel.backgroundColor=[UIColor clearColor];
-            nameLabel.font=[UIFont fontWithName:@"Arial" size:11];
+            nameLabel.font=[UIFont fontWithName:@"Arial" size:12];
             [cell addSubview:nameLabel];
-            
             UILabel *priceLabel=[[UILabel alloc] initWithFrame:CGRectMake(120, 80, 180, 20)];
-            priceLabel.text=[NSString stringWithFormat:@"￥ %@",[itemDic objectForKey:@"amount"]];
             priceLabel.backgroundColor=[UIColor clearColor];
-            priceLabel.font=[UIFont fontWithName:@"Arial" size:11];
+            priceLabel.font=[UIFont fontWithName:@"Arial" size:12];
             [cell addSubview:priceLabel];
-
+            switch (dingdanMode) {
+                case 0:
+                {
+                    nameLabel.frame=CGRectMake(120, 0, 180, 50);
+                    nameLabel.text=[NSString stringWithFormat:@"%@",[itemDic objectForKey:@"name"]];
+                    priceLabel.frame=CGRectMake(120, 50, 180, 20);
+                    priceLabel.text=[NSString stringWithFormat:@"￥ %@",[itemDic objectForKey:@"amount"]];
+                }
+                    break;
+                case 1:
+                {
+                    orderIDLabel.text=[NSString stringWithFormat:@"订单号：%@",[itemDic objectForKey:@"orderNo"]];
+                    nameLabel.text=[NSString stringWithFormat:@"%@",[itemDic objectForKey:@"mallName"]];
+                    priceLabel.text=[NSString stringWithFormat:@"￥ %@",[itemDic objectForKey:@"price"]];
+                }
+                    break;
+                case 2:
+                {
+                    orderIDLabel.text=[NSString stringWithFormat:@"订单号：%@",[itemDic objectForKey:@"orderNo"]];
+                    nameLabel.text=[NSString stringWithFormat:@"%@",[itemDic objectForKey:@"mallName"]];
+                    priceLabel.text=[NSString stringWithFormat:@"￥ %@",[itemDic objectForKey:@"price"]];
+                }
+                    break;
+                    
+            }
         }
             break;
         case 2:
         {
-            UILabel *profitLabel=[[UILabel alloc] initWithFrame:CGRectMake(160, 0, 100, 20)];
+            [cell setBackgroundColor:[UIColor colorWithRed:229.0/255.0 green:229.0/255.0 blue:229.0/255.0 alpha:0.8]];
+            UILabel *profitLabel=[[UILabel alloc] initWithFrame:CGRectMake(160, 9/2, 140, 30)];
             profitLabel.text=[NSString stringWithFormat:@"获得%@",[NSString stringWithFormat:@"%@",[itemDic objectForKey:@"profit"]]];
             profitLabel.backgroundColor=[UIColor clearColor];
-            profitLabel.font=[UIFont fontWithName:@"Arial" size:11];
+            profitLabel.font=[UIFont fontWithName:@"Arial" size:13];
             [cell addSubview:profitLabel];
 
         }

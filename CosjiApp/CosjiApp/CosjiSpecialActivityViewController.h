@@ -14,7 +14,7 @@
     int currentPage;
 
 }
-@property (weak, nonatomic) IBOutlet UITableView *tableView;
-@property (weak, nonatomic) IBOutlet UIView *CustomNav;
+@property (strong, nonatomic)  UITableView *tableView;
+@property (strong, nonatomic)  UIView *CustomNav;
 
 @end

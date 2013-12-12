@@ -50,15 +50,15 @@ static CosjiLoginViewController *shareCosjiLoginViewController = nil;
     primaryView.backgroundColor=[UIColor colorWithRed:241.0/255.0 green:233/255.0 blue:230/255.0 alpha:100.0];
     self.view=primaryView;
     UIButton *backBtn=[UIButton buttonWithType:UIButtonTypeCustom];
-    backBtn.frame=CGRectMake(11, 12, 13, 21);
+    backBtn.frame=CGRectMake(11, 12, 60/2, 41/2);
     [backBtn setBackgroundImage:[UIImage imageNamed:@"返回"] forState:UIControlStateNormal];
     [backBtn addTarget:self action:@selector(back:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:backBtn];
-    UIImageView *cosjiLogo=[[UIImageView alloc] initWithFrame:CGRectMake(20, 56, 261/2, 81/2)];
+    UIImageView *cosjiLogo=[[UIImageView alloc] initWithFrame:CGRectMake(20, 54, 261/2, 81/2)];
     cosjiLogo.image=[UIImage imageNamed:@"登陆页-logo"];
     [self.view addSubview:cosjiLogo];
     //用户名输入框
-    self.userName=[[UITextField alloc] initWithFrame:CGRectMake(20, 127, 280, 32)];
+    self.userName=[[UITextField alloc] initWithFrame:CGRectMake(160-582/4, 124, 582/2, 86/2)];
     self.userName.background=[UIImage imageNamed:@"登陆页-登陆框-动态"];
     self.userName.disabledBackground=[UIImage imageNamed:@"登陆页-登陆框-默认"];
     self.userName.textAlignment=NSTextAlignmentCenter;
@@ -66,12 +66,12 @@ static CosjiLoginViewController *shareCosjiLoginViewController = nil;
     self.userName.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
     self.userName.contentHorizontalAlignment=UIControlContentHorizontalAlignmentCenter;
     self.userName.delegate=self;
-    UIImageView *userNameIcon=[[UIImageView alloc] initWithFrame:CGRectMake(10, 6, 16, 20)];
+    UIImageView *userNameIcon=[[UIImageView alloc] initWithFrame:CGRectMake(10, 10, 16, 20)];
     userNameIcon.image=[UIImage imageNamed:@"登陆页-用户名"];
     [self.userName addSubview:userNameIcon];
     [self.view addSubview:self.userName];
     //密码框
-    self.passWord=[[UITextField alloc] initWithFrame:CGRectMake(20, 172, 280, 32)];
+    self.passWord=[[UITextField alloc] initWithFrame:CGRectMake(160-582/4, 172, 582/2, 86/2)];
     self.passWord.background=[UIImage imageNamed:@"登陆页-登陆框-动态"];
     self.passWord.disabledBackground=[UIImage imageNamed:@"登陆页-登陆框-默认"];
     self.passWord.secureTextEntry=YES;
@@ -81,45 +81,58 @@ static CosjiLoginViewController *shareCosjiLoginViewController = nil;
     self.passWord.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
     self.passWord.contentHorizontalAlignment=UIControlContentHorizontalAlignmentCenter;
     [self.passWord addTarget:self action:@selector(login:) forControlEvents:UIControlEventEditingDidEndOnExit];
-    UIImageView *passWordIcon=[[UIImageView alloc] initWithFrame:CGRectMake(10, 6, 16, 20)];
+    UIImageView *passWordIcon=[[UIImageView alloc] initWithFrame:CGRectMake(10, 10, 16, 20)];
     passWordIcon.image=[UIImage imageNamed:@"登陆页-密码"];
     [self.passWord addSubview:passWordIcon];
     [self.view addSubview:self.passWord];
     //记住密码
     self.rememberBtn=[UIButton buttonWithType:UIButtonTypeCustom];
-    self.rememberBtn.frame=CGRectMake(20, 224, 21, 22);
+    self.rememberBtn.frame=CGRectMake(20, 226, 21, 22);
     [self.rememberBtn setBackgroundImage:[UIImage imageNamed:@"登陆页-记住密码-默认"] forState:UIControlStateNormal];
     [self.rememberBtn setBackgroundImage:[UIImage imageNamed:@"登陆页-记住密码-动态"] forState:UIControlStateSelected];
     [self.rememberBtn setSelected:NO];
     [self.rememberBtn addTarget:self action:@selector(remember:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:self.rememberBtn];
-    UILabel *rememberLabel=[[UILabel alloc] initWithFrame:CGRectMake(49, 224, 120, 21)];
+    UILabel *rememberLabel=[[UILabel alloc] initWithFrame:CGRectMake(49, 226, 120, 21)];
     rememberLabel.backgroundColor=[UIColor clearColor];
     rememberLabel.text=@"记住密码";
     rememberLabel.textColor=[UIColor redColor];
     [self.view addSubview:rememberLabel];
-    UILabel *registerLabel=[[UILabel alloc] initWithFrame:CGRectMake(20, 299, 100, 21)];
+    
+    UIButton *loginBrn=[UIButton buttonWithType:UIButtonTypeCustom];
+    loginBrn.frame=CGRectMake(160-291/2, 280, 582/2, 69/2);
+    [loginBrn setBackgroundImage:[UIImage imageNamed:@"按钮_登录"] forState:UIControlStateNormal];
+    [loginBrn setTitle:@"登录" forState:UIControlStateNormal];
+    [loginBrn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    [loginBrn addTarget:self action:@selector(login:) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:loginBrn];
+    
+    
+    UILabel *registerLabel=[[UILabel alloc] initWithFrame:CGRectMake(20, 350, 100, 21)];
     registerLabel.backgroundColor=[UIColor clearColor];
+    registerLabel.font=[UIFont fontWithName:@"Arial" size:15];
     registerLabel.text=@"还没有账号,";
     [self.view addSubview:registerLabel];
     self.registerBtn=[UIButton buttonWithType:UIButtonTypeCustom];
-    self.registerBtn.frame=CGRectMake(110, 298, 100, 25);
+    self.registerBtn.frame=CGRectMake(85, 349, 100, 25);
     [self.registerBtn setTitle:@"注册账号" forState:UIControlStateNormal];
+    [self.registerBtn.titleLabel setFont:[UIFont fontWithName:@"Arial" size:15]];
     [self.registerBtn setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
     [self.registerBtn addTarget:self action:@selector(regitsterAction) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:self.registerBtn];
     
-    UILabel *forgetLabel=[[UILabel alloc] initWithFrame:CGRectMake(20, 325, 100, 21)];
+    UILabel *forgetLabel=[[UILabel alloc] initWithFrame:CGRectMake(20, 380, 100, 21)];
     forgetLabel.backgroundColor=[UIColor clearColor];
+    forgetLabel.font=[UIFont fontWithName:@"Arial" size:15];
     forgetLabel.text=@"忘记密码,";
     [self.view addSubview:forgetLabel];
     self.forgetBtn=[UIButton buttonWithType:UIButtonTypeCustom];
-    self.forgetBtn.frame=CGRectMake(110, 324, 100, 25);
+    self.forgetBtn.frame=CGRectMake(70, 379, 100, 25);
     [self.forgetBtn setTitle:@"找回密码" forState:UIControlStateNormal];
+    [self.forgetBtn.titleLabel setFont:[UIFont fontWithName:@"Arial" size:15]];
     [self.forgetBtn setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
     [self.forgetBtn addTarget:self action:@selector(forgetAction) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:self.forgetBtn];
-
     
 
 }
@@ -159,14 +172,14 @@ static CosjiLoginViewController *shareCosjiLoginViewController = nil;
 {
     NSLog(@"didEndEditing");
     [sender resignFirstResponder];
-    [SVProgressHUD showWithStatus:@"正在登陆。。。"];
     CosjiServerHelper *serverHelper=[CosjiServerHelper shareCosjiServerHelper];
      NSDictionary *tmpDic=[NSDictionary dictionaryWithDictionary: [serverHelper getJsonDictionary:[NSString stringWithFormat:@"/user/login/?account=%@&password=%@",self.userName.text,self.passWord.text]]];
     if (tmpDic!=nil)
     {
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
             NSDictionary *headDic=[NSDictionary dictionaryWithDictionary:[tmpDic objectForKey:@"head"]];
-            if ([[headDic objectForKey:@"msg"]isEqualToString:@"success"]) {
+            if ([[headDic objectForKey:@"msg"] isEqualToString:@"success"])
+            {
                 NSDictionary *idDic=[NSDictionary dictionaryWithDictionary:[tmpDic objectForKey:@"body"]];
                 
                 NSDictionary *userInfo=[NSDictionary dictionaryWithDictionary:[serverHelper getJsonDictionary:[NSString stringWithFormat:@"/user/profile/?id=%@",[idDic objectForKey:@"userId"]]]];
@@ -192,16 +205,12 @@ static CosjiLoginViewController *shareCosjiLoginViewController = nil;
                 [alert show];
                 
             }
-            
-            
         });
     }else
     {
-        [SVProgressHUD dismiss];
         UIAlertView *alert=[[UIAlertView alloc] initWithTitle:@"错误" message:@"服务器无法连接，请稍后再试" delegate:nil cancelButtonTitle:@"好的" otherButtonTitles: nil];
         [alert show];
     }
-    [SVProgressHUD dismiss];
 }
 -(void)remember:(id)sender
 {

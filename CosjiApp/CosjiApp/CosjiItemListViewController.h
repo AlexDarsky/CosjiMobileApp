@@ -13,9 +13,9 @@
     NSMutableArray *itemsArray;
     int currentPage;
 }
-@property (weak, nonatomic) IBOutlet UIView *customNavBar;
-@property (weak, nonatomic) IBOutlet UILabel *titleLabel;
-@property (weak, nonatomic) IBOutlet UITableView *tableView;
+@property (strong, nonatomic)  UIView *customNavBar;
+@property (strong, nonatomic)  UILabel *titleLabel;
+@property (strong, nonatomic)  UITableView *tableView;
 +(CosjiItemListViewController*)shareCosjiItemListViewController;
 -(void)loadInfoWith:(NSString*)textString atPage:(int)pageNumber;
 @end

@@ -38,19 +38,48 @@
 {
     [MobileProbe pageEndWithName:@"淘宝返利"];
 }
+-(void)loadView
+{
+    UIView *primary=[[UIView alloc] initWithFrame:[UIScreen mainScreen].bounds];
+    primary.backgroundColor=[UIColor colorWithRed:229.0/255.0 green:229.0/255.0 blue:229.0/255.0 alpha:100];
+    self.view=primary;
+    self.customNavBar=[[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 45)];
+    self.customNavBar.backgroundColor=[UIColor colorWithPatternImage:[UIImage imageNamed:@"工具栏背景"]];
+    UIButton *moreBtn=[UIButton buttonWithType:UIButtonTypeCustom];
+    moreBtn.frame=CGRectMake(282, 14, 23, 21);
+    [moreBtn setBackgroundImage:[UIImage imageNamed:@"更多列表"] forState:UIControlStateNormal];
+    [moreBtn addTarget:self  action:@selector(presentAllItemsTable) forControlEvents:UIControlEventTouchUpInside];
+    [self.customNavBar addSubview:moreBtn];
+    [self.view addSubview:self.customNavBar];
+    UIImageView *llogoImage=[[UIImageView alloc] initWithFrame:CGRectMake(14, 8,156/2, 65/2)];
+    llogoImage.image=[UIImage imageNamed:@"工具栏背景-标语"];
+    [self.customNavBar addSubview:llogoImage];
+    UIImageView *blogoImage=[[UIImageView alloc] initWithFrame:CGRectMake(160-155/4,13, 155/2, 40/2)];
+    blogoImage.image=[UIImage imageNamed:@"淘宝返利"];
+    [self.customNavBar addSubview:blogoImage];
+    self.tableView=[[UITableView alloc] initWithFrame:CGRectMake(0, 45, 320, [UIScreen mainScreen].bounds.size.height-45-20-49)];
+    self.tableView.delegate=self;
+    self.tableView.dataSource=self;
+    self.tableView.backgroundColor=[UIColor clearColor];
+    self.tableView.backgroundView=nil;
+    [self.tableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
+    [self.view addSubview:self.tableView];
+    
+    }
 - (void)viewDidLoad
 {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
     self.navigationController.navigationBarHidden=YES;
     subjectsArray=[[NSMutableArray alloc] initWithCapacity:0];
-    self.customNavBar.backgroundColor=[UIColor colorWithPatternImage:[UIImage imageNamed:@"工具栏背景"]];
-    self.searchField=[[UITextField alloc] initWithFrame:CGRectMake(0, 10, 300, 35)];
+    self.searchField=[[UITextField alloc] initWithFrame:CGRectMake(10, 20, 300, 35)];
     self.searchField.borderStyle=UITextBorderStyleNone;
-    self.searchField.returnKeyType=UIReturnKeyDone;
+    self.searchField.returnKeyType=UIReturnKeySearch;
     self.searchField.textAlignment=UITextAlignmentCenter;
+    self.searchField.contentHorizontalAlignment=UIControlContentHorizontalAlignmentCenter;
+    self.searchField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
     self.searchField.backgroundColor=[UIColor clearColor];
-    self.searchField.font=[UIFont fontWithName:@"Arial Hebrew" size:18];
+    self.searchField.font=[UIFont fontWithName:@"Arial" size:18];
     self.searchField.placeholder=@"输入商品名称或网址查询返利";
     self.searchField.textAlignment=UITextAlignmentCenter;
     [self.searchField addTarget:self action:@selector(searchItemFrom:) forControlEvents:UIControlEventEditingDidEndOnExit];
@@ -192,28 +221,28 @@
         {
             UIView *taoBtnView=[[UIView alloc] initWithFrame:CGRectMake(10, 70, 90, 64)];
             taoBtnView.backgroundColor=[UIColor whiteColor];
-            UILabel *taoBtnLabel=[[UILabel alloc] initWithFrame:CGRectMake(10, 49, 70, 15)];
+            UILabel *taoBtnLabel=[[UILabel alloc] initWithFrame:CGRectMake(0, 49, 90, 15)];
             taoBtnLabel.text=[NSString stringWithFormat:@"淘宝"];
             taoBtnLabel.textAlignment=UITextAlignmentCenter;
             
             UIView *tmallBtnView=[[UIView alloc] initWithFrame:CGRectMake(115, 70, 90, 64)];
             tmallBtnView.backgroundColor=[UIColor whiteColor];
-            UILabel *tmallBtnLabel=[[UILabel alloc] initWithFrame:CGRectMake(10, 49, 70, 15)];
+            UILabel *tmallBtnLabel=[[UILabel alloc] initWithFrame:CGRectMake(0, 49, 90, 15)];
             tmallBtnLabel.text=[NSString stringWithFormat:@"天猫"];
             tmallBtnLabel.textAlignment=UITextAlignmentCenter;
             
             UIView *juBtnView=[[UIView alloc] initWithFrame:CGRectMake(220, 70, 90, 64)];
             juBtnView.backgroundColor=[UIColor whiteColor];
-            UILabel *juBtnLabel=[[UILabel alloc] initWithFrame:CGRectMake(10, 49, 70, 15)];
+            UILabel *juBtnLabel=[[UILabel alloc] initWithFrame:CGRectMake(0, 49, 90, 15)];
             juBtnLabel.text=[NSString stringWithFormat:@"聚划算"];
             juBtnLabel.textAlignment=UITextAlignmentCenter;
             UIImageView *lineSpretor1=[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"淘宝返利-投影分割线-2"]];
-            lineSpretor1.frame=CGRectMake(0, 63, 320, 4.5);
+            lineSpretor1.frame=CGRectMake(0, 58, 320, 4.5);
             [cell addSubview:lineSpretor1];
             UIImageView *lineSpretor2=[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"淘宝返利-投影分割线-1"]];
             lineSpretor2.frame=CGRectMake(0, 135, 320, 4.5);
-            taoBtnLabel.backgroundColor=tmallBtnLabel.backgroundColor=juBtnLabel.backgroundColor=[UIColor lightGrayColor];
-
+            taoBtnLabel.backgroundColor=tmallBtnLabel.backgroundColor=juBtnLabel.backgroundColor=[UIColor colorWithRed:248.0/255.0 green:248.0/255.0 blue:248.0/255.0 alpha:80];
+            taoBtnLabel.font=tmallBtnLabel.font=juBtnLabel.font=[UIFont fontWithName:@"Arial" size:12];
             [cell addSubview:lineSpretor2];
             [taoBtnView addSubview:self.taoBtn];
             [taoBtnView addSubview:taoBtnLabel];
@@ -221,11 +250,11 @@
             [tmallBtnView addSubview:tmallBtnLabel];
             [juBtnView addSubview:self.juBtn];
             [juBtnView addSubview:juBtnLabel];
-            UIImageView *searchFieldBG=[[UIImageView alloc] initWithFrame:CGRectMake(10, 20, 300, 45)];
+            UIImageView *searchFieldBG=[[UIImageView alloc] initWithFrame:CGRectMake(10, 15, 300, 45)];
             [searchFieldBG setImage:[UIImage imageNamed:@"淘宝返利-搜索框"]];
             searchFieldBG.userInteractionEnabled=YES;
-            [searchFieldBG addSubview:self.searchField];
             [cell addSubview:searchFieldBG];
+            [cell addSubview:self.searchField];
             [cell addSubview:taoBtnView];
             [cell addSubview:tmallBtnView];
             [cell addSubview:juBtnView];
@@ -243,6 +272,7 @@
                     UIButton *itemButton=[UIButton buttonWithType:UIButtonTypeCustom];
                     itemButton.frame=CGRectMake(10+x*80, 10, 60, 60);
                     [itemButton setTitle:[NSString stringWithFormat:@"%@",[itemDic objectForKey:@"name"]] forState:UIControlStateNormal];
+                    [itemButton setTitleColor:[UIColor clearColor] forState:UIControlStateNormal];
                     NSString *imageUrl=[NSString stringWithFormat:@"%@",[itemDic objectForKey:@"imgUrl"]];
                     imageUrl=[imageUrl stringByReplacingOccurrencesOfString:@"\"" withString:@""];
                     UILabel *itemLabel=[[UILabel alloc] initWithFrame:CGRectMake(0, 45, 60, 15)];
@@ -252,11 +282,38 @@
                     itemLabel.font=[UIFont fontWithName:@"Arial" size:12];
                     [itemButton addSubview:itemLabel];
                     [itemButton addTarget:self action:@selector(getItemListViewController:) forControlEvents:UIControlEventTouchUpInside];
-                    subjectItemImage([NSURL URLWithString:imageUrl], ^( UIImage * image )
-                                    {
-                                        [itemButton setImage:image forState:UIControlStateNormal];
-                                    }, ^(void){
-                                    });
+                    //缓存图片
+                    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0),
+                                   ^{
+                                       NSArray *paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
+                                       NSString *cachePath = [paths objectAtIndex:0];
+                                       BOOL isDir = YES;
+                                       NSString *dirName=[cachePath stringByAppendingPathComponent:@"cacheImages"];
+                                       if (![[NSFileManager defaultManager] fileExistsAtPath:dirName isDirectory:&isDir])
+                                       {
+                                           [[NSFileManager defaultManager] createDirectoryAtPath:dirName withIntermediateDirectories:YES attributes:nil error:nil];
+                                       }
+                                       NSString *filename = [dirName stringByAppendingPathComponent:[NSString stringWithFormat:@"%@",[itemDic objectForKey:@"name"]]];
+                                       if (![[NSFileManager defaultManager] fileExistsAtPath:filename])
+                                       {
+                                           NSLog(@"download cacheImage %@",filename);
+                                           NSData * data = [[NSData alloc] initWithContentsOfURL:[NSURL URLWithString:imageUrl]];
+                                           UIImage * cacheimage = [[UIImage alloc] initWithData:data];
+                                           [UIImageJPEGRepresentation(cacheimage, 1.0) writeToFile:filename atomically:YES];
+                                           dispatch_async(dispatch_get_main_queue(), ^{
+                                               NSData *imageData=[NSData dataWithContentsOfFile:filename];
+                                               [itemButton setBackgroundImage:[UIImage imageWithData:imageData] forState:UIControlStateNormal];
+                                           });
+                                       }else
+                                       {
+                                           dispatch_async(dispatch_get_main_queue(), ^{
+                                               NSLog(@"load cacheImage %@",filename);
+                                               NSData *imageData=[NSData dataWithContentsOfFile:filename];
+                                               [itemButton setBackgroundImage:[UIImage imageWithData:imageData] forState:UIControlStateNormal];
+                                           });
+                                       }
+                                   });
+                    //缓存图片
                     [cell addSubview:itemButton];
                 }else
                 {
@@ -264,6 +321,7 @@
                     UIButton *itemButton=[UIButton buttonWithType:UIButtonTypeCustom];
                     itemButton.frame=CGRectMake(10+(x-4)*80, 80, 60, 60);
                     [itemButton setTitle:[NSString stringWithFormat:@"%@",[itemDic objectForKey:@"name"]] forState:UIControlStateNormal];
+                    [itemButton setTitleColor:[UIColor clearColor] forState:UIControlStateNormal];
                     NSString *imageUrl=[NSString stringWithFormat:@"%@",[itemDic objectForKey:@"imgUrl"]];
                     imageUrl=[imageUrl stringByReplacingOccurrencesOfString:@"\"" withString:@""];
                     UILabel *itemLabel=[[UILabel alloc] initWithFrame:CGRectMake(0, 45, 60, 15)];
@@ -273,11 +331,39 @@
                     itemLabel.font=[UIFont fontWithName:@"Arial" size:12];
                     [itemButton addSubview:itemLabel];
                     [itemButton addTarget:self action:@selector(getItemListViewController:) forControlEvents:UIControlEventTouchUpInside];
-                    subjectItemImage([NSURL URLWithString:imageUrl], ^( UIImage * image )
-                                     {
-                                         [itemButton setImage:image forState:UIControlStateNormal];
-                                     }, ^(void){
-                                     });
+                    //缓存图片
+                    
+                    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0),
+                                   ^{
+                                       NSArray *paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
+                                       NSString *cachePath = [paths objectAtIndex:0];
+                                       BOOL isDir = YES;
+                                       NSString *dirName=[cachePath stringByAppendingPathComponent:@"cacheImages"];
+                                       if (![[NSFileManager defaultManager] fileExistsAtPath:dirName isDirectory:&isDir])
+                                       {
+                                           [[NSFileManager defaultManager] createDirectoryAtPath:dirName withIntermediateDirectories:YES attributes:nil error:nil];
+                                       }
+                                       NSString *filename = [dirName stringByAppendingPathComponent:[NSString stringWithFormat:@"%@",[itemDic objectForKey:@"name"]]];
+                                       if (![[NSFileManager defaultManager] fileExistsAtPath:filename])
+                                       {
+                                           NSLog(@"download cacheImage %@",filename);
+                                           NSData * data = [[NSData alloc] initWithContentsOfURL:[NSURL URLWithString:imageUrl]];
+                                           UIImage * cacheimage = [[UIImage alloc] initWithData:data];
+                                           [UIImageJPEGRepresentation(cacheimage, 1.0) writeToFile:filename atomically:YES];
+                                           dispatch_async(dispatch_get_main_queue(), ^{
+                                               NSData *imageData=[NSData dataWithContentsOfFile:filename];
+                                               [itemButton setBackgroundImage:[UIImage imageWithData:imageData] forState:UIControlStateNormal];
+                                           });
+                                       }else
+                                       {
+                                           dispatch_async(dispatch_get_main_queue(), ^{
+                                               NSLog(@"load cacheImage %@",filename);
+                                               NSData *imageData=[NSData dataWithContentsOfFile:filename];
+                                               [itemButton setBackgroundImage:[UIImage imageWithData:imageData] forState:UIControlStateNormal];
+                                           });
+                                       }
+                                   });
+                    //缓存图片
                     [cell addSubview:itemButton];
                 }
             }
@@ -329,7 +415,7 @@
             break;
     }
 }
--(IBAction)presentAllItemsTable
+-(void)presentAllItemsTable
 {
     
     NSURL *url =[NSURL URLWithString:@"http://m.taobao.com/channel/act/sale/quanbuleimu.html"];
@@ -362,7 +448,7 @@ void subjectItemImage( NSURL * URL, void (^imageBlock)(UIImage * image), void (^
 -(void)searchItemFrom:(UITextField*)textField
 {
     [textField resignFirstResponder];
-    if (textField!=nil)
+    if (textField!=nil&&![textField.text isEqualToString:@""])
     {
         NSLog(@"开始搜索");
         CosjiItemListViewController *itemsListViewController=[CosjiItemListViewController shareCosjiItemListViewController];

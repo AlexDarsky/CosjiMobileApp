@@ -11,6 +11,7 @@
 @interface CosjiSettingViewController : UIViewController<UITableViewDataSource,UITableViewDelegate>
 {
     NSArray *itemArray;
+    UIImageView *grayImageView;
 }
 @property (strong,nonatomic)UITableView *myTableView;
 @end

@@ -51,7 +51,7 @@ static CosjiWebViewController *shareCosjiWebViewController = nil;
     self.webView=[[UIWebView alloc] initWithFrame:CGRectMake(0, 43, 320, [UIScreen mainScreen].bounds.size.height-49-20)];
     [self.view addSubview:webView];
     UIButton *backBtn=[UIButton buttonWithType:UIButtonTypeCustom];
-    backBtn.frame=CGRectMake(11, 12, 13, 21);
+    backBtn.frame=CGRectMake(11, 12, 60/2, 41/2);
     [backBtn addTarget:self action:@selector(back:) forControlEvents:UIControlEventTouchUpInside];
     [backBtn setBackgroundImage:[UIImage imageNamed:@"返回"] forState:UIControlStateNormal];
     [self.customNavBar addSubview:backBtn];

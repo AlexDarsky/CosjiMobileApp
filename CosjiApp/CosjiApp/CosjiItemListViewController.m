@@ -34,7 +34,31 @@ static CosjiItemListViewController* shareCosjiItemListViewController;
     }
     return self;
 }
-
+-(void)loadView
+{
+    UIView *primary=[[UIView alloc] initWithFrame:[UIScreen mainScreen].bounds];
+    primary.backgroundColor=[UIColor whiteColor];
+    self.view=primary;
+    self.customNavBar=[[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 45)];
+    self.customNavBar.backgroundColor=[UIColor colorWithPatternImage:[UIImage imageNamed:@"工具栏背景"]];
+    self.titleLabel=[[UILabel alloc] initWithFrame:CGRectMake(32, 11, 200, 21)];
+    self.titleLabel.backgroundColor=[UIColor clearColor];
+    self.titleLabel.textColor=[UIColor whiteColor];
+    [self.customNavBar addSubview:self.titleLabel];
+    UIButton *backBtn=[UIButton buttonWithType:UIButtonTypeCustom];
+    backBtn.frame=CGRectMake(11, 12,60/2, 41/2);
+    [backBtn setBackgroundImage:[UIImage imageNamed:@"返回"] forState:UIControlStateNormal];
+    [backBtn addTarget:self  action:@selector(backAction:) forControlEvents:UIControlEventTouchUpInside];
+    [self.customNavBar addSubview:backBtn];
+    [self.view addSubview:self.customNavBar];
+    self.tableView=[[UITableView alloc] initWithFrame:CGRectMake(0, 45, 320, [UIScreen mainScreen].bounds.size.height-45)];
+    self.tableView.backgroundColor=[UIColor clearColor];
+    self.tableView.dataSource=self;
+    self.tableView.delegate=self;
+    [self.tableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
+    self.tableView.backgroundView=nil;
+    [self.view addSubview:self.tableView];
+}
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -211,7 +235,7 @@ void ItemImageDownloadURL( NSURL * URL, void (^imageBlock)(UIImage * image), voi
                        });
                    });
 }
-- (IBAction)backAction:(id)sender
+- (void)backAction:(id)sender
 {
     [self dismissViewControllerAnimated:YES completion:nil];
 }

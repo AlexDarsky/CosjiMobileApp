@@ -12,6 +12,7 @@
 {
     NSMutableArray *itemsArray;
     int currentPage;
+    int dingdanMode;
 }
 @property (strong, nonatomic)  UITableView *listTableView;
 @property (strong, nonatomic)  UIView *customNarBar;

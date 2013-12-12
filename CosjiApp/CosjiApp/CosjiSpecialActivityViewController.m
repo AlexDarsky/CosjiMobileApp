@@ -41,6 +41,30 @@
 {
     [MobileProbe pageEndWithName:@"九元购"];
 }
+-(void)loadView
+{
+    UIView *primary=[[UIView alloc] initWithFrame:[UIScreen mainScreen].bounds];
+    primary.backgroundColor=[UIColor colorWithRed:229.0/255.0 green:229.0/255.0 blue:229.0/255.0 alpha:100];
+    self.view=primary;
+    self.CustomNav=[[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 45)];
+    self.CustomNav.backgroundColor=[UIColor colorWithPatternImage:[UIImage imageNamed:@"工具栏背景"]];
+    [self.view addSubview:self.CustomNav];
+    UIImageView *llogoImage=[[UIImageView alloc] initWithFrame:CGRectMake(14, 8, 156/2, 65/2)];
+    llogoImage.image=[UIImage imageNamed:@"工具栏背景-标语"];
+    [self.CustomNav addSubview:llogoImage];
+    UIImageView *blogoImage=[[UIImageView alloc] initWithFrame:CGRectMake(160-155/4,13, 155/2, 40/2)];
+    blogoImage.image=[UIImage imageNamed:@"折扣优惠"];
+    [self.CustomNav addSubview:blogoImage];
+
+    self.tableView=[[UITableView alloc] initWithFrame:CGRectMake(0, 45, 320, [UIScreen mainScreen].bounds.size.height-45-49-20) style:UITableViewStylePlain];
+    [self.tableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
+    [self.tableView setBackgroundColor:[UIColor clearColor]];
+    self.tableView.dataSource=self;
+    self.tableView.delegate=self;
+    self.tableView.backgroundView=nil;
+    [self.view addSubview:self.tableView];
+
+}
 -(void)viewWillAppear:(BOOL)animated
 {
     self.tabBarController.tabBar.hidden=NO;
@@ -258,8 +282,8 @@ void ItemImageFromURL( NSURL * URL, void (^imageBlock)(UIImage * image), void (^
                  [self.NewsTableView endUpdates];
                  */
                 [SVProgressHUD dismiss];
-                CGPoint point=CGPointMake(0,self.tableView.contentSize.height-self.tableView.frame.size.height);
-                [self.tableView setContentOffset:point animated:YES];
+              //  CGPoint point=CGPointMake(0,self.tableView.contentSize.height-self.tableView.frame.size.height);
+                //[self.tableView setContentOffset:point animated:YES];
                 
             });
         }else
