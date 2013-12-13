@@ -8,6 +8,14 @@
 
 #import <UIKit/UIKit.h>
 
-@interface CosjiMessageViewController : UIViewController
-
+@interface CosjiMessageViewController : UIViewController<UITableViewDataSource,UITableViewDelegate>
+{
+    NSMutableArray *itemsArray;
+    int currentPage;
+    int messageMode;
+}
+@property (strong, nonatomic)  UITableView *listTableView;
+@property (strong, nonatomic)  UIView *customNarBar;
+@property (strong, nonatomic)  UISegmentedControl *segmentCon;
+@property (nonatomic,strong) NSString *userID;
 @end

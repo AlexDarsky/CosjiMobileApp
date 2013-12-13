@@ -12,6 +12,7 @@
 #import "CosjiFanLiListViewController.h"
 #import "CosjiAccountViewController.h"
 #import "CosjiGetCashViewController.h"
+#import "CosjiMessageViewController.h"
 
 @interface CosjiUserViewController : UIViewController<UITableViewDelegate,UITableViewDataSource>
 {
@@ -35,5 +36,7 @@
 @property (strong,nonatomic) CosjiFanLiListViewController *fanliListViewController;
 @property (strong,nonatomic) CosjiAccountViewController *accountViewController;
 @property (strong,nonatomic) CosjiGetCashViewController *getCashViewController;
+@property (strong,nonatomic) CosjiMessageViewController *messageViewController;
+
 
 @end

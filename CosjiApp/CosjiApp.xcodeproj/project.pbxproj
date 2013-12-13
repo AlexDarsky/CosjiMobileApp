@@ -25,6 +25,7 @@
 		183D0BF1185177CE006D5BE2 /* gerenzhonxin anniu@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 183D0BF0185177CE006D5BE2 /* gerenzhonxin anniu@2x.png */; };
 		183D0BF318517ACE006D5BE2 /* gerenzhonxin shez@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 183D0BF218517ACE006D5BE2 /* gerenzhonxin shez@2x.png */; };
 		184D5A5017FFF9C90048F04C /* CosjiSettingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 184D5A4E17FFF9C90048F04C /* CosjiSettingViewController.m */; };
+		18535649185961CE0034E2EB /* CosjiMessageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 18535648185961CE0034E2EB /* CosjiMessageViewController.m */; };
 		18563D9B18488FB30081CD1E /* JSONKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 18563D9A18488FB30081CD1E /* JSONKit.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		185B3EF71856F6330006002E /* iOS 模拟器屏幕快照“2013年12月10日 下午1.32.25”.png in Resources */ = {isa = PBXBuildFile; fileRef = 185B3EE91856F6330006002E /* iOS 模拟器屏幕快照“2013年12月10日 下午1.32.25”.png */; };
 		185B3EF81856F6330006002E /* iOS 模拟器屏幕快照“2013年12月10日 下午1.32.28”.png in Resources */ = {isa = PBXBuildFile; fileRef = 185B3EEA1856F6330006002E /* iOS 模拟器屏幕快照“2013年12月10日 下午1.32.28”.png */; };
@@ -189,6 +190,8 @@
 		183D0BF218517ACE006D5BE2 /* gerenzhonxin shez@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "gerenzhonxin shez@2x.png"; sourceTree = "<group>"; };
 		184D5A4D17FFF9C90048F04C /* CosjiSettingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CosjiSettingViewController.h; sourceTree = "<group>"; };
 		184D5A4E17FFF9C90048F04C /* CosjiSettingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CosjiSettingViewController.m; sourceTree = "<group>"; };
+		18535647185961CE0034E2EB /* CosjiMessageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CosjiMessageViewController.h; sourceTree = "<group>"; };
+		18535648185961CE0034E2EB /* CosjiMessageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CosjiMessageViewController.m; sourceTree = "<group>"; };
 		18563D9918488FB30081CD1E /* JSONKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSONKit.h; sourceTree = "<group>"; };
 		18563D9A18488FB30081CD1E /* JSONKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JSONKit.m; sourceTree = "<group>"; };
 		185B3EE91856F6330006002E /* iOS 模拟器屏幕快照“2013年12月10日 下午1.32.25”.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "iOS 模拟器屏幕快照“2013年12月10日 下午1.32.25”.png"; sourceTree = "<group>"; };
@@ -415,6 +418,8 @@
 		18535646185961AE0034E2EB /* 站内消息 */ = {
 			isa = PBXGroup;
 			children = (
+				18535647185961CE0034E2EB /* CosjiMessageViewController.h */,
+				18535648185961CE0034E2EB /* CosjiMessageViewController.m */,
 			);
 			name = "站内消息";
 			sourceTree = "<group>";
@@ -929,6 +934,7 @@
 				18E208AA17C7551300D849F5 /* CosjiTBViewController.m in Sources */,
 				18AACA4617F52C2000C2D286 /* CosjiServerHelper.m in Sources */,
 				181A337017FE802100D8C55F /* CosjiLoginViewController.m in Sources */,
+				18535649185961CE0034E2EB /* CosjiMessageViewController.m in Sources */,
 				184D5A5017FFF9C90048F04C /* CosjiSettingViewController.m in Sources */,
 				18B3C1091801034300F496E4 /* CosjiItemListViewController.m in Sources */,
 				188BDB0B184742F90027A832 /* CosjiAccountItemView.m in Sources */,

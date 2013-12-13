@@ -12,7 +12,7 @@
 #define login @"http://192.168.1.110"
 #define shouye @"/mall/getAll"
 #define httpAdd @"http://rest.cosjii.com"
-#define demoURL @"/order/toList/?userID=390184&page=1&number=1"
+#define demoURL @"/message/outbox/?userID=390184&page=1&number=1"
 #define allItems @"/taobao/category/"
 
 @implementation CosjiServerHelper

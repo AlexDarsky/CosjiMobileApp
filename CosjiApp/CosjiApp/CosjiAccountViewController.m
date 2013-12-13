@@ -42,7 +42,7 @@
     self.myTableView.dataSource=self;
     [self.view addSubview:self.myTableView];
     [self.view addSubview:self.customNavBar];
-    self.accountModelSC=[[UISegmentedControl alloc] initWithItems:[NSArray arrayWithObjects:@"我的收入",@"我的体现", nil]];
+    self.accountModelSC=[[UISegmentedControl alloc] initWithItems:[NSArray arrayWithObjects:@"我的收入",@"我的提现", nil]];
     self.accountModelSC.frame=CGRectMake(-10, 44, 340, 44);
     [self.accountModelSC addTarget:self action:@selector(changeAccountModel:) forControlEvents:UIControlEventValueChanged];
     [self.accountModelSC setSelectedSegmentIndex:0];

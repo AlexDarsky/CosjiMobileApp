@@ -358,7 +358,11 @@ static CosjiUserViewController *CosjiUserRootController;
             break;
         case 3:
         {
-
+            if (self.messageViewController==nil)
+            {
+                self.messageViewController=[[CosjiMessageViewController alloc] init];
+            }
+            [self presentViewController:self.messageViewController animated:YES completion:nil];
         }
             break;
         case 4:
