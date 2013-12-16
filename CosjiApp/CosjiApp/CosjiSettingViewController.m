@@ -248,7 +248,8 @@
                 case 2:
                 {
                     NSLog(@"检测更新");
-
+                    CosjiServerHelper *serverHelper=[CosjiServerHelper shareCosjiServerHelper];
+                    [serverHelper jsonTest];
                 }
                     break;
                 case 3:

@@ -124,7 +124,7 @@
 
 -(CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return 180;
+    return 200;
 }
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -166,9 +166,10 @@
     itemLeftPrice.backgroundColor=[UIColor redColor];
     [itemLeftPrice setTextColor:[UIColor whiteColor]];
     [itemLeftPrice setText:[NSString stringWithFormat:@"￥%@   有返利",[leftItemDic objectForKey:@"promotion"]]];
-    UILabel *itemLeftName=[[UILabel alloc] initWithFrame:CGRectMake(12.5, 162, 140, 14)];
+    UILabel *itemLeftName=[[UILabel alloc] initWithFrame:CGRectMake(12.5, 162, 140, 28)];
     [itemLeftName setText:[leftItemDic objectForKey:@"name"]];
     [itemLeftName setFont:nameFont];
+    itemLeftName.numberOfLines=0;
     itemLeftName.backgroundColor=[UIColor clearColor];
     [cell addSubview:itemLeftName];
     [cell addSubview:itemLeftPrice];
@@ -197,10 +198,11 @@
             [rightItemBtn addSubview:freight2Label];
         }
 
-        UILabel *itemRightName=[[UILabel alloc] initWithFrame:CGRectMake(12.5+155, 162, 140, 14)];
+        UILabel *itemRightName=[[UILabel alloc] initWithFrame:CGRectMake(12.5+155, 162, 140, 28)];
         [itemRightName setText:[rightItemDic objectForKey:@"name"]];
         [itemRightName setFont:nameFont];
         itemRightName.backgroundColor=[UIColor clearColor];
+        itemRightName.numberOfLines=0;
         [cell addSubview:rightItemBtn];
         [cell addSubview:itemRightName];
         UILabel *itemRightPrice=[[UILabel alloc] initWithFrame:CGRectMake(12.5+155, 132, 144, 28.5)];

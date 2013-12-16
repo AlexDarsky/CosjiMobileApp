@@ -133,7 +133,7 @@
     passwordField.font=passwordTitle.font=[UIFont fontWithName:@"Arial" size:14];
     
     UIButton *getCashBtn=[UIButton buttonWithType:UIButtonTypeCustom];
-    getCashBtn.frame=CGRectMake(160-582/4, [UIScreen mainScreen].bounds.size.height-161/2-69/2, 582/2, 69/2);
+    getCashBtn.frame=CGRectMake(160-582/4, [UIScreen mainScreen].bounds.size.height-69, 582/2, 69/2);
     [getCashBtn setBackgroundImage:[UIImage imageNamed:@"按钮_登录"] forState:UIControlStateNormal];
     [getCashBtn setTitle:@"马上提现" forState:UIControlStateNormal];
     [getCashBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];

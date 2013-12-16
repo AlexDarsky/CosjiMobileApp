@@ -80,7 +80,7 @@
     self.searchField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
     self.searchField.backgroundColor=[UIColor clearColor];
     self.searchField.font=[UIFont fontWithName:@"Arial" size:18];
-    self.searchField.placeholder=@"输入商品名称或网址查询返利";
+    self.searchField.placeholder=@"输入商品名称或网址查询商品";
     self.searchField.textAlignment=UITextAlignmentCenter;
     [self.searchField addTarget:self action:@selector(searchItemFrom:) forControlEvents:UIControlEventEditingDidEndOnExit];
     UIImageView *imgv=[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"淘宝返利-搜索框放大镜"]];

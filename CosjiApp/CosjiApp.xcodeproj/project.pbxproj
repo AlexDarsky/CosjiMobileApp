@@ -11,6 +11,7 @@
 		1814F6F11798FE7B00CC2ECD /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1814F6F01798FE7B00CC2ECD /* QuartzCore.framework */; };
 		18152A31181E183C00225B18 /* CosjiFanLiListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 18152A2F181E183C00225B18 /* CosjiFanLiListViewController.m */; };
 		181A337017FE802100D8C55F /* CosjiLoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 181A336E17FE802100D8C55F /* CosjiLoginViewController.m */; };
+		181A639F18599E2200A165FA /* CosjiMessagCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 181A639E18599E2200A165FA /* CosjiMessagCell.m */; };
 		181D108118472B5A004925C2 /* CosjiAccountViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 181D108018472B5A004925C2 /* CosjiAccountViewController.m */; };
 		182667CF1801279A00ED9CC8 /* SVProgressHUD.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 182667CC1801279A00ED9CC8 /* SVProgressHUD.bundle */; };
 		182667D01801279A00ED9CC8 /* SVProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 182667CE1801279A00ED9CC8 /* SVProgressHUD.m */; };
@@ -171,6 +172,8 @@
 		18152A2F181E183C00225B18 /* CosjiFanLiListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CosjiFanLiListViewController.m; sourceTree = "<group>"; };
 		181A336D17FE802100D8C55F /* CosjiLoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CosjiLoginViewController.h; sourceTree = "<group>"; };
 		181A336E17FE802100D8C55F /* CosjiLoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CosjiLoginViewController.m; sourceTree = "<group>"; };
+		181A639D18599E2200A165FA /* CosjiMessagCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CosjiMessagCell.h; sourceTree = "<group>"; };
+		181A639E18599E2200A165FA /* CosjiMessagCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CosjiMessagCell.m; sourceTree = "<group>"; };
 		181D107F18472B5A004925C2 /* CosjiAccountViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CosjiAccountViewController.h; sourceTree = "<group>"; };
 		181D108018472B5A004925C2 /* CosjiAccountViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CosjiAccountViewController.m; sourceTree = "<group>"; };
 		182667CC1801279A00ED9CC8 /* SVProgressHUD.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = SVProgressHUD.bundle; sourceTree = "<group>"; };
@@ -420,6 +423,8 @@
 			children = (
 				18535647185961CE0034E2EB /* CosjiMessageViewController.h */,
 				18535648185961CE0034E2EB /* CosjiMessageViewController.m */,
+				181A639D18599E2200A165FA /* CosjiMessagCell.h */,
+				181A639E18599E2200A165FA /* CosjiMessagCell.m */,
 			);
 			name = "站内消息";
 			sourceTree = "<group>";
@@ -936,6 +941,7 @@
 				181A337017FE802100D8C55F /* CosjiLoginViewController.m in Sources */,
 				18535649185961CE0034E2EB /* CosjiMessageViewController.m in Sources */,
 				184D5A5017FFF9C90048F04C /* CosjiSettingViewController.m in Sources */,
+				181A639F18599E2200A165FA /* CosjiMessagCell.m in Sources */,
 				18B3C1091801034300F496E4 /* CosjiItemListViewController.m in Sources */,
 				188BDB0B184742F90027A832 /* CosjiAccountItemView.m in Sources */,
 				182667D01801279A00ED9CC8 /* SVProgressHUD.m in Sources */,

@@ -255,7 +255,7 @@ static CosjiUserViewController *CosjiUserRootController;
 #pragma mark tableviewmethod
 - (NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return 5;
+    return 4;
 }
 
 - (NSInteger) numberOfSectionsInTableView:(UITableView *)tableView
@@ -278,24 +278,13 @@ static CosjiUserViewController *CosjiUserRootController;
             UIImageView *imageIcon=[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"我的订单"]];
             imageIcon.frame=CGRectMake(20, 10, 25, 25);
             UILabel *functionLabel=[[UILabel alloc] initWithFrame:CGRectMake(60, 10, 80, 20)];
-            functionLabel.text=@"返利订单";
+            functionLabel.text=@"我的订单";
             functionLabel.backgroundColor=[UIColor clearColor];
             [cell addSubview:imageIcon];
             [cell addSubview:functionLabel];
         }
             break;
         case 1:
-        {
-            UIImageView *imageIcon=[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"推荐奖励"]];
-            imageIcon.frame=CGRectMake(20, 10, 25, 25);
-            UILabel *functionLabel=[[UILabel alloc] initWithFrame:CGRectMake(60, 10, 80, 25)];
-            functionLabel.text=@"推荐奖励";
-            functionLabel.backgroundColor=[UIColor clearColor];
-            [cell addSubview:imageIcon];
-            [cell addSubview:functionLabel];
-        }
-            break;
-        case 2:
         {
             UIImageView *imageIcon=[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"账户明细"]];
             imageIcon.frame=CGRectMake(20, 10, 25, 25);
@@ -306,7 +295,7 @@ static CosjiUserViewController *CosjiUserRootController;
             [cell addSubview:functionLabel];
         }
             break;
-        case 3:
+        case 2:
         {
             UIImageView *imageIcon=[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"信息"]];
             imageIcon.frame=CGRectMake(20, 10, 25, 25);
@@ -317,7 +306,7 @@ static CosjiUserViewController *CosjiUserRootController;
             [cell addSubview:functionLabel];
         }
             break;
-        case 4:
+        case 3:
         {
             UIImageView *imageIcon=[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"账户设置"]];
             imageIcon.frame=CGRectMake(20, 10, 25, 25);
@@ -345,18 +334,13 @@ static CosjiUserViewController *CosjiUserRootController;
             break;
         case 1:
         {
-
-        }
-            break;
-        case 2:
-        {
             if (self.accountViewController==nil) {
                 self.accountViewController=[[CosjiAccountViewController alloc] init];
             }
             [self presentViewController:self.accountViewController animated:YES completion:nil];
         }
             break;
-        case 3:
+        case 2:
         {
             if (self.messageViewController==nil)
             {
@@ -365,7 +349,7 @@ static CosjiUserViewController *CosjiUserRootController;
             [self presentViewController:self.messageViewController animated:YES completion:nil];
         }
             break;
-        case 4:
+        case 3:
         {
             
         }

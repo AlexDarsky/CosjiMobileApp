@@ -33,6 +33,7 @@ static UINavigationController* nc;
 
 -(void)loadView
 {
+    [super loadView];
     UIView *primaryView=[[UIView alloc] initWithFrame:[UIScreen mainScreen].bounds];
     primaryView.backgroundColor=[UIColor colorWithRed:229.0/255.0 green:229.0/255.0 blue:229.0/255.0 alpha:100];
     self.view=primaryView;
@@ -45,15 +46,13 @@ static UINavigationController* nc;
     UIImageView *blogoImage=[[UIImageView alloc] initWithFrame:CGRectMake(129,13, 126/2, 42/2)];
     blogoImage.image=[UIImage imageNamed:@"工具栏背景-logo"];
     [self.CustomHeadView addSubview:blogoImage];
-    self.mainTableView=[[UITableView alloc] initWithFrame:CGRectMake(0, 48, 320, [UIScreen mainScreen].bounds.size.height-48-49)];
+    self.mainTableView=[[UITableView alloc] initWithFrame:CGRectMake(0, 48, 320, [UIScreen mainScreen].bounds.size.height-48-49-20)];
     self.mainTableView.delegate=self;
     self.mainTableView.dataSource=self;
     self.mainTableView.backgroundColor=[UIColor clearColor];
     self.mainTableView.backgroundView=nil;
     [self.mainTableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
     [self.view addSubview:self.mainTableView];
-    
-    
 }
 - (void)viewDidLoad
 {
