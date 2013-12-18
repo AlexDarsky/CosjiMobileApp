@@ -14,6 +14,7 @@
 #import "CosjiSettingViewController.h"
 #import "CosjiWebViewController.h"
 #import "SVProgressHUD.h"
+#import "CosjiAccountSettingViewController.h"
 #define userid @"390184"
 #define kAppKey             @"21428060"
 #define kAppSecret          @"dda4af6d892e2024c26cd621b05dd2d0"
@@ -351,7 +352,10 @@ static CosjiUserViewController *CosjiUserRootController;
             break;
         case 3:
         {
-            
+            if (self.accountViewController==nil) {
+                self.accountSettingViewController=[[CosjiAccountSettingViewController alloc] init];
+            }
+            [self presentViewController:self.accountSettingViewController animated:YES completion:nil];
         }
             break;
     }

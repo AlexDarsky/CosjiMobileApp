@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		180EE5D5186024380078665B /* 我的可及_置_背景@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 180EE5D4186024380078665B /* 我的可及_置_背景@2x.png */; };
+		180EE5DA18603E2B0078665B /* CosjiMallsListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 180EE5D918603E2B0078665B /* CosjiMallsListViewController.m */; };
 		1813C69C18570BBF008741C9 /* CosjiGetCashViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1813C69B18570BBF008741C9 /* CosjiGetCashViewController.m */; };
 		1814F6F11798FE7B00CC2ECD /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1814F6F01798FE7B00CC2ECD /* QuartzCore.framework */; };
 		18152A31181E183C00225B18 /* CosjiFanLiListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 18152A2F181E183C00225B18 /* CosjiFanLiListViewController.m */; };
@@ -25,6 +27,7 @@
 		183D0BED18517199006D5BE2 /* 按钮_登录@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 183D0BEC18517199006D5BE2 /* 按钮_登录@2x.png */; };
 		183D0BF1185177CE006D5BE2 /* gerenzhonxin anniu@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 183D0BF0185177CE006D5BE2 /* gerenzhonxin anniu@2x.png */; };
 		183D0BF318517ACE006D5BE2 /* gerenzhonxin shez@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 183D0BF218517ACE006D5BE2 /* gerenzhonxin shez@2x.png */; };
+		184841571860214B002F1BFA /* CosjiAccountSettingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 184841561860214B002F1BFA /* CosjiAccountSettingViewController.m */; };
 		184D5A5017FFF9C90048F04C /* CosjiSettingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 184D5A4E17FFF9C90048F04C /* CosjiSettingViewController.m */; };
 		18535649185961CE0034E2EB /* CosjiMessageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 18535648185961CE0034E2EB /* CosjiMessageViewController.m */; };
 		18563D9B18488FB30081CD1E /* JSONKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 18563D9A18488FB30081CD1E /* JSONKit.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
@@ -34,7 +37,6 @@
 		185B3EFA1856F6330006002E /* zhzhekoukou.png in Resources */ = {isa = PBXBuildFile; fileRef = 185B3EEC1856F6330006002E /* zhzhekoukou.png */; };
 		185B3EFB1856F6330006002E /* 首页天猫@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 185B3EED1856F6330006002E /* 首页天猫@2x.png */; };
 		185B3EFC1856F6330006002E /* 导航条@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 185B3EEE1856F6330006002E /* 导航条@2x.png */; };
-		185B3EFD1856F6330006002E /* 我的可及-置-背景.png in Resources */ = {isa = PBXBuildFile; fileRef = 185B3EEF1856F6330006002E /* 我的可及-置-背景.png */; };
 		185B3EFE1856F6330006002E /* 我的可及.png in Resources */ = {isa = PBXBuildFile; fileRef = 185B3EF01856F6330006002E /* 我的可及.png */; };
 		185B3EFF1856F6330006002E /* 折 动态@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 185B3EF11856F6330006002E /* 折 动态@2x.png */; };
 		185B3F001856F6330006002E /* 折 默认@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 185B3EF21856F6330006002E /* 折 默认@2x.png */; };
@@ -165,6 +167,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		180EE5D4186024380078665B /* 我的可及_置_背景@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "我的可及_置_背景@2x.png"; sourceTree = "<group>"; };
+		180EE5D818603E2B0078665B /* CosjiMallsListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CosjiMallsListViewController.h; sourceTree = "<group>"; };
+		180EE5D918603E2B0078665B /* CosjiMallsListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CosjiMallsListViewController.m; sourceTree = "<group>"; };
 		1813C69A18570BBF008741C9 /* CosjiGetCashViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CosjiGetCashViewController.h; sourceTree = "<group>"; };
 		1813C69B18570BBF008741C9 /* CosjiGetCashViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CosjiGetCashViewController.m; sourceTree = "<group>"; };
 		1814F6F01798FE7B00CC2ECD /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
@@ -191,6 +196,8 @@
 		183D0BEC18517199006D5BE2 /* 按钮_登录@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "按钮_登录@2x.png"; sourceTree = "<group>"; };
 		183D0BF0185177CE006D5BE2 /* gerenzhonxin anniu@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "gerenzhonxin anniu@2x.png"; sourceTree = "<group>"; };
 		183D0BF218517ACE006D5BE2 /* gerenzhonxin shez@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "gerenzhonxin shez@2x.png"; sourceTree = "<group>"; };
+		184841551860214B002F1BFA /* CosjiAccountSettingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CosjiAccountSettingViewController.h; sourceTree = "<group>"; };
+		184841561860214B002F1BFA /* CosjiAccountSettingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CosjiAccountSettingViewController.m; sourceTree = "<group>"; };
 		184D5A4D17FFF9C90048F04C /* CosjiSettingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CosjiSettingViewController.h; sourceTree = "<group>"; };
 		184D5A4E17FFF9C90048F04C /* CosjiSettingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CosjiSettingViewController.m; sourceTree = "<group>"; };
 		18535647185961CE0034E2EB /* CosjiMessageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CosjiMessageViewController.h; sourceTree = "<group>"; };
@@ -203,7 +210,6 @@
 		185B3EEC1856F6330006002E /* zhzhekoukou.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = zhzhekoukou.png; sourceTree = "<group>"; };
 		185B3EED1856F6330006002E /* 首页天猫@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "首页天猫@2x.png"; sourceTree = "<group>"; };
 		185B3EEE1856F6330006002E /* 导航条@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "导航条@2x.png"; sourceTree = "<group>"; };
-		185B3EEF1856F6330006002E /* 我的可及-置-背景.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "我的可及-置-背景.png"; sourceTree = "<group>"; };
 		185B3EF01856F6330006002E /* 我的可及.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "我的可及.png"; sourceTree = "<group>"; };
 		185B3EF11856F6330006002E /* 折 动态@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "折 动态@2x.png"; sourceTree = "<group>"; };
 		185B3EF21856F6330006002E /* 折 默认@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "折 默认@2x.png"; sourceTree = "<group>"; };
@@ -372,6 +378,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		180EE5D718603CC00078665B /* 更多商城 */ = {
+			isa = PBXGroup;
+			children = (
+				180EE5D818603E2B0078665B /* CosjiMallsListViewController.h */,
+				180EE5D918603E2B0078665B /* CosjiMallsListViewController.m */,
+			);
+			name = "更多商城";
+			sourceTree = "<group>";
+		};
 		1813C69918570B92008741C9 /* 申请提现 */ = {
 			isa = PBXGroup;
 			children = (
@@ -418,6 +433,15 @@
 			name = "教程";
 			sourceTree = "<group>";
 		};
+		184841541860211F002F1BFA /* 账户设置 */ = {
+			isa = PBXGroup;
+			children = (
+				184841551860214B002F1BFA /* CosjiAccountSettingViewController.h */,
+				184841561860214B002F1BFA /* CosjiAccountSettingViewController.m */,
+			);
+			name = "账户设置";
+			sourceTree = "<group>";
+		};
 		18535646185961AE0034E2EB /* 站内消息 */ = {
 			isa = PBXGroup;
 			children = (
@@ -432,13 +456,13 @@
 		185B3EE81856F6330006002E /* 切片20131210 */ = {
 			isa = PBXGroup;
 			children = (
+				180EE5D4186024380078665B /* 我的可及_置_背景@2x.png */,
 				185B3EE91856F6330006002E /* iOS 模拟器屏幕快照“2013年12月10日 下午1.32.25”.png */,
 				185B3EEA1856F6330006002E /* iOS 模拟器屏幕快照“2013年12月10日 下午1.32.28”.png */,
 				185B3EEB1856F6330006002E /* iOS 模拟器屏幕快照“2013年12月10日 下午1.32.30”.png */,
 				185B3EEC1856F6330006002E /* zhzhekoukou.png */,
 				185B3EED1856F6330006002E /* 首页天猫@2x.png */,
 				185B3EEE1856F6330006002E /* 导航条@2x.png */,
-				185B3EEF1856F6330006002E /* 我的可及-置-背景.png */,
 				185B3EF01856F6330006002E /* 我的可及.png */,
 				185B3EF11856F6330006002E /* 折 动态@2x.png */,
 				185B3EF21856F6330006002E /* 折 默认@2x.png */,
@@ -486,6 +510,7 @@
 		1893116617F80B550009C08F /* 首页 */ = {
 			isa = PBXGroup;
 			children = (
+				180EE5D718603CC00078665B /* 更多商城 */,
 				60934215178E1EB600761FB6 /* CosjiViewController.h */,
 				60934216178E1EB600761FB6 /* CosjiViewController.m */,
 				182A81B017A39D91003BEBFA /* CosjiWebViewController.h */,
@@ -565,6 +590,7 @@
 		18F0CD28179269C10031995E /* 我的可及 */ = {
 			isa = PBXGroup;
 			children = (
+				184841541860211F002F1BFA /* 账户设置 */,
 				18535646185961AE0034E2EB /* 站内消息 */,
 				1813C69918570B92008741C9 /* 申请提现 */,
 				188BDB0C184746250027A832 /* 设置 */,
@@ -804,6 +830,7 @@
 				18DCC6D4179AC0A600FA5B4A /* huwai.png in Resources */,
 				18DCC6D5179AC0A600FA5B4A /* huwai@2x.png in Resources */,
 				18DCC6D6179AC0A600FA5B4A /* jiajujiancai.png in Resources */,
+				180EE5D5186024380078665B /* 我的可及_置_背景@2x.png in Resources */,
 				18DCC6D7179AC0A600FA5B4A /* jiajujiancai@2x.png in Resources */,
 				18DCC6D8179AC0A600FA5B4A /* meironghufu.png in Resources */,
 				18DCC6D9179AC0A600FA5B4A /* meironghufu@2x.png in Resources */,
@@ -909,7 +936,6 @@
 				185B3EFA1856F6330006002E /* zhzhekoukou.png in Resources */,
 				185B3EFB1856F6330006002E /* 首页天猫@2x.png in Resources */,
 				185B3EFC1856F6330006002E /* 导航条@2x.png in Resources */,
-				185B3EFD1856F6330006002E /* 我的可及-置-背景.png in Resources */,
 				185B3EFE1856F6330006002E /* 我的可及.png in Resources */,
 				185B3EFF1856F6330006002E /* 折 动态@2x.png in Resources */,
 				185B3F001856F6330006002E /* 折 默认@2x.png in Resources */,
@@ -932,6 +958,7 @@
 				6093420E178E1EB600761FB6 /* CosjiAppDelegate.m in Sources */,
 				60934217178E1EB600761FB6 /* CosjiViewController.m in Sources */,
 				181D108118472B5A004925C2 /* CosjiAccountViewController.m in Sources */,
+				180EE5DA18603E2B0078665B /* CosjiMallsListViewController.m in Sources */,
 				18F0CD26179268E40031995E /* CosjiSpecialActivityViewController.m in Sources */,
 				18F0CD2C179269DA0031995E /* CosjiUserViewController.m in Sources */,
 				182A81B317A39D91003BEBFA /* CosjiWebViewController.m in Sources */,
@@ -953,6 +980,7 @@
 				1813C69C18570BBF008741C9 /* CosjiGetCashViewController.m in Sources */,
 				18152A31181E183C00225B18 /* CosjiFanLiListViewController.m in Sources */,
 				18CF8F0C1855B3C400EC635C /* CosjiFileManager.m in Sources */,
+				184841571860214B002F1BFA /* CosjiAccountSettingViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

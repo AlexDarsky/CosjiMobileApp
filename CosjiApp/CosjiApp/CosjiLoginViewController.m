@@ -134,7 +134,9 @@ static CosjiLoginViewController *shareCosjiLoginViewController = nil;
     [self.forgetBtn addTarget:self action:@selector(forgetAction) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:self.forgetBtn];
     
-
+    UIImageView *loginLogo=[[UIImageView alloc] initWithFrame:CGRectMake(self.view.frame.size.width-161*2/3, self.view.frame.size.height-67, 161/2, 67/2)];
+    [loginLogo setImage:[UIImage imageNamed:@"登陆页-标语"]];
+    [self.view addSubview:loginLogo];
 }
 -(void)viewWillAppear:(BOOL)animated
 {

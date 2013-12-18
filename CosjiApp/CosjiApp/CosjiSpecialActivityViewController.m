@@ -12,6 +12,7 @@
 #import "CosjiServerHelper.h"
 #import "CosjiWebViewController.h"
 #import "SVProgressHUD.h"
+#import "CosjiItemListViewController.h"
 
 
 #define kAppKey             @"21428060"
@@ -19,6 +20,11 @@
 #define kAppRedirectURI     @"http://cosjii.com"
 
 @interface CosjiSpecialActivityViewController ()
+{
+    UIView *searchView;
+    UITextField *searchField;
+    BOOL searchViewShowing;
+}
 
 @end
 
@@ -40,22 +46,13 @@
 - (void)viewDidDisappear:(BOOL)animated
 {
     [MobileProbe pageEndWithName:@"九元购"];
+    [searchField resignFirstResponder];
 }
 -(void)loadView
 {
     UIView *primary=[[UIView alloc] initWithFrame:[UIScreen mainScreen].bounds];
     primary.backgroundColor=[UIColor colorWithRed:229.0/255.0 green:229.0/255.0 blue:229.0/255.0 alpha:100];
     self.view=primary;
-    self.CustomNav=[[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 45)];
-    self.CustomNav.backgroundColor=[UIColor colorWithPatternImage:[UIImage imageNamed:@"工具栏背景"]];
-    [self.view addSubview:self.CustomNav];
-    UIImageView *llogoImage=[[UIImageView alloc] initWithFrame:CGRectMake(14, 8, 156/2, 65/2)];
-    llogoImage.image=[UIImage imageNamed:@"工具栏背景-标语"];
-    [self.CustomNav addSubview:llogoImage];
-    UIImageView *blogoImage=[[UIImageView alloc] initWithFrame:CGRectMake(160-155/4,13, 155/2, 40/2)];
-    blogoImage.image=[UIImage imageNamed:@"折扣优惠"];
-    [self.CustomNav addSubview:blogoImage];
-
     self.tableView=[[UITableView alloc] initWithFrame:CGRectMake(0, 45, 320, [UIScreen mainScreen].bounds.size.height-45-49-20) style:UITableViewStylePlain];
     [self.tableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
     [self.tableView setBackgroundColor:[UIColor clearColor]];
@@ -63,7 +60,36 @@
     self.tableView.delegate=self;
     self.tableView.backgroundView=nil;
     [self.view addSubview:self.tableView];
-
+    self.CustomNav=[[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 45)];
+    self.CustomNav.backgroundColor=[UIColor colorWithPatternImage:[UIImage imageNamed:@"工具栏背景"]];
+    UIButton *searchBtn=[UIButton buttonWithType:UIButtonTypeCustom];
+    searchBtn.frame=CGRectMake(self.CustomNav.frame.size.width-40, self.CustomNav.frame.size.height/2-82/4, 64/2, 82/2);
+    [searchBtn setBackgroundImage:[UIImage imageNamed:@"工具栏背景-搜索"] forState:UIControlStateNormal];
+    [searchBtn addTarget:self action:@selector(showSearchView) forControlEvents:UIControlEventTouchDown];
+    [self.CustomNav addSubview:searchBtn];
+    searchView=[[UIView alloc] initWithFrame:self.CustomNav.frame];
+    searchView.backgroundColor=[UIColor whiteColor];
+    searchField=[[UITextField alloc] initWithFrame:CGRectMake(10, 0, 300, 35)];
+    searchField.borderStyle=UITextBorderStyleNone;
+    searchField.returnKeyType=UIReturnKeySearch;
+    searchField.textAlignment=UITextAlignmentCenter;
+    searchField.contentHorizontalAlignment=UIControlContentHorizontalAlignmentCenter;
+    searchField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
+    searchField.backgroundColor=[UIColor clearColor];
+    searchField.font=[UIFont fontWithName:@"Arial" size:18];
+    searchField.placeholder=@"输入商品名称或网址查询商品";
+    searchField.textAlignment=UITextAlignmentCenter;
+    [searchView addSubview:searchField];
+    [searchField addTarget:self action:@selector(searchItemFrom:) forControlEvents:UIControlEventEditingDidEndOnExit];
+    [self.view addSubview:searchView];
+    searchViewShowing=NO;
+    [self.view addSubview:self.CustomNav];
+    UIImageView *llogoImage=[[UIImageView alloc] initWithFrame:CGRectMake(14, 8, 156/2, 65/2)];
+    llogoImage.image=[UIImage imageNamed:@"工具栏背景-标语"];
+    [self.CustomNav addSubview:llogoImage];
+    UIImageView *blogoImage=[[UIImageView alloc] initWithFrame:CGRectMake(160-155/4,13, 155/2, 40/2)];
+    blogoImage.image=[UIImage imageNamed:@"折扣优惠"];
+    [self.CustomNav addSubview:blogoImage];
 }
 -(void)viewWillAppear:(BOOL)animated
 {
@@ -297,6 +323,43 @@ void ItemImageFromURL( NSURL * URL, void (^imageBlock)(UIImage * image), void (^
         }
     });
     [SVProgressHUD dismiss];
+}
+-(void)showSearchView
+{
+    if (searchViewShowing==NO) {
+        NSLog(@"SHOW");
+        [UIView beginAnimations:nil context:nil];
+        [UIView setAnimationDuration:0.5];
+        CGFloat translation = 45;
+        searchView.transform = CGAffineTransformMakeTranslation(0, translation);
+        [UIView commitAnimations];
+        searchViewShowing=YES;
+    }else
+    {
+        NSLog(@"HIDE");
+        [searchField resignFirstResponder];
+        [UIView beginAnimations:nil context:nil];
+        [UIView setAnimationDuration:0.5];
+        CGFloat translation = 0;
+        searchView.transform = CGAffineTransformMakeTranslation(0,translation);
+        [UIView commitAnimations];
+        searchViewShowing=NO;
+    }
+}
+-(void)searchItemFrom:(UITextField*)textField
+{
+    [textField resignFirstResponder];
+    if (textField!=nil&&![textField.text isEqualToString:@""])
+    {
+        NSLog(@"开始搜索");
+        CosjiItemListViewController *itemsListViewController=[CosjiItemListViewController shareCosjiItemListViewController];
+        [self presentViewController:itemsListViewController animated:YES completion:nil];
+        [itemsListViewController loadInfoWith:[NSString stringWithFormat:@"%@",searchField.text] atPage:1];
+    }else
+    {
+        UIAlertView *alert=[[UIAlertView alloc] initWithTitle:@"错误" message:@"请输入您想要搜索的商品或查询的网址" delegate:nil cancelButtonTitle:@"好的" otherButtonTitles: nil];
+        [alert show];
+    }
 }
 - (void)didReceiveMemoryWarning
 {

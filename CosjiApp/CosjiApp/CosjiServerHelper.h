@@ -7,6 +7,8 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <SystemConfiguration/SystemConfiguration.h>
+#import <netdb.h>
 
 @interface CosjiServerHelper : NSObject
 

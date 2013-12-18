@@ -10,8 +10,9 @@
 #import <QuartzCore/QuartzCore.h>
 #import "StoreKit/SKProductsRequest.h"
 #import "CosjiWebViewController.h"
+#import "CosjiMallsListViewController.h"
 
-@interface CosjiViewController : UIViewController<UITableViewDataSource,UITableViewDelegate,UIScrollViewDelegate,UIActionSheetDelegate>
+@interface CosjiViewController : UIViewController<UITableViewDataSource,UITableViewDelegate,UIScrollViewDelegate,UIActionSheetDelegate,UITextFieldDelegate>
 {
     UIScrollView *sv;
     UIPageControl *page;
@@ -26,9 +27,11 @@
 }
 
 @property (strong,nonatomic)  UITableView *mainTableView;
-@property (copy,nonatomic) NSMutableArray * userIds;
 @property (strong, nonatomic)UIView *CustomHeadView;
+@property (copy,nonatomic) NSMutableArray * userIds;
 @property (strong,nonatomic) CosjiWebViewController *storeBrowseViewController;
+@property (strong,nonatomic) CosjiMallsListViewController *mallsListViewController;
+
 - (IBAction)exitKeyboard:(id)sender;
 
 @end

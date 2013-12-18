@@ -37,6 +37,7 @@
 - (void)viewDidDisappear:(BOOL)animated
 {
     [MobileProbe pageEndWithName:@"淘宝返利"];
+    [self.searchField resignFirstResponder];
 }
 -(void)loadView
 {

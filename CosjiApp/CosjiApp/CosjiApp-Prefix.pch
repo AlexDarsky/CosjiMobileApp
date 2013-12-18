@@ -12,5 +12,6 @@
     #import <UIKit/UIKit.h>
     #import <Foundation/Foundation.h>
     #import "CosjiFileManager.h"
+    #import "SVProgressHUD.h"
     #import "CosjiServerHelper.h"
 #endif

@@ -37,7 +37,7 @@ static CosjiItemListViewController* shareCosjiItemListViewController;
 -(void)loadView
 {
     UIView *primary=[[UIView alloc] initWithFrame:[UIScreen mainScreen].bounds];
-    primary.backgroundColor=[UIColor whiteColor];
+    primary.backgroundColor=[UIColor colorWithRed:229.0/255.0 green:229.0/255.0 blue:229.0/255.0 alpha:100];
     self.view=primary;
     self.customNavBar=[[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 45)];
     self.customNavBar.backgroundColor=[UIColor colorWithPatternImage:[UIImage imageNamed:@"工具栏背景"]];
@@ -51,11 +51,11 @@ static CosjiItemListViewController* shareCosjiItemListViewController;
     [backBtn addTarget:self  action:@selector(backAction:) forControlEvents:UIControlEventTouchUpInside];
     [self.customNavBar addSubview:backBtn];
     [self.view addSubview:self.customNavBar];
-    self.tableView=[[UITableView alloc] initWithFrame:CGRectMake(0, 45, 320, [UIScreen mainScreen].bounds.size.height-45)];
+    self.tableView=[[UITableView alloc] initWithFrame:CGRectMake(0, 45, 320, [UIScreen mainScreen].bounds.size.height-45-20)];
     self.tableView.backgroundColor=[UIColor clearColor];
     self.tableView.dataSource=self;
     self.tableView.delegate=self;
-    [self.tableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
+    [self.tableView setSeparatorStyle:UITableViewCellSeparatorStyleSingleLine];
     self.tableView.backgroundView=nil;
     [self.view addSubview:self.tableView];
 }
@@ -132,21 +132,34 @@ static CosjiItemListViewController* shareCosjiItemListViewController;
                     }, ^(void){
                     });
     [cell addSubview:itemImageView];
-    
-    UILabel *nameLabel=[[UILabel alloc] initWithFrame:CGRectMake(120, 10, 180, 40)];
-    nameLabel.adjustsFontSizeToFitWidth=YES;
-    nameLabel.numberOfLines=0;
-    nameLabel.text=[NSString stringWithFormat:@"%@",[itemDic objectForKey:@"name"]];
+    UIWebView *nameWebView=[[UIWebView alloc] initWithFrame:CGRectMake(110, 10, 180, 50)];
+    NSString *htmlString = [NSString stringWithFormat:@"<html>"
+                          "<head> "
+                          "<style type=\"text/css\"> "
+                          "body {font-size: %f;; color: %@;}"
+                          "a{color:#ccc}"
+                          "</style>"
+                          "</head>"
+                          "<body><p>%@</p></body>"
+                          "</html>", 11.0, @"#000",[itemDic objectForKey:@"name"]];
+    [nameWebView loadHTMLString:htmlString baseURL:nil];
+    [nameWebView setBackgroundColor:[UIColor clearColor]];
+    [nameWebView setOpaque:NO];
+    nameWebView.scrollView.scrollEnabled=NO;
     UILabel *priceLabel=[[UILabel alloc] initWithFrame:CGRectMake(120, 60, 60, 20)];
     priceLabel.text=[NSString stringWithFormat:@"%@",[itemDic objectForKey:@"price"]];
     priceLabel.textColor=[UIColor redColor];
     UILabel *saveLabel=[[UILabel alloc] initWithFrame:CGRectMake(200, 60, 80, 20)];
     saveLabel.text=[NSString stringWithFormat:@"可返利"];
+    saveLabel.backgroundColor=[UIColor redColor];
+    saveLabel.textColor=[UIColor whiteColor];
+    saveLabel.textAlignment=NSTextAlignmentCenter;
     saveLabel.adjustsFontSizeToFitWidth=YES;
-    UILabel *sellLabel=[[UILabel alloc] initWithFrame:CGRectMake(120, 100, 180, 20)];
+    UILabel *sellLabel=[[UILabel alloc] initWithFrame:CGRectMake(120, 80, 180, 20)];
     sellLabel.text=[NSString stringWithFormat:@"最近售出%@件",[itemDic objectForKey:@"sell"]];
-    nameLabel.backgroundColor=priceLabel.backgroundColor=saveLabel.backgroundColor=sellLabel.backgroundColor=[UIColor clearColor];
-    [cell addSubview:nameLabel];
+    sellLabel.font=[UIFont fontWithName:@"Arial" size:13];
+    priceLabel.backgroundColor=sellLabel.backgroundColor=[UIColor clearColor];
+    [cell addSubview:nameWebView];
     [cell addSubview:priceLabel];
     [cell addSubview:saveLabel];
     [cell addSubview:sellLabel];

@@ -29,7 +29,7 @@
 {
     UIView *primaryView=[[UIView alloc] initWithFrame:[UIScreen mainScreen].bounds];
     self.view=primaryView;
-    self.view.backgroundColor=[UIColor colorWithPatternImage:[UIImage imageNamed:@"我的可及-系统设置-背景"]];
+    self.view.backgroundColor=[UIColor colorWithPatternImage:[UIImage imageNamed:@"我的可及_置_背景"]];
     self.myTableView=[[UITableView alloc] initWithFrame:CGRectMake(40, 0, 280,[UIScreen mainScreen].bounds.size.height-49)];
    // self.myTableView.backgroundColor=[UIColor colorWithPatternImage:[UIImage imageNamed:@"我的可及-系统设置-背景"]];
     self.myTableView.backgroundColor=[UIColor clearColor];
