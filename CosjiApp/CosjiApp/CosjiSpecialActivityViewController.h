@@ -12,6 +12,7 @@
 {
     NSMutableArray *itemsArray;
     int currentPage;
+    CGPoint prePoint;
 
 }
 @property (strong, nonatomic)  UITableView *tableView;

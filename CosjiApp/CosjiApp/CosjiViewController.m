@@ -404,7 +404,7 @@ void TopImageFromURL( NSURL * URL, void (^imageBlock)(UIImage * image), void (^e
                     btnView.backgroundColor=[UIColor whiteColor];
                     UIButton *button=[UIButton buttonWithType:UIButtonTypeCustom];
                     button.frame=CGRectMake(0,5, 95, 50);
-                    button.tag=indexPath.row*3;
+                    button.tag=indexPath.row*3+x;
                     NSString *imageUrl1=[NSString stringWithFormat:@"%@",[storeDic objectForKey:@"logo"]];
                     imageUrl1=[imageUrl1 stringByReplacingOccurrencesOfString:@"\"" withString:@""];
                     if ([imageUrl1 rangeOfString:@"http://www.Cosji.com/"].location==NSNotFound) {
@@ -441,7 +441,6 @@ void TopImageFromURL( NSURL * URL, void (^imageBlock)(UIImage * image), void (^e
                                            });
                                        }
                                    });
-                    
                     [button addTarget:self action:@selector(opRemenshangcheng:) forControlEvents:UIControlEventTouchUpInside];
                     [btnView addSubview:button];
                     [cell addSubview:btnView];

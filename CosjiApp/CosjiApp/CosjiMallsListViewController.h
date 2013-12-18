@@ -12,6 +12,8 @@
 {
     NSMutableArray *storeListArray;
     int currentPage;
+    int selectedIndex;
+    CGPoint prePoint;
 }
 @property (strong,nonatomic)  UITableView *mainTableView;
 @property (strong, nonatomic)UIView *CustomHeadView;

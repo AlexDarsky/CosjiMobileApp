@@ -7,6 +7,8 @@
 //
 
 #import "CosjiMallsListViewController.h"
+#import "CosjiWebViewController.h"
+#import "CosjiLoginViewController.h"
 
 @interface CosjiMallsListViewController ()
 
@@ -59,7 +61,7 @@
         [SVProgressHUD showWithStatus:@"正在载入。。。"];
         currentPage=1;
         CosjiServerHelper *serverHelper=[CosjiServerHelper shareCosjiServerHelper];
-        NSDictionary *tmpDic=[NSDictionary dictionaryWithDictionary:[serverHelper getJsonDictionary:[NSString stringWithFormat:@"/mall/getAll/?page=%d",currentPage]]];
+        NSDictionary *tmpDic=[NSDictionary dictionaryWithDictionary:[serverHelper getJsonDictionary:[NSString stringWithFormat:@"/mall/getAll/?page=%d&&num=15",currentPage]]];
         if ([tmpDic objectForKey:@"body"]!=nil)
         {
             dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
@@ -122,7 +124,7 @@
             btnView.backgroundColor=[UIColor whiteColor];
             UIButton *button=[UIButton buttonWithType:UIButtonTypeCustom];
             button.frame=CGRectMake(0,5, 95, 50);
-            button.tag=indexPath.row*3;
+            button.tag=indexPath.row*3+x;
             NSString *imageUrl1=[NSString stringWithFormat:@"%@",[storeDic objectForKey:@"logo"]];
             imageUrl1=[imageUrl1 stringByReplacingOccurrencesOfString:@"\"" withString:@""];
             if ([imageUrl1 rangeOfString:@"http://www.Cosji.com/"].location==NSNotFound) {
@@ -172,42 +174,98 @@
     }
     return cell;
 }
-- (void)scrollViewWillEndDragging:(UIScrollView *)scrollView withVelocity:(CGPoint)velocity targetContentOffset:(inout CGPoint *)targetContentOffset
+
+- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
 {
     NSLog(@"%f %f",scrollView.contentOffset.y,scrollView.contentSize.height - scrollView.frame.size.height);
-    if(scrollView.contentOffset.y > ((scrollView.contentSize.height - scrollView.frame.size.height))&&scrollView.contentOffset.y>0)
-        
+    if (scrollView.contentOffset.y>=(scrollView.contentSize.height - scrollView.frame.size.height)+100&&scrollView.contentOffset.y>0)
     {
-        [self loadDataBegin];
+        [SVProgressHUD showWithStatus:@"正在载入。。。"];
+        [self performSelector:@selector(loadDataBegin) withObject:Nil afterDelay:2.0];
     }
-    
 }
+
 -(void)loadDataBegin
 {
     NSLog(@"%d",currentPage);
     CosjiServerHelper *serverHelper=[CosjiServerHelper shareCosjiServerHelper];
     currentPage+=1;
-    NSDictionary *tmpDic=[NSDictionary dictionaryWithDictionary:[serverHelper getJsonDictionary:[NSString stringWithFormat:@"/mall/ship/?page=%d&&num=16",currentPage]]];
+    NSDictionary *tmpDic=[NSDictionary dictionaryWithDictionary:[serverHelper getJsonDictionary:[NSString stringWithFormat:@"/mall/getAll/?page=%d&&num=15",currentPage]]];
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         NSDictionary *recordDic=[NSDictionary dictionaryWithDictionary:[tmpDic objectForKey:@"body"]];
         NSArray *loadArray=[[NSArray alloc] initWithArray:[recordDic objectForKey:@"record"]];
         if ([loadArray count]>0) {
+            prePoint=CGPointMake(0,self.mainTableView.contentSize.height);
             NSLog(@"load Store %d",[storeListArray count]);
             [storeListArray addObjectsFromArray:loadArray];
             dispatch_async(dispatch_get_main_queue(), ^{
                 [self.mainTableView reloadData];
-                [SVProgressHUD dismiss];
+                [self performSelector:@selector(startContentOffset:) withObject:nil afterDelay:0.5];
             });
         }else
         {
             dispatch_async(dispatch_get_main_queue(), ^{
                 currentPage-=1;
-                [SVProgressHUD dismiss];
             });
         }
     });
     [SVProgressHUD dismiss];
-
+}
+-(void)startContentOffset:(CGPoint)point
+{
+    [self.mainTableView setContentOffset:prePoint animated:YES];
+}
+-(void)opRemenshangcheng:(id)sender
+{
+    selectedIndex=[sender tag];
+    if ([[[NSUserDefaults standardUserDefaults] objectForKey:@"logined"]isEqualToString:@"YES"]) {
+        NSDictionary *tmpDic=[NSDictionary dictionaryWithDictionary:[storeListArray objectAtIndex:selectedIndex]];
+        NSString *storeUrl=[NSString stringWithFormat:@"%@",[tmpDic objectForKey:@"url"]];
+        NSLog(@"%@",[storeUrl stringByReplacingOccurrencesOfString:@"\"" withString:@""]);
+        NSURL *url =[NSURL URLWithString:[storeUrl stringByReplacingOccurrencesOfString:@"\"" withString:@""]];
+        NSURLRequest *request =[NSURLRequest requestWithURL:url];
+        CosjiWebViewController *storeBrowseViewController=[CosjiWebViewController shareCosjiWebViewController];
+        
+        [self presentViewController:storeBrowseViewController animated:YES completion:nil];
+        [storeBrowseViewController.webView loadRequest:request];
+        [storeBrowseViewController.storeName setText:[NSString stringWithFormat:@"%@",[tmpDic objectForKey:@"name"]]];
+        
+    }else
+    {
+        UIAlertView *alert=[[UIAlertView alloc] initWithTitle:@"提示" message:@"登录获取返利" delegate:self cancelButtonTitle:@"跳过" otherButtonTitles:@"登陆",nil];
+        alert.tag=1;
+        [alert show];
+    }
+}
+-(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    if (alertView.tag==1) {
+        switch (buttonIndex) {
+            case 0:{
+                NSLog(@"case 0");
+                NSDictionary *tmpDic=[NSDictionary dictionaryWithDictionary:[storeListArray objectAtIndex:selectedIndex]];
+                NSString *storeUrl=[NSString stringWithFormat:@"%@",[tmpDic objectForKey:@"yiqifaurl"]];
+                NSLog(@"%@",[storeUrl stringByReplacingOccurrencesOfString:@"\"" withString:@""]);
+                
+                NSURL *url =[NSURL URLWithString:[storeUrl stringByReplacingOccurrencesOfString:@"\"" withString:@""]];
+                NSURLRequest *request =[NSURLRequest requestWithURL:url];
+                CosjiWebViewController *storeBrowseViewController=[CosjiWebViewController shareCosjiWebViewController];
+                [self presentViewController:storeBrowseViewController animated:YES completion:nil];
+                [storeBrowseViewController.webView loadRequest:request];
+                [storeBrowseViewController.storeName setText:[NSString stringWithFormat:@"%@",[tmpDic objectForKey:@"name"]]];
+            }
+                break;
+                
+            case 1:
+            {
+                NSLog(@"case 1");
+                CosjiLoginViewController *loginViewController=[CosjiLoginViewController shareCosjiLoginViewController];
+                [self presentViewController:loginViewController animated:YES completion:nil];
+                
+            }
+                break;
+        }
+    }
 }
 - (void)didReceiveMemoryWarning
 {

@@ -270,13 +270,13 @@ void ItemImageFromURL( NSURL * URL, void (^imageBlock)(UIImage * image), void (^
     [storeBrowseViewController.storeName setText:[NSString stringWithFormat:@"%@",[tmpDic objectForKey:@"name"]]];
 
 }
-- (void)scrollViewWillEndDragging:(UIScrollView *)scrollView withVelocity:(CGPoint)velocity targetContentOffset:(inout CGPoint *)targetContentOffset
+- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
 {
     NSLog(@"%f %f",scrollView.contentOffset.y,scrollView.contentSize.height - scrollView.frame.size.height);
-    if(scrollView.contentOffset.y > ((scrollView.contentSize.height - scrollView.frame.size.height))&&scrollView.contentOffset.y>0)
-        
+    if (scrollView.contentOffset.y>=(scrollView.contentSize.height - scrollView.frame.size.height)+100&&scrollView.contentOffset.y>0)
     {
-        [self loadDataBegin];
+        [SVProgressHUD showWithStatus:@"正在载入。。。"];
+        [self performSelector:@selector(doneLoadingTableViewData) withObject:Nil afterDelay:2.0];
     }
     
 }
@@ -284,45 +284,40 @@ void ItemImageFromURL( NSURL * URL, void (^imageBlock)(UIImage * image), void (^
 
 {
     
-    [SVProgressHUD showWithStatus:@"正在加载"];
-    //  [self doneLoadingTableViewData];
     [self performSelector:@selector(doneLoadingTableViewData) withObject:nil afterDelay:1.0];
     
 }
 - (void)doneLoadingTableViewData{
     NSLog(@"===加载完数据");
-    //   [self.tableView refreshFinished];
     NSLog(@"%d",currentPage);
     CosjiServerHelper *serverHelper=[CosjiServerHelper shareCosjiServerHelper];
     currentPage+=1;
+    
     NSDictionary *tmpDic=[NSDictionary dictionaryWithDictionary:[serverHelper getJsonDictionary:[NSString stringWithFormat:@"/product/ship/?page=%d&&num=16",currentPage]]];
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         NSDictionary *recordDic=[NSDictionary dictionaryWithDictionary:[tmpDic objectForKey:@"body"]];
         NSArray *loadArray=[[NSArray alloc] initWithArray:[recordDic objectForKey:@"record"]];
         if ([loadArray count]>0) {
+            prePoint=CGPointMake(0,self.tableView.contentSize.height);
             NSLog(@"load Store %d",[itemsArray count]);
             [itemsArray addObjectsFromArray:loadArray];
             dispatch_async(dispatch_get_main_queue(), ^{
                 [self.tableView reloadData];
-                /*
-                 [self.NewsTableView beginUpdates];
-                 [self.NewsTableView reloadData];
-                 [self.NewsTableView endUpdates];
-                 */
-                [SVProgressHUD dismiss];
-              //  CGPoint point=CGPointMake(0,self.tableView.contentSize.height-self.tableView.frame.size.height);
-                //[self.tableView setContentOffset:point animated:YES];
+                [self performSelector:@selector(startContentOffset:) withObject:nil afterDelay:0.5];
                 
             });
         }else
         {
             dispatch_async(dispatch_get_main_queue(), ^{
                 currentPage-=1;
-                [SVProgressHUD dismiss];
             });
         }
     });
     [SVProgressHUD dismiss];
+}
+-(void)startContentOffset:(CGPoint)point
+{
+    [self.tableView setContentOffset:prePoint animated:YES];
 }
 -(void)showSearchView
 {
