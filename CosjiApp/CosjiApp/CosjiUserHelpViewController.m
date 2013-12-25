@@ -69,7 +69,7 @@ static CosjiUserHelpViewController *shareCosjiUserHelpViewController = nil;
 }
 -(void)setUserHelpFor:(int)requestID
 {
-    [SVProgressHUD showWithStatus:@"正在载入。。。"];
+    [SVProgressHUD showWithStatus:@"正在载入..."];
     if ([itemsArray count]>0)
     {
         [itemsArray removeAllObjects];

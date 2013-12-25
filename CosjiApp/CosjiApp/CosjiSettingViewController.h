@@ -12,6 +12,8 @@
 {
     NSArray *itemArray;
     UIImageView *grayImageView;
+    UIButton *saveBtn;
 }
 @property (strong,nonatomic)UITableView *myTableView;
+@property (strong)id settingDelegate;
 @end

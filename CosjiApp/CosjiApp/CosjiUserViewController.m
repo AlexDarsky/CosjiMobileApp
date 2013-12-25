@@ -30,6 +30,7 @@
     UILabel *jifenbaoTitle;
     UIButton *loginBtn;
     UIButton *registerBtn;
+    UIImageView * userImageBoard;
     UILabel *qq;
 }
 @property (strong,nonatomic)UIViewController *backViewController;
@@ -72,17 +73,18 @@ static CosjiUserViewController *CosjiUserRootController;
     CosjiUserRootController=self;
     backViewShowing=NO;
     self.settingViewController=[[CosjiSettingViewController alloc] init];
+    self.settingViewController.settingDelegate=self;
     self.fanliListViewController=[[CosjiFanLiListViewController alloc] init];
     [self addChildViewController:self.settingViewController];
     [self.view addSubview: self.settingViewController.view];
     [self prepareMainBoard];
     self.customNavBar=[[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 45)];
     self.customNavBar.backgroundColor=[UIColor colorWithPatternImage:[UIImage imageNamed:@"工具栏背景"]];
-    UIImageView *llogoImage=[[UIImageView alloc] initWithFrame:CGRectMake(14, 8, 156/2, 65/2)];
+    UIImageView *llogoImage=[[UIImageView alloc] initWithFrame:CGRectMake(14, 6, 156/2, 65/2)];
     llogoImage.image=[UIImage imageNamed:@"工具栏背景-标语"];
     [self.customNavBar addSubview:llogoImage];
     UIButton *settingBtn=[UIButton buttonWithType:UIButtonTypeCustom];
-    settingBtn.frame=CGRectMake(286, 10, 25, 25);
+    settingBtn.frame=CGRectMake(285, 45/2-40/4, 60/2, 40/2);
     [settingBtn setBackgroundImage:[UIImage imageNamed:@"系统设置"] forState:UIControlStateNormal];
     [settingBtn addTarget:self action:@selector(showOrHideBackView:) forControlEvents:UIControlEventTouchUpInside];
     [self.customNavBar addSubview:settingBtn];
@@ -94,7 +96,7 @@ static CosjiUserViewController *CosjiUserRootController;
     [self.MainBoard setBackgroundColor:[UIColor colorWithRed:229.0/255.0 green:229.0/255.0 blue:229.0/255.0 alpha:100]];
     self.userInfoView=[[UIView alloc] initWithFrame:CGRectMake(0, 45, 320, 140)];
     self.userInfoView.backgroundColor=[UIColor colorWithPatternImage:[UIImage imageNamed:@"我的可及-背景"]];
-    self.userName=[[UILabel alloc] initWithFrame:CGRectMake(88, 20, 100, 12)];
+    self.userName=[[UILabel alloc] initWithFrame:CGRectMake(88, 20, 120, 12)];
     self.userName.backgroundColor=[UIColor clearColor];
     self.userName.textColor=[UIColor whiteColor];
     self.userName.font=[UIFont fontWithName:@"Arial" size:14];
@@ -132,7 +134,7 @@ static CosjiUserViewController *CosjiUserRootController;
     jifenbaoTitle.font=[UIFont fontWithName:@"Arial" size:14];
     jifenbaoTitle.text=@"积分宝";
     [self.userInfoView addSubview:jifenbaoTitle];
-    self.jifenbaoLabel=[[UILabel alloc] initWithFrame:CGRectMake(220, 69, 48, 14)];
+    self.jifenbaoLabel=[[UILabel alloc] initWithFrame:CGRectMake(220, 69, 100, 14)];
     self.jifenbaoLabel.backgroundColor=[UIColor clearColor];
     self.jifenbaoLabel.textColor=[UIColor yellowColor];
     self.jifenbaoLabel.font=[UIFont fontWithName:@"Arial" size:12];
@@ -199,12 +201,12 @@ static CosjiUserViewController *CosjiUserRootController;
 -(void)hideUserInfoView:(BOOL)isHide
 {
     if (isHide) {
-        self.userName.hidden=self.vipImage.hidden=bananceTitle.hidden=self.balanceLabel.hidden=self.jifenbaoLabel.hidden=jifenbaoTitle.hidden=jifenTitle.hidden=self.scoreLabel.hidden=self.tixianBtn.hidden=self.tijifenbaoBtn.hidden=self.qiandaoBtn.hidden=self.tixianLineView.hidden=YES;
+        self.userName.hidden=self.vipImage.hidden=bananceTitle.hidden=self.balanceLabel.hidden=self.jifenbaoLabel.hidden=jifenbaoTitle.hidden=jifenTitle.hidden=self.scoreLabel.hidden=self.tixianBtn.hidden=self.tijifenbaoBtn.hidden=self.qiandaoBtn.hidden=self.tixianLineView.hidden=self.userHeadImage.hidden=userImageBoard.hidden=YES;
         loginBtn.hidden=registerBtn.hidden=NO;
         
     }else
     {
-        self.userName.hidden=self.vipImage.hidden=bananceTitle.hidden=self.balanceLabel.hidden=self.jifenbaoLabel.hidden=jifenbaoTitle.hidden=jifenTitle.hidden=self.scoreLabel.hidden=self.tixianBtn.hidden=self.tijifenbaoBtn.hidden=self.qiandaoBtn.hidden=self.tixianLineView.hidden=NO;
+        self.userName.hidden=self.vipImage.hidden=bananceTitle.hidden=self.balanceLabel.hidden=self.jifenbaoLabel.hidden=jifenbaoTitle.hidden=jifenTitle.hidden=self.scoreLabel.hidden=self.tixianBtn.hidden=self.tijifenbaoBtn.hidden=self.qiandaoBtn.hidden=self.tixianLineView.hidden=self.userHeadImage.hidden=userImageBoard.hidden=NO;
         loginBtn.hidden=registerBtn.hidden=YES;
     }
 
@@ -213,6 +215,23 @@ static CosjiUserViewController *CosjiUserRootController;
 {
     if ([[[NSUserDefaults standardUserDefaults] objectForKey:@"logined"] isEqualToString:@"YES"]) {
         [self hideUserInfoView:NO];
+        if (self.qiandaoBtn.enabled==YES)
+        {
+            CosjiServerHelper *serverHelper=[CosjiServerHelper shareCosjiServerHelper];
+            NSDictionary *tmpDic=[NSDictionary dictionaryWithDictionary:[serverHelper getJsonDictionary:@"/registry/status"]];
+            NSDictionary *statusDic=[NSDictionary dictionaryWithDictionary:[tmpDic objectForKey:@"body"]];
+            NSString *statusString=[NSString stringWithFormat:@"%@",[statusDic objectForKey:@"status"]];
+            if ([statusString isEqualToString:@"0"])
+            {
+                
+                self.qiandaoBtn.enabled=YES;
+            }else
+            {
+                [self.qiandaoBtn setTitle:@"已签到" forState:UIControlStateNormal];
+                self.qiandaoBtn.enabled=NO;
+
+            }
+        }
         NSDictionary *tmpDic=[NSDictionary dictionaryWithDictionary:[[NSUserDefaults standardUserDefaults] objectForKey:@"userInfo"]];
         NSDictionary *infoDic=[NSDictionary dictionaryWithDictionary:[tmpDic objectForKey:@"body"]];
         self.userName.text=[NSString stringWithFormat:@"%@",[infoDic objectForKey:@"username"]];
@@ -223,17 +242,19 @@ static CosjiUserViewController *CosjiUserRootController;
         urlString=[urlString stringByReplacingOccurrencesOfString:@"\"" withString:@""];
         if (self.userHeadImage==nil) {
             self.userHeadImage=[[UIImageView alloc] init];
-            self.userHeadImage.frame = CGRectMake(10.f, 10.f, 72, 72);
+            self.userHeadImage.frame = CGRectMake(13.f, 12.f, 70, 70);
             self.userHeadImage.layer.masksToBounds = YES;
-            self.userHeadImage.layer.cornerRadius = 36;
+            self.userHeadImage.layer.cornerRadius = 35;
             HeadImageFromURL([NSURL URLWithString:urlString], ^( UIImage * image )
                              {
                                  [self.userHeadImage setImage:image];
                              }, ^(void){
             });
-            UIImageView * userImageBoard = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"我的可及-人像框"]];
-            userImageBoard.frame = CGRectMake(10.f, 10.f, 76, 76);
-            [self.userInfoView addSubview:userImageBoard];
+            if (userImageBoard==nil) {
+                userImageBoard = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"我的可及-人像框"]];
+                userImageBoard.frame = CGRectMake(10.f, 10.f, 76, 76);
+                [self.userInfoView addSubview:userImageBoard];
+            }
             [self.userInfoView addSubview:self.userHeadImage];
 
         }else
@@ -497,24 +518,28 @@ void HeadImageFromURL( NSURL * URL, void (^imageBlock)(UIImage * image), void (^
 }
 -(void)qiandaoAnimation:(UIButton*)sender
 {
-    NSLog(@"qiandao");
-    qq.alpha = 0.0f;
-    [UIView beginAnimations:@"fadeIn" context:nil];
-    [UIView setAnimationDuration:3];
-    qq.alpha = 1.0f;
-    CGFloat translation = -30;
-    qq.transform = CGAffineTransformMakeTranslation(0, translation);
-    [UIView commitAnimations];
-    [UIView beginAnimations:@"fadeIn" context:nil];
-    [UIView setAnimationDuration:4.5];
-    qq.alpha = 0.0f;
-    [UIView commitAnimations];
-    qq.transform = CGAffineTransformMakeTranslation(0, 0);
-    [sender setTitle:@"已签到" forState:UIControlStateNormal];
-    sender.userInteractionEnabled=NO;
-    [sender setBackgroundColor:[UIColor colorWithRed:0 green:0 blue:0 alpha:0.2]];
-    
-
+    if (sender.enabled==YES)
+    {
+        CosjiServerHelper *serverHelper=[CosjiServerHelper shareCosjiServerHelper];
+        NSDictionary *signDic=[NSDictionary dictionaryWithDictionary:[serverHelper getJsonDictionary:@"/registry/sign"]];
+        NSLog(@"qiandao");
+        qq.alpha = 0.0f;
+        [UIView beginAnimations:@"fadeIn" context:nil];
+        [UIView setAnimationDuration:3];
+        qq.alpha = 1.0f;
+        CGFloat translation = -30;
+        qq.transform = CGAffineTransformMakeTranslation(0, translation);
+        [UIView commitAnimations];
+        [UIView beginAnimations:@"fadeIn" context:nil];
+        [UIView setAnimationDuration:4.5];
+        qq.alpha = 0.0f;
+        [UIView commitAnimations];
+        qq.transform = CGAffineTransformMakeTranslation(0, 0);
+        [sender setTitle:@"已签到" forState:UIControlStateNormal];
+        sender.userInteractionEnabled=NO;
+        [sender setBackgroundColor:[UIColor colorWithRed:0 green:0 blue:0 alpha:0.2]];
+        qq.enabled=NO;
+    }
 }
 - (void)viewDidUnload {
     [self setCustomNavBar:nil];

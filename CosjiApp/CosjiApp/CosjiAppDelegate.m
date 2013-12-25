@@ -12,9 +12,10 @@
 #import "CosjiSpecialActivityViewController.h"
 #import "CosjiTBViewController.h"
 #import "CosjiUserViewController.h"
-#define kAppKey             @"21428060"
-#define kAppSecret          @"dda4af6d892e2024c26cd621b05dd2d0"
-#define kAppRedirectURI     @"http://cosjii.com"
+#import "TopIOSClient.h"
+//#define CosjiAppKey             @"21602410"
+//#define CosjiAppSecret          @"40b803eb95d919f230118ad0095bf55d"
+//#define CosjiAppRedirectURI     @"http://cosjii.com"
 
 @implementation CosjiAppDelegate
 @synthesize viewController;
@@ -34,7 +35,7 @@
     tbFanliNavCon.navigationBarHidden=YES;
     rootTabBarController.viewControllers=[NSArray arrayWithObjects:mainNavCon,tbFanliNavCon,specialActivityViewController,userViewController, nil];
     //设置tab bar item 图标的
-    [[NSUserDefaults standardUserDefaults] setObject:@"NO" forKey:@"logined"];
+   //[[NSUserDefaults standardUserDefaults] setObject:@"NO" forKey:@"logined"];
     [mainNavCon.tabBarItem setFinishedSelectedImage:[UIImage imageNamed:@"首页-动态"] withFinishedUnselectedImage:[UIImage imageNamed:@"首页-默认"] ];
     [mainNavCon.tabBarItem setTitle:@"首页"];
     [tbFanliNavCon.tabBarItem setFinishedSelectedImage:[UIImage imageNamed:@"淘宝-动态"]  withFinishedUnselectedImage:[UIImage imageNamed:@"淘宝-默认"]];
@@ -48,6 +49,7 @@
     //add transaction observer
     self.window.rootViewController = rootTabBarController;
     [self.window makeKeyAndVisible];
+    [TopIOSClient registerIOSClient:CosjiAppKey appSecret:CosjiAppSecret callbackUrl:CosjiAppRedirectURI needAutoRefreshToken:TRUE];
     return YES;
 }
 
@@ -87,5 +89,13 @@
     
     return YES;
 }
-
+- (BOOL)application:(UIApplication *)application handleOpenURL:(NSURL*)url
+{
+    
+    TopIOSClient *iosClient = [TopIOSClient getIOSClientByAppKey:CosjiAppKey];
+    
+    [iosClient authCallback:[NSString stringWithFormat:@"%@",url]];
+    
+    return YES;
+}
 @end

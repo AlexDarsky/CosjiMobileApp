@@ -108,6 +108,7 @@
                 break;
         }
         requestURL=[requestURL stringByAppendingFormat:@"?userID=%@&num=10&page=%d",self.userID,currentPage];
+    NSLog(@"userID is %@",self.userID);
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
     CosjiServerHelper *serverHelper=[CosjiServerHelper shareCosjiServerHelper];
     NSDictionary *requestDic=[NSDictionary dictionaryWithDictionary:[serverHelper getJsonDictionary:requestURL]];
@@ -274,7 +275,7 @@ void FanLiItemImageDownloadURL( NSURL * URL, void (^imageBlock)(UIImage * image)
         case 2:
         {
             [cell setBackgroundColor:[UIColor colorWithRed:229.0/255.0 green:229.0/255.0 blue:229.0/255.0 alpha:0.8]];
-            UILabel *profitLabel=[[UILabel alloc] initWithFrame:CGRectMake(160, 9/2, 140, 30)];
+            UILabel *profitLabel=[[UILabel alloc] initWithFrame:CGRectMake(180, 9/2, 120, 30)];
             profitLabel.text=[NSString stringWithFormat:@"获得%@",[NSString stringWithFormat:@"%@",[itemDic objectForKey:@"profit"]]];
             profitLabel.backgroundColor=[UIColor clearColor];
             profitLabel.font=[UIFont fontWithName:@"Arial" size:13];

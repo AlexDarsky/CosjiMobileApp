@@ -58,7 +58,7 @@
     self.tabBarController.tabBar.hidden=NO;
     if ([storeListArray count]==0)
     {
-        [SVProgressHUD showWithStatus:@"正在载入。。。"];
+        [SVProgressHUD showWithStatus:@"正在载入..."];
         currentPage=1;
         CosjiServerHelper *serverHelper=[CosjiServerHelper shareCosjiServerHelper];
         NSDictionary *tmpDic=[NSDictionary dictionaryWithDictionary:[serverHelper getJsonDictionary:[NSString stringWithFormat:@"/mall/getAll/?page=%d&&num=15",currentPage]]];
@@ -180,7 +180,7 @@
     NSLog(@"%f %f",scrollView.contentOffset.y,scrollView.contentSize.height - scrollView.frame.size.height);
     if (scrollView.contentOffset.y>=(scrollView.contentSize.height - scrollView.frame.size.height)+100&&scrollView.contentOffset.y>0)
     {
-        [SVProgressHUD showWithStatus:@"正在载入。。。"];
+        [SVProgressHUD showWithStatus:@"正在载入..."];
         [self performSelector:@selector(loadDataBegin) withObject:Nil afterDelay:2.0];
     }
 }

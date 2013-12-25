@@ -15,11 +15,10 @@
 #import "SVProgressHUD.h"
 #import "CosjiGuideViewController.h"
 #import "CosjiItemListViewController.h"
+#import "TopIOSClient.h"
+#import "TopAttachment.h"
 
 
-#define kAppKey             @"21428060"
-#define kAppSecret          @"dda4af6d892e2024c26cd621b05dd2d0"
-#define kAppRedirectURI     @"http://cosjii.com"
 
 @interface CosjiViewController ()
 {
@@ -73,12 +72,33 @@ static UINavigationController* nc;
     [self.view addSubview:searchView];
     searchViewShowing=NO;
     [self.view addSubview:self.CustomHeadView];
-    UIImageView *llogoImage=[[UIImageView alloc] initWithFrame:CGRectMake(14, 8, 156/2, 65/2)];
+    UIImageView *llogoImage=[[UIImageView alloc] initWithFrame:CGRectMake(14, 6, 156/2, 65/2)];
     llogoImage.image=[UIImage imageNamed:@"工具栏背景-标语"];
     [self.CustomHeadView addSubview:llogoImage];
     UIImageView *blogoImage=[[UIImageView alloc] initWithFrame:CGRectMake(129,13, 126/2, 42/2)];
     blogoImage.image=[UIImage imageNamed:@"工具栏背景-logo"];
     [self.CustomHeadView addSubview:blogoImage];
+    
+    if (qiandaoBtn==nil) {
+        qiandaoBtn=[UIButton buttonWithType:UIButtonTypeCustom];
+        qiandaoBtn.frame=CGRectMake(10, 0, 218/2, 25);
+        [qiandaoBtn addTarget:self action:@selector(qiandaoServer:) forControlEvents:UIControlEventTouchUpInside];
+        [qiandaoBtn setBackgroundColor:[UIColor whiteColor]];
+        [qiandaoBtn setTitle:@"      签到赚线" forState:UIControlStateNormal];
+        qiandaoBtn.titleLabel.font=[UIFont fontWithName:@"Arial" size:12];
+        [qiandaoBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+        qq=[[UILabel alloc] initWithFrame:CGRectMake(30, -15, 30, 30)];
+        qq.backgroundColor=[UIColor clearColor];
+        qq.text=@"+15";
+        qq.textColor=[UIColor redColor];
+        qq.adjustsFontSizeToFitWidth=YES;
+        qq.alpha=0.0;
+        UIImageView *qiandaoImage=[[UIImageView alloc] initWithFrame:CGRectMake(5, 4, 18, 17)];
+        [qiandaoImage setImage:[UIImage imageNamed:@"首页-签到"]];
+        qiandaoImage.userInteractionEnabled=YES;
+        [qiandaoBtn addSubview:qiandaoImage];
+        [qiandaoBtn addSubview:qq];
+    }
    }
 - (void)viewDidLoad
 {
@@ -113,12 +133,26 @@ static UINavigationController* nc;
 -(void)viewWillAppear:(BOOL)animated
 {
     self.tabBarController.tabBar.hidden=NO;
+    CosjiServerHelper *serverHelper=[CosjiServerHelper shareCosjiServerHelper];
+    if ([[[NSUserDefaults standardUserDefaults] objectForKey:@"logined"]isEqualToString:@"YES"]&&qiandaoBtn.enabled==YES)
+    {
+        NSDictionary *tmpDic=[NSDictionary dictionaryWithDictionary:[serverHelper getJsonDictionary:@"/registry/status"]];
+        NSDictionary *statusDic=[NSDictionary dictionaryWithDictionary:[tmpDic objectForKey:@"body"]];
+        NSString *statusString=[NSString stringWithFormat:@"%@",[statusDic objectForKey:@"status"]];
+        if ([statusString isEqualToString:@"0"]) {
+            NSLog(@"qiandao enabled");
+            qiandaoBtn.enabled=YES;
+        }else
+        {
+            [qiandaoBtn setTitle:@"       已签到" forState:UIControlStateNormal];
+            qiandaoBtn.enabled=NO;
+        }
+    }
     if ([storeListArray count]==0)
     {
-        [SVProgressHUD showWithStatus:@"正在载入。。。"];
-        CosjiServerHelper *serverHelper=[CosjiServerHelper shareCosjiServerHelper];
+        [SVProgressHUD showWithStatus:@"正在载入..."];
+
         NSDictionary *tmpDic=[NSDictionary dictionaryWithDictionary:[serverHelper getJsonDictionary:@"/mall/hot/"]];
-        
         if ([tmpDic objectForKey:@"body"]!=nil)
         {
             dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
@@ -139,6 +173,12 @@ static UINavigationController* nc;
 
     }
     [SVProgressHUD dismiss];
+}
+-(void)checkDidResign
+{
+    CosjiServerHelper *serverHelper=[CosjiServerHelper shareCosjiServerHelper];
+    [serverHelper jsonTest];
+
 }
 - (void)didReceiveMemoryWarning
 {
@@ -349,26 +389,7 @@ void TopImageFromURL( NSURL * URL, void (^imageBlock)(UIImage * image), void (^e
         {
             [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
             
-            if (qiandaoBtn==nil) {
-                qiandaoBtn=[UIButton buttonWithType:UIButtonTypeCustom];
-                qiandaoBtn.frame=CGRectMake(10, 0, 218/2, 25);
-                [qiandaoBtn addTarget:self action:@selector(qiandaoServer:) forControlEvents:UIControlEventTouchUpInside];
-                [qiandaoBtn setBackgroundColor:[UIColor whiteColor]];
-                [qiandaoBtn setTitle:@"      签到赚线" forState:UIControlStateNormal];
-                qiandaoBtn.titleLabel.font=[UIFont fontWithName:@"Arial" size:12];
-                [qiandaoBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-                qq=[[UILabel alloc] initWithFrame:CGRectMake(30, -15, 30, 30)];
-                qq.backgroundColor=[UIColor clearColor];
-                qq.text=@"+15";
-                qq.textColor=[UIColor redColor];
-                qq.adjustsFontSizeToFitWidth=YES;
-                qq.alpha=0.0;
-                UIImageView *qiandaoImage=[[UIImageView alloc] initWithFrame:CGRectMake(5, 4, 18, 17)];
-                [qiandaoImage setImage:[UIImage imageNamed:@"首页-签到"]];
-                qiandaoImage.userInteractionEnabled=YES;
-                [qiandaoBtn addSubview:qiandaoImage];
-                [qiandaoBtn addSubview:qq];
-            }
+
             [cell addSubview:qiandaoBtn];
             UIButton *helperBtn=[UIButton buttonWithType:UIButtonTypeCustom];
             helperBtn.frame=CGRectMake(10, 32, 218/2, 120/2);
@@ -461,22 +482,40 @@ void TopImageFromURL( NSURL * URL, void (^imageBlock)(UIImage * image), void (^e
 {
     if ([[[NSUserDefaults standardUserDefaults] objectForKey:@"logined"]isEqualToString:@"YES"])
     {
-        NSLog(@"qiandao");
-        qq.alpha = 0.0f;
-        [UIView beginAnimations:@"fadeIn" context:nil];
-        [UIView setAnimationDuration:2];
-        qq.alpha = 1.0f;
-        CGFloat translation = -10;
-        qq.transform = CGAffineTransformMakeTranslation(0, translation);
-        [UIView commitAnimations];
-        [UIView beginAnimations:@"fadeIn" context:nil];
-        [UIView setAnimationDuration:2.5];
-        qq.alpha = 0.0f;
-        [qiandaoBtn setTitle:@"       已签到" forState:UIControlStateNormal];
-        qiandaoBtn.userInteractionEnabled=NO;
-        [UIView commitAnimations];
-        qq.transform = CGAffineTransformMakeTranslation(0, 0);
-    }else
+        CosjiServerHelper *serverHelper=[CosjiServerHelper shareCosjiServerHelper];
+        if (qiandaoBtn.enabled==YES)
+        {
+            NSDictionary *tmpDic=[NSDictionary dictionaryWithDictionary:[serverHelper getJsonDictionary:@"/registry/status"]];
+            NSDictionary *statusDic=[NSDictionary dictionaryWithDictionary:[tmpDic objectForKey:@"body"]];
+            NSString *statusString=[NSString stringWithFormat:@"%@",[statusDic objectForKey:@"status"]];
+            if ([statusString isEqualToString:@"0"]) {
+                NSLog(@"qiandao enabled");
+                NSDictionary *signDic=[NSDictionary dictionaryWithDictionary:[serverHelper getJsonDictionary:@"/registry/sign"]];
+                NSLog(@"qiandaoDIC is %@",signDic);
+                qq.alpha = 0.0f;
+                [UIView beginAnimations:@"fadeIn" context:nil];
+                [UIView setAnimationDuration:2];
+                qq.alpha = 1.0f;
+                CGFloat translation = -10;
+                qq.transform = CGAffineTransformMakeTranslation(0, translation);
+                [UIView commitAnimations];
+                [UIView beginAnimations:@"fadeIn" context:nil];
+                [UIView setAnimationDuration:2.5];
+                qq.alpha = 0.0f;
+                [qiandaoBtn setTitle:@"       已签到" forState:UIControlStateNormal];
+                qiandaoBtn.userInteractionEnabled=NO;
+                [UIView commitAnimations];
+                qq.transform = CGAffineTransformMakeTranslation(0, 0);
+
+            }else
+            {
+                [qiandaoBtn setTitle:@"       已签到" forState:UIControlStateNormal];
+                qiandaoBtn.enabled=NO;
+
+            }
+        }
+
+            }else
     {
         UIAlertView *alert=[[UIAlertView alloc] initWithTitle:@"提示" message:@"登录账号，签到赚线" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"登陆",nil];
         [alert show];
@@ -530,6 +569,12 @@ void TopImageFromURL( NSURL * URL, void (^imageBlock)(UIImage * image), void (^e
                 
             }
                 break;
+        }
+    }else
+    {
+        if (buttonIndex==1) {
+            CosjiLoginViewController *loginViewController=[CosjiLoginViewController shareCosjiLoginViewController];
+            [self presentViewController:loginViewController animated:YES completion:nil];
         }
     }
 }
@@ -617,18 +662,52 @@ void TopImageFromURL( NSURL * URL, void (^imageBlock)(UIImage * image), void (^e
 -(void)searchItemFrom:(UITextField*)textField
 {
     [textField resignFirstResponder];
-    if (textField!=nil&&![textField.text isEqualToString:@""])
+    if ([[[NSUserDefaults standardUserDefaults] objectForKey:@"logined"]isEqualToString:@"YES"])
     {
-        NSLog(@"开始搜索");
-        CosjiItemListViewController *itemsListViewController=[CosjiItemListViewController shareCosjiItemListViewController];
-        [self presentViewController:itemsListViewController animated:YES completion:nil];
-        [itemsListViewController loadInfoWith:[NSString stringWithFormat:@"%@",searchField.text] atPage:1];
+        if (textField!=nil&&![textField.text isEqualToString:@""])
+        {
+                NSLog(@"开始搜索");
+            CosjiItemListViewController *itemsListViewController=[CosjiItemListViewController shareCosjiItemListViewController];
+            [self presentViewController:itemsListViewController animated:YES completion:nil];
+            [itemsListViewController loadInfoWith:[NSString stringWithFormat:@"%@",searchField.text] atPage:1];
+        }else
+        {
+            UIAlertView *alert=[[UIAlertView alloc] initWithTitle:@"错误" message:@"请输入您想要搜索的商品或查询的网址" delegate:nil cancelButtonTitle:@"好的" otherButtonTitles: nil];
+            [alert show];
+        }
+
     }else
     {
-        UIAlertView *alert=[[UIAlertView alloc] initWithTitle:@"错误" message:@"请输入您想要搜索的商品或查询的网址" delegate:nil cancelButtonTitle:@"好的" otherButtonTitles: nil];
+        UIAlertView *alert=[[UIAlertView alloc] initWithTitle:@"提示" message:@"登录查询获取返利" delegate:self cancelButtonTitle:@"跳过" otherButtonTitles:@"登陆",nil];
+        alert.tag=1;
         [alert show];
     }
 }
+-(void)showApiResponse:(id)data
+{
+    if ([data isKindOfClass:[TopApiResponse class]])
+    {
+        TopApiResponse *response = (TopApiResponse *)data;
+        
+        if ([response content])
+        {
+            NSLog(@"%@",[response content]);
+        }
+        else {
+            NSLog(@"%@",[(NSError *)[response error] userInfo]);
+        }
+        
+        NSDictionary *dictionary = (NSDictionary *)[response reqParams];
+        
+        for (id key in dictionary) {
+            
+            NSLog(@"key: %@, value: %@", key, [dictionary objectForKey:key]);
+            
+        }
+    }
+    
+}
+
 - (void)allMalls
 {
     if (self.mallsListViewController==nil) {

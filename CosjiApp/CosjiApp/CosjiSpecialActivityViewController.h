@@ -13,6 +13,7 @@
     NSMutableArray *itemsArray;
     int currentPage;
     CGPoint prePoint;
+    BOOL isSaveMode;
 
 }
 @property (strong, nonatomic)  UITableView *tableView;

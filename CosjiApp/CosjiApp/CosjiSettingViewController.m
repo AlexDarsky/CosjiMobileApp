@@ -9,12 +9,14 @@
 #import "CosjiSettingViewController.h"
 #import "CosjiUserHelpViewController.h"
 #import "CosjiGuideViewController.h"
+#import "CosjiUserViewController.h"
 
 @interface CosjiSettingViewController ()
 
 @end
 
 @implementation CosjiSettingViewController
+@synthesize settingDelegate;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -30,7 +32,7 @@
     UIView *primaryView=[[UIView alloc] initWithFrame:[UIScreen mainScreen].bounds];
     self.view=primaryView;
     self.view.backgroundColor=[UIColor colorWithPatternImage:[UIImage imageNamed:@"我的可及_置_背景"]];
-    self.myTableView=[[UITableView alloc] initWithFrame:CGRectMake(40, 0, 280,[UIScreen mainScreen].bounds.size.height-49)];
+    self.myTableView=[[UITableView alloc] initWithFrame:CGRectMake(40, 0, 280,[UIScreen mainScreen].bounds.size.height-49-20)];
    // self.myTableView.backgroundColor=[UIColor colorWithPatternImage:[UIImage imageNamed:@"我的可及-系统设置-背景"]];
     self.myTableView.backgroundColor=[UIColor clearColor];
     [self.myTableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
@@ -39,8 +41,26 @@
     self.myTableView.dataSource=self;
     self.myTableView.delegate=self;
     [self.view addSubview:self.myTableView];
-    itemArray=[[NSArray alloc] initWithObjects:@"用户指南",@"返利问题",@"常见问题",@"客服在线",@"分享软件",@"意见反馈",@"清除缓存",@"检测更新",@"流量节省模式", nil];
+    itemArray=[[NSArray alloc] initWithObjects:@"用户指南",@"返利问题",@"常见问题",@"客服在线",@"分享软件",@"意见反馈",@"清除缓存",@"检测更新",@"流量节省模式",@"注销账户",nil];
+    saveBtn=[UIButton buttonWithType:UIButtonTypeCustom];
+    saveBtn.frame=CGRectMake(180, 40/2-43/4, 69/2, 43/2);
+    [saveBtn setBackgroundImage:[UIImage imageNamed:@"设置开关槽-默认"] forState:UIControlStateNormal];
+    [saveBtn setBackgroundImage:[UIImage imageNamed:@"设置开关槽-打开"] forState:UIControlStateSelected];
+    [saveBtn addTarget:self action:@selector(changeSaveMode) forControlEvents:UIControlEventTouchDown];
+    if ([[[NSUserDefaults standardUserDefaults] objectForKey:@"saveMode"] isEqualToString:@"YES"]) {
+        NSLog(@"初始化打开");
+        saveBtn.selected=YES;
+    }else
+    {
+        NSLog(@"初始化不打开");
+        saveBtn.selected=NO;
 
+    }
+}
+-(void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:YES];
+    [self.myTableView reloadData];
 }
 - (void)viewDidLoad
 {
@@ -53,7 +73,7 @@
     if (section==0) {
         return 5;
     }else
-    return 4;
+    return 5;
 }
 
 - (NSInteger) numberOfSectionsInTableView:(UITableView *)tableView
@@ -129,7 +149,6 @@
                 cellLabel.text=[NSString stringWithFormat:@"%@",[itemArray objectAtIndex:indexPath.row]];
                 cellLabel.backgroundColor=[UIColor clearColor];
                 cellLabel.textColor=[UIColor lightTextColor];
-
                 [cell addSubview:iconImage];
                 [cell addSubview:cellLabel];
 
@@ -147,6 +166,7 @@
                 cellLabel.text=[NSString stringWithFormat:@"%@",[itemArray objectAtIndex:indexPath.row+5]];
                 cellLabel.backgroundColor=[UIColor clearColor];
                 cellLabel.textColor=[UIColor lightTextColor];
+                [cell addSubview:saveBtn];
                 [cell addSubview:iconImage];
                 [cell addSubview:cellLabel];
                 
@@ -159,10 +179,16 @@
                 cellLabel.text=[NSString stringWithFormat:@"%@",[itemArray objectAtIndex:indexPath.row+5]];
                 cellLabel.backgroundColor=[UIColor clearColor];
                 cellLabel.textColor=[UIColor lightTextColor];
-
+                if(indexPath.row==4)
+                {
+                    if ([[[NSUserDefaults standardUserDefaults] objectForKey:@"logined"] isEqualToString:@"YES"]) {
+                        cellLabel.textColor=[UIColor redColor];
+                    }else
+                        cellLabel.textColor=[UIColor lightTextColor];
+                }else
+                    cellLabel.textColor=[UIColor lightTextColor];
                 [cell addSubview:iconImage];
                 [cell addSubview:cellLabel];
-                
             }
         }
             break;
@@ -255,6 +281,23 @@
                 case 3:
                 {
                     NSLog(@"流量节省模式");
+
+                        [self changeSaveMode];
+                }
+                    break;
+                case 4:
+                {
+                    NSLog(@"注销");
+                    if ([[[NSUserDefaults standardUserDefaults] objectForKey:@"logined"] isEqualToString:@"YES"])
+                    {
+                    [[NSUserDefaults standardUserDefaults] setObject:@"NO" forKey:@"logined"];
+                    [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"userInfo"];
+                    [settingDelegate hideUserInfoView:YES];
+                    UIAlertView *alert=[[UIAlertView alloc] initWithTitle:@"提示" message:@"已注销用户" delegate:self cancelButtonTitle:@"好的" otherButtonTitles:nil];
+                    [alert show];
+                    [self.myTableView reloadData];
+                    [settingDelegate showOrHideBackView:nil];
+                    }
                 }
                     break;
             }
@@ -264,6 +307,20 @@
             break;
     }
 
+}
+-(void)changeSaveMode
+{
+    if (saveBtn.selected==YES)
+    {
+        NSLog(@"不节省流量");
+        [[NSUserDefaults standardUserDefaults] setObject:@"NO" forKey:@"saveMode"];
+        saveBtn.selected=NO;
+    }else
+    {
+        NSLog(@"节省流量");
+        [[NSUserDefaults standardUserDefaults] setObject:@"YES" forKey:@"saveMode"];
+        saveBtn.selected=YES;
+    }
 }
 -(void)viewDidDisappear:(BOOL)animated
 {

@@ -15,4 +15,6 @@
 +(CosjiServerHelper*)shareCosjiServerHelper;
 -(void)jsonTest;
 -(NSDictionary*)getJsonDictionary:(NSString*)orderString;
+- (NSArray*)getItemsFromTopByKeyWord:(NSString*)keyword atPage:(int)pageNO;
+-(NSString*)getClick_urlFromTop:(NSString*)numiids;
 @end

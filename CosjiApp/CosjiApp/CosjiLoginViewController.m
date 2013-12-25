@@ -146,6 +146,11 @@ static CosjiLoginViewController *shareCosjiLoginViewController = nil;
         self.userName.text=[NSString stringWithFormat:@"%@",[loginDic objectForKey:@"loginName"]];
         self.passWord.text=[NSString stringWithFormat:@"%@",[loginDic objectForKey:@"loginPWD"]];
         self.rememberBtn.selected=YES;
+    }else
+    {
+        self.userName.text=[NSString stringWithFormat:@""];
+        self.passWord.text=[NSString stringWithFormat:@""];
+        self.rememberBtn.selected=NO;
     }
 }
 - (void)viewDidLoad

@@ -52,7 +52,7 @@
     [moreBtn addTarget:self  action:@selector(presentAllItemsTable) forControlEvents:UIControlEventTouchUpInside];
     [self.customNavBar addSubview:moreBtn];
     [self.view addSubview:self.customNavBar];
-    UIImageView *llogoImage=[[UIImageView alloc] initWithFrame:CGRectMake(14, 8,156/2, 65/2)];
+    UIImageView *llogoImage=[[UIImageView alloc] initWithFrame:CGRectMake(14, 6,156/2, 65/2)];
     llogoImage.image=[UIImage imageNamed:@"工具栏背景-标语"];
     [self.customNavBar addSubview:llogoImage];
     UIImageView *blogoImage=[[UIImageView alloc] initWithFrame:CGRectMake(160-155/4,13, 155/2, 40/2)];
@@ -109,7 +109,7 @@
 }
 -(void)viewWillAppear:(BOOL)animated
 {
-    [SVProgressHUD showWithStatus:@"正在载入。。。"];
+    [SVProgressHUD showWithStatus:@"正在载入..."];
     self.navigationController.navigationBarHidden=YES;
     self.tabBarController.tabBar.hidden=NO;
     if ([subjectsArray count]==0)
@@ -452,9 +452,10 @@ void subjectItemImage( NSURL * URL, void (^imageBlock)(UIImage * image), void (^
     if (textField!=nil&&![textField.text isEqualToString:@""])
     {
         NSLog(@"开始搜索");
-        CosjiItemListViewController *itemsListViewController=[CosjiItemListViewController shareCosjiItemListViewController];
-        [self presentViewController:itemsListViewController animated:YES completion:nil];
-        [itemsListViewController loadInfoWith:[NSString stringWithFormat:@"%@",self.searchField.text] atPage:1];
+        [self presentItemList:[NSString stringWithFormat:@"%@",self.searchField.text]];
+//        CosjiItemListViewController *itemsListViewController=[CosjiItemListViewController shareCosjiItemListViewController];
+//        [self presentViewController:itemsListViewController animated:YES completion:nil];
+//        [itemsListViewController loadInfoWith:[NSString stringWithFormat:@"%@",self.searchField.text] atPage:1];
     }else
     {
         UIAlertView *alert=[[UIAlertView alloc] initWithTitle:@"错误" message:@"请输入您想要搜索的商品或查询的网址" delegate:nil cancelButtonTitle:@"好的" otherButtonTitles: nil];
@@ -465,9 +466,17 @@ void subjectItemImage( NSURL * URL, void (^imageBlock)(UIImage * image), void (^
 {
     UIButton *senderBtn=(UIButton*)sender;
     NSLog(@"get");
+//    CosjiItemListViewController *itemsListViewController=[CosjiItemListViewController shareCosjiItemListViewController];
+//    [self presentViewController:itemsListViewController animated:YES completion:nil];
+//    [itemsListViewController loadInfoWith:[NSString stringWithFormat:@"%@",senderBtn.titleLabel.text] atPage:1];
+    [self presentItemList:[NSString stringWithFormat:@"%@",senderBtn.titleLabel.text]];
+
+}
+-(void)presentItemList:(NSString*)keyword
+{
     CosjiItemListViewController *itemsListViewController=[CosjiItemListViewController shareCosjiItemListViewController];
     [self presentViewController:itemsListViewController animated:YES completion:nil];
-    [itemsListViewController loadInfoWith:[NSString stringWithFormat:@"%@",senderBtn.titleLabel.text] atPage:1];
+    [itemsListViewController loadInfoWith:keyword atPage:1];
 }
 - (void)didReceiveMemoryWarning
 {

@@ -44,7 +44,7 @@ static CosjiWebViewController *shareCosjiWebViewController = nil;
     self.customNavBar.layer.shadowRadius=10.0;
     self.customNavBar.layer.shadowOpacity=1.0;
     [self.view addSubview:self.customNavBar];
-    self.storeName=[[UILabel alloc] initWithFrame:CGRectMake(40, 2, 140, 40)];
+    self.storeName=[[UILabel alloc] initWithFrame:CGRectMake(40, 2, 280, 40)];
     self.storeName.backgroundColor=[UIColor clearColor];
     self.storeName.textColor=[UIColor whiteColor];
     [self.customNavBar addSubview:self.storeName];

@@ -40,5 +40,6 @@
 @property (strong,nonatomic) CosjiMessageViewController *messageViewController;
 @property (strong,nonatomic) CosjiAccountSettingViewController *accountSettingViewController;
 
-
+-(void)hideUserInfoView:(BOOL)isHide;
+- (IBAction)showOrHideBackView:(id)sender;
 @end

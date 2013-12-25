@@ -84,17 +84,24 @@
     [self.view addSubview:searchView];
     searchViewShowing=NO;
     [self.view addSubview:self.CustomNav];
-    UIImageView *llogoImage=[[UIImageView alloc] initWithFrame:CGRectMake(14, 8, 156/2, 65/2)];
+    UIImageView *llogoImage=[[UIImageView alloc] initWithFrame:CGRectMake(14, 6, 156/2, 65/2)];
     llogoImage.image=[UIImage imageNamed:@"工具栏背景-标语"];
     [self.CustomNav addSubview:llogoImage];
     UIImageView *blogoImage=[[UIImageView alloc] initWithFrame:CGRectMake(160-155/4,13, 155/2, 40/2)];
     blogoImage.image=[UIImage imageNamed:@"折扣优惠"];
     [self.CustomNav addSubview:blogoImage];
+
+    
 }
 -(void)viewWillAppear:(BOOL)animated
 {
     self.tabBarController.tabBar.hidden=NO;
-    [SVProgressHUD showWithStatus:@"正在加载。。。"];
+    [SVProgressHUD showWithStatus:@"正在加载..."];
+    if ([[[NSUserDefaults standardUserDefaults] objectForKey:@"saveMode"] isEqualToString:@"YES"])
+    {
+        isSaveMode=YES;
+    }else
+        isSaveMode=NO;
     if ([itemsArray count]==0)
     {
         currentPage=1;
@@ -132,8 +139,6 @@
     itemsArray=[[NSMutableArray alloc] initWithCapacity:0];
     self.CustomNav.backgroundColor=[UIColor colorWithPatternImage:[UIImage imageNamed:@"工具栏背景"]];
 
-    
-    
 }
 - (NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
@@ -160,85 +165,85 @@
     // cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier]
     UIFont *nameFont= [UIFont fontWithName:@"Arial" size:12];
     UIFont *font = [UIFont fontWithName:@"Arial" size:15];
-
-    //左
-    NSDictionary *leftItemDic=[NSDictionary dictionaryWithDictionary:[itemsArray objectAtIndex:indexPath.section*2]];
-    UIButton *leftItemBtn=[UIButton buttonWithType:UIButtonTypeCustom];
-    leftItemBtn.frame=CGRectMake(12.5,4, 144, 128);
-    leftItemBtn.tag=indexPath.section*2;
-    NSString *itemLefturl=[NSString stringWithFormat:@"%@",[leftItemDic objectForKey:@"imgUrl"]];
-    itemLefturl=[itemLefturl stringByReplacingOccurrencesOfString:@"\"" withString:@""];
-    ItemImageFromURL( [NSURL URLWithString:itemLefturl], ^( UIImage * image )
+    
+    for (int x=0; x<2; x++)
     {
-        [leftItemBtn setBackgroundImage:image forState:UIControlStateNormal];
-    },
-    ^(void){
-    });
-    [leftItemBtn addTarget:self action:@selector(qiangGou:) forControlEvents:UIControlEventTouchUpInside];
-    [cell addSubview:leftItemBtn];
-    NSString *freightString=[NSString stringWithFormat:@"%@",[leftItemDic objectForKey:@"freight"]];
-    if ([freightString intValue]>0)
-    {
-        UILabel *freightLabel=[[UILabel alloc] initWithFrame:CGRectMake(124, 0, 20, 20)];
-        freightLabel.backgroundColor=[UIColor redColor];
-        freightLabel.textColor=[UIColor whiteColor];
-        freightLabel.text=[NSString stringWithFormat:@"包邮"];
-        freightLabel.textAlignment=NSTextAlignmentCenter;
-        freightLabel.font=[UIFont fontWithName:@"Arial" size:9];
-        [leftItemBtn addSubview:freightLabel];
-    }
-    UILabel *itemLeftPrice=[[UILabel alloc] initWithFrame:CGRectMake(12.5, 132,144, 28.5)];
-    [itemLeftPrice setFont:font];
-    itemLeftPrice.backgroundColor=[UIColor redColor];
-    [itemLeftPrice setTextColor:[UIColor whiteColor]];
-    [itemLeftPrice setText:[NSString stringWithFormat:@"￥%@   有返利",[leftItemDic objectForKey:@"promotion"]]];
-    UILabel *itemLeftName=[[UILabel alloc] initWithFrame:CGRectMake(12.5, 162, 140, 28)];
-    [itemLeftName setText:[leftItemDic objectForKey:@"name"]];
-    [itemLeftName setFont:nameFont];
-    itemLeftName.numberOfLines=0;
-    itemLeftName.backgroundColor=[UIColor clearColor];
-    [cell addSubview:itemLeftName];
-    [cell addSubview:itemLeftPrice];
-    //右
-    if ([itemsArray count]-1>=indexPath.section*2+1) {
-        NSDictionary *rightItemDic=[NSDictionary dictionaryWithDictionary:[itemsArray objectAtIndex:indexPath.section*2+1]];
-        UIButton *rightItemBtn=[UIButton buttonWithType:UIButtonTypeCustom];
-        rightItemBtn.frame=CGRectMake(167.5,4, 144, 128);
-        rightItemBtn.tag=indexPath.section*2+1;
-        NSString *itemRightrurl=[NSString stringWithFormat:@"%@",[rightItemDic objectForKey:@"imgUrl"]];
-        itemRightrurl=[itemRightrurl stringByReplacingOccurrencesOfString:@"\"" withString:@""];
-        ItemImageFromURL( [NSURL URLWithString:itemRightrurl], ^( UIImage * image )
-                         {
-                             [rightItemBtn setBackgroundImage:image forState:UIControlStateNormal];
-                         }, ^(void){
-                         });
-        NSString *freight2String=[NSString stringWithFormat:@"%@",[rightItemDic objectForKey:@"freight"]];
-        if ([freight2String intValue]>0)
+        if (indexPath.row*2+x<[itemsArray count])
         {
-            UILabel *freight2Label=[[UILabel alloc] initWithFrame:CGRectMake(124, 0, 20, 20)];
-            freight2Label.backgroundColor=[UIColor redColor];
-            freight2Label.textColor=[UIColor whiteColor];
-            freight2Label.text=[NSString stringWithFormat:@"包邮"];
-            freight2Label.textAlignment=NSTextAlignmentCenter;
-            freight2Label.font=[UIFont fontWithName:@"Arial" size:9];
-            [rightItemBtn addSubview:freight2Label];
-        }
+            NSDictionary *leftItemDic=[NSDictionary dictionaryWithDictionary:[itemsArray objectAtIndex:indexPath.section*2+x]];
+            UIButton *leftItemBtn=[UIButton buttonWithType:UIButtonTypeCustom];
+            leftItemBtn.frame=CGRectMake(12.5+x*155,4, 144, 128);
+            leftItemBtn.tag=indexPath.section*2+x;
+            NSString *itemLefturl=[NSString stringWithFormat:@"%@",[leftItemDic objectForKey:@"imgUrl"]];
+            itemLefturl=[itemLefturl stringByReplacingOccurrencesOfString:@"\"" withString:@""];
+            if (isSaveMode) {
+                dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0),
+                               ^{
+                                   NSArray *paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
+                                   NSString *cachePath = [paths objectAtIndex:0];
+                                   BOOL isDir = YES;
+                                   NSString *dirName=[cachePath stringByAppendingPathComponent:@"cacheImages"];
+                                   if (![[NSFileManager defaultManager] fileExistsAtPath:dirName isDirectory:&isDir])
+                                   {
+                                       [[NSFileManager defaultManager] createDirectoryAtPath:dirName withIntermediateDirectories:YES attributes:nil error:nil];
+                                   }
+                                   NSString *filename = [dirName stringByAppendingPathComponent:[NSString stringWithFormat:@"%@",[leftItemDic objectForKey:@"id"]]];
+                                   if (![[NSFileManager defaultManager] fileExistsAtPath:filename])
+                                   {
+                                       NSLog(@"download cacheImage %@",filename);
+                                       NSData * data = [[NSData alloc] initWithContentsOfURL:[NSURL URLWithString:itemLefturl]];
+                                       UIImage * cacheimage = [[UIImage alloc] initWithData:data];
+                                       [UIImageJPEGRepresentation(cacheimage, 1.0) writeToFile:filename atomically:YES];
+                                       dispatch_async(dispatch_get_main_queue(), ^{
+                                           NSData *imageData=[NSData dataWithContentsOfFile:filename];
+                                           [leftItemBtn setBackgroundImage:[UIImage imageWithData:imageData] forState:UIControlStateNormal];
+                                       });
+                                   }else
+                                   {
+                                       dispatch_async(dispatch_get_main_queue(), ^{
+                                           NSLog(@"load cacheImage %@",filename);
+                                           NSData *imageData=[NSData dataWithContentsOfFile:filename];
+                                           [leftItemBtn setBackgroundImage:[UIImage imageWithData:imageData] forState:UIControlStateNormal];
+                                       });
+                                   }
+                               });
 
-        UILabel *itemRightName=[[UILabel alloc] initWithFrame:CGRectMake(12.5+155, 162, 140, 28)];
-        [itemRightName setText:[rightItemDic objectForKey:@"name"]];
-        [itemRightName setFont:nameFont];
-        itemRightName.backgroundColor=[UIColor clearColor];
-        itemRightName.numberOfLines=0;
-        [cell addSubview:rightItemBtn];
-        [cell addSubview:itemRightName];
-        UILabel *itemRightPrice=[[UILabel alloc] initWithFrame:CGRectMake(12.5+155, 132, 144, 28.5)];
-        // UIFont *font = [UIFont fontWithName:@"Arial" size:20];
-        [itemRightPrice setFont:font];
-        itemRightPrice.backgroundColor=[UIColor redColor];
-        [itemRightPrice setTextColor:[UIColor whiteColor]];
-        [itemRightPrice setText:[NSString stringWithFormat:@"￥%@   有返利",[rightItemDic objectForKey:@"promotion"]]];
-        [rightItemBtn addTarget:self action:@selector(qiangGou:) forControlEvents:UIControlEventTouchUpInside];
-        [cell addSubview:itemRightPrice];
+            }else
+            {
+                ItemImageFromURL( [NSURL URLWithString:itemLefturl], ^( UIImage * image )
+                                 {
+                                     [leftItemBtn setBackgroundImage:image forState:UIControlStateNormal];
+                                 },
+                                 ^(void){
+                                 });
+            }
+            [leftItemBtn addTarget:self action:@selector(qiangGou:) forControlEvents:UIControlEventTouchUpInside];
+            [cell addSubview:leftItemBtn];
+            NSString *freightString=[NSString stringWithFormat:@"%@",[leftItemDic objectForKey:@"freight"]];
+            if ([freightString intValue]>0)
+            {
+                UILabel *freightLabel=[[UILabel alloc] initWithFrame:CGRectMake(124, 0, 20, 20)];
+                freightLabel.backgroundColor=[UIColor redColor];
+                freightLabel.textColor=[UIColor whiteColor];
+                freightLabel.text=[NSString stringWithFormat:@"包邮"];
+                freightLabel.textAlignment=NSTextAlignmentCenter;
+                freightLabel.font=[UIFont fontWithName:@"Arial" size:9];
+                [leftItemBtn addSubview:freightLabel];
+            }
+            UILabel *itemLeftPrice=[[UILabel alloc] initWithFrame:CGRectMake(12.5+155*x, 132,144, 28.5)];
+            [itemLeftPrice setFont:font];
+            itemLeftPrice.backgroundColor=[UIColor redColor];
+            [itemLeftPrice setTextColor:[UIColor whiteColor]];
+            [itemLeftPrice setText:[NSString stringWithFormat:@"￥%@   有返利",[leftItemDic objectForKey:@"promotion"]]];
+            UILabel *itemLeftName=[[UILabel alloc] initWithFrame:CGRectMake(12.5+155*x, 162, 140, 28)];
+            [itemLeftName setText:[leftItemDic objectForKey:@"name"]];
+            [itemLeftName setFont:nameFont];
+            itemLeftName.numberOfLines=0;
+            itemLeftName.backgroundColor=[UIColor clearColor];
+            [cell addSubview:itemLeftName];
+            [cell addSubview:itemLeftPrice];
+
+        }
     }
        return cell;
 }
@@ -275,7 +280,7 @@ void ItemImageFromURL( NSURL * URL, void (^imageBlock)(UIImage * image), void (^
     NSLog(@"%f %f",scrollView.contentOffset.y,scrollView.contentSize.height - scrollView.frame.size.height);
     if (scrollView.contentOffset.y>=(scrollView.contentSize.height - scrollView.frame.size.height)+100&&scrollView.contentOffset.y>0)
     {
-        [SVProgressHUD showWithStatus:@"正在载入。。。"];
+        [SVProgressHUD showWithStatus:@"正在载入..."];
         [self performSelector:@selector(doneLoadingTableViewData) withObject:Nil afterDelay:2.0];
     }
     

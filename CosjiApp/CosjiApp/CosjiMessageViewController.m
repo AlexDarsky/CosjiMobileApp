@@ -294,7 +294,7 @@
         {
             messageSenderField.text=@"";
             [SVProgressHUD showSuccessWithStatus:@"发送成功" duration:1];
-            [self performSelector:@selector(loadFanLiListFor:) withObject:self.segmentCon afterDelay:2];
+            [self performSelector:@selector(loadFanLiListFor:) withObject:self.segmentCon afterDelay:1.5];
         }
     }else
     {
@@ -320,14 +320,31 @@
 }
 -(void)deleteAction:(id)sender
 {
+    NSString *string1 = @"This is a string";
+    
+    NSString *string2 = [string1 substringFromIndex:string1.length-1];
+    
+    NSLog(@"string2:%@",string2);
     NSMutableIndexSet *deleteIndexSet=[[NSMutableIndexSet alloc] init];
+    NSMutableString *deleteString=[NSMutableString stringWithFormat:@"/message/remove/?id="];
     for (int x=0;x<[selectedArray count];x++)
     {
         if ([[selectedArray objectAtIndex:x] isEqualToString:@"YES"])
         {
+           // NSLog(@"delete this %d",x);
+            NSDictionary *tmpDic=[NSDictionary dictionaryWithDictionary:[itemsArray objectAtIndex:x]];
+            [deleteString appendFormat:@"%@,",[tmpDic objectForKey:@"id"]];
             [deleteIndexSet addIndex:x];
         }
     }
+    NSString *checkString = [deleteString substringFromIndex:deleteString.length-1];
+    if ([checkString isEqualToString:@","])
+    {
+        NSLog(@"error");
+        deleteString=[[deleteString substringToIndex:deleteString.length-1] mutableCopy];
+    }
+    CosjiServerHelper *serverHelper=[CosjiServerHelper shareCosjiServerHelper];
+    [serverHelper getJsonDictionary:deleteString];
     [itemsArray removeObjectsAtIndexes:deleteIndexSet];
     [selectedArray removeObjectsAtIndexes:deleteIndexSet];
     [self.listTableView deleteSections:deleteIndexSet withRowAnimation:UITableViewRowAnimationLeft];

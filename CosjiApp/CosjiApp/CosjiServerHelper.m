@@ -8,15 +8,18 @@
 
 #import "CosjiServerHelper.h"
 #import "JSONKit.h"
+#import "TopIOSClient.h"
+#import "TopAttachment.h"
 
 #define login @"http://192.168.1.110"
 #define shouye @"/mall/getAll"
 #define httpAdd @"http://rest.cosjii.com"
-#define demoURL @"/mall/getAll/?page=1"
+#define demoURL @"/registry/status"
 #define allItems @"/taobao/category/"
 
 @implementation CosjiServerHelper
 static CosjiServerHelper *shareCosjiServerHelper=nil;
+
 +(CosjiServerHelper*)shareCosjiServerHelper
 {
     if (shareCosjiServerHelper == nil) {
@@ -68,6 +71,54 @@ static CosjiServerHelper *shareCosjiServerHelper=nil;
     {
         return nil;
     }
+}
+- (NSArray*)getItemsFromTopByKeyWord:(NSString*)keyword atPage:(int)pageNO
+{
+    NSDictionary *tmpDic=[NSDictionary dictionaryWithDictionary:[[NSUserDefaults standardUserDefaults] objectForKey:@"userInfo"]];
+    NSDictionary *infoDic=[NSDictionary dictionaryWithDictionary:[tmpDic objectForKey:@"body"]];
+    
+    NSString *uid =[NSString stringWithFormat:@"%@",[infoDic objectForKey:@"userId"]];
+    
+    NSMutableDictionary *params = [[NSMutableDictionary alloc]init];
+    
+    [params setObject:@"taobao.tbk.items.get" forKey:@"method"];
+    [params setObject:@"num_iid,title,price,volume,pic_url,item_url,click_url" forKey:@"fields"];
+    [params setObject:@"1" forKey:@"start_price"];
+    [params setObject:[NSString stringWithFormat:@"%d",pageNO] forKey:@"page_no"];
+    [params setObject:keyword forKey:@"keyword"];
+    [params setObject:@"100" forKey:@"start_commissionRate"];
+    [params setObject:@"50000" forKey:@"end_commissionRate"];
+    TopIOSClient *iosClient = [TopIOSClient getIOSClientByAppKey:CosjiAppKey];
+    TopApiResponse * response = [iosClient tql:@"GET" params:params userId:uid];
+    NSDictionary *responeDic =[[response content]  objectFromJSONString];
+    NSDictionary *respone_getDIC=[responeDic objectForKey:@"tbk_items_get_response"];
+    NSDictionary *tbk_items_IDC=[respone_getDIC objectForKey:@"tbk_items"];
+    return [NSArray arrayWithArray:[tbk_items_IDC objectForKey:@"tbk_item"]];
+}
+-(NSString*)getClick_urlFromTop:(NSString*)numiids
+{
+    NSDictionary *tmpDic=[NSDictionary dictionaryWithDictionary:[[NSUserDefaults standardUserDefaults] objectForKey:@"userInfo"]];
+    NSDictionary *infoDic=[NSDictionary dictionaryWithDictionary:[tmpDic objectForKey:@"body"]];
+    
+    NSString *uid =[NSString stringWithFormat:@"%@",[infoDic objectForKey:@"userId"]];
+    
+    NSMutableDictionary *params = [[NSMutableDictionary alloc]init];
+    
+    [params setObject:@"taobao.tbk.mobile.items.convert" forKey:@"method"];
+    [params setObject:@"click_url" forKey:@"fields"];
+    [params setObject:numiids forKey:@"num_iids"];
+    [params setObject:uid forKey:@"outer_code"];
+
+    TopIOSClient *iosClient = [TopIOSClient getIOSClientByAppKey:CosjiAppKey];
+    TopApiResponse * response = [iosClient tql:@"GET" params:params userId:uid];
+    NSDictionary *responeDic =[[response content]  objectFromJSONString];
+    NSDictionary *respone_getDIC=[responeDic objectForKey:@"tbk_mobile_items_convert_response"];
+    NSDictionary *tbk_items_DIC=[respone_getDIC objectForKey:@"tbk_items"];
+    NSDictionary *tbk_item_DIC=[[NSArray arrayWithArray:[tbk_items_DIC objectForKey:@"tbk_item"]]lastObject];
+   // NSLog(@"%@",[NSString stringWithFormat:@"%@",[[NSArray arrayWithArray:[tbk_items_DIC objectForKey:@"tbk_item"]]lastObject]]);
+    
+    NSLog(@"click_url is %@",[tbk_item_DIC objectForKey:@"click_url"]);
+    return [tbk_item_DIC objectForKey:@"click_url"];
 
 }
 - (BOOL) connectedToNetwork

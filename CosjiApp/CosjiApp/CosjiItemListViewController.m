@@ -10,6 +10,9 @@
 #import "CosjiServerHelper.h"
 #import "CosjiWebViewController.h"
 #import "SVProgressHUD.h"
+#import "TopIOSClient.h"
+#import "TopAttachment.h"
+#import "JSONKit.h"
 
 @interface CosjiItemListViewController ()
 
@@ -75,29 +78,42 @@ static CosjiItemListViewController* shareCosjiItemListViewController;
         [self.tableView reloadData];
     }
     self.titleLabel.text=[NSString stringWithFormat:@"%@",textString];
-    currentPage=1;
+    currentPage=pageNumber;
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-    CosjiServerHelper *serverHelper=[CosjiServerHelper shareCosjiServerHelper];
-    
-    NSDictionary *tmpDic=[NSDictionary dictionaryWithDictionary:[serverHelper getJsonDictionary:[NSString stringWithFormat:@"/taobao/search/?keyword=%@&num=10&page=%d",textString,currentPage]]];
-    if (tmpDic!=nil)
-    {
-
-        NSDictionary *recordDic=[NSDictionary dictionaryWithDictionary:[tmpDic objectForKey:@"body"]];
-        itemsArray=[NSMutableArray arrayWithArray:[recordDic objectForKey:@"record"]];
+        CosjiServerHelper *serverHelper=[CosjiServerHelper shareCosjiServerHelper];
+        itemsArray=[NSMutableArray arrayWithArray:[serverHelper getItemsFromTopByKeyWord:textString atPage:pageNumber]];
         NSLog(@"get Store %d",[itemsArray count]);
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [SVProgressHUD dismiss];
-        [self.tableView reloadData];
-    });
-                
-
-    }else
-    {
-        [SVProgressHUD dismiss];
-        UIAlertView *alert=[[UIAlertView alloc] initWithTitle:@"错误" message:@"服务器无法连接，请稍后再试" delegate:nil cancelButtonTitle:@"好的" otherButtonTitles: nil];
-        [alert show];
-    }
+        if ([itemsArray count]>0) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [SVProgressHUD dismiss];
+                [self.tableView reloadData];
+            });
+        }else
+            {
+                [SVProgressHUD dismiss];
+                UIAlertView *alert=[[UIAlertView alloc] initWithTitle:@"错误" message:@"服务器无法连接，请稍后再试" delegate:nil cancelButtonTitle:@"好的" otherButtonTitles: nil];
+                [alert show];
+        }
+//    从服务器获取商品数据
+//    NSDictionary *tmpDic=[NSDictionary dictionaryWithDictionary:[serverHelper getJsonDictionary:[NSString stringWithFormat:@"/taobao/search/?keyword=%@&num=10&page=%d",textString,currentPage]]];
+//    if (tmpDic!=nil)
+//    {
+//
+//        NSDictionary *recordDic=[NSDictionary dictionaryWithDictionary:[tmpDic objectForKey:@"body"]];
+//        itemsArray=[NSMutableArray arrayWithArray:[recordDic objectForKey:@"record"]];
+//        NSLog(@"get Store %d",[itemsArray count]);
+//        dispatch_async(dispatch_get_main_queue(), ^{
+//            [SVProgressHUD dismiss];
+//        [self.tableView reloadData];
+//    });
+//                
+//
+//    }else
+//    {
+//        [SVProgressHUD dismiss];
+//        UIAlertView *alert=[[UIAlertView alloc] initWithTitle:@"错误" message:@"服务器无法连接，请稍后再试" delegate:nil cancelButtonTitle:@"好的" otherButtonTitles: nil];
+//        [alert show];
+//    }
         });
 }
 - (NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
@@ -124,58 +140,59 @@ static CosjiItemListViewController* shareCosjiItemListViewController;
     // cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
     NSDictionary *itemDic=[NSDictionary dictionaryWithDictionary:[itemsArray objectAtIndex:indexPath.row]];
     UIImageView *itemImageView=[[UIImageView alloc] initWithFrame:CGRectMake(10, 10, 100, 100)];
-    NSString *imageUrl=[NSString stringWithFormat:@"%@",[itemDic objectForKey:@"imgUrl"]];
-    imageUrl=[imageUrl stringByReplacingOccurrencesOfString:@"\"" withString:@""];
+    NSString *imageUrl=[NSString stringWithFormat:@"%@",[itemDic objectForKey:@"pic_url"]];
     ItemImageDownloadURL([NSURL URLWithString:imageUrl], ^( UIImage * image )
                     {
                         [itemImageView setImage:image ];
                     }, ^(void){
                     });
     [cell addSubview:itemImageView];
-    UIWebView *nameWebView=[[UIWebView alloc] initWithFrame:CGRectMake(110, 10, 180, 50)];
-    NSString *htmlString = [NSString stringWithFormat:@"<html>"
-                          "<head> "
-                          "<style type=\"text/css\"> "
-                          "body {font-size: %f;; color: %@;}"
-                          "a{color:#ccc}"
-                          "</style>"
-                          "</head>"
-                          "<body><p>%@</p></body>"
-                          "</html>", 11.0, @"#000",[itemDic objectForKey:@"name"]];
-    [nameWebView loadHTMLString:htmlString baseURL:nil];
-    [nameWebView setBackgroundColor:[UIColor clearColor]];
-    [nameWebView setOpaque:NO];
-    nameWebView.scrollView.scrollEnabled=NO;
+    UILabel *nameLabel=[[UILabel alloc] initWithFrame:CGRectMake(120, 10, 180, 50)];
+    nameLabel.backgroundColor=[UIColor clearColor];
+    nameLabel.numberOfLines=0;
+    nameLabel.text=[NSString stringWithFormat:@"%@",[itemDic objectForKey:@"title"]];
+    nameLabel.font=[UIFont fontWithName:@"Arial" size:14];
+    [cell addSubview:nameLabel];
+//    UIWebView *nameWebView=[[UIWebView alloc] initWithFrame:CGRectMake(110, 10, 180, 50)];
+//    NSString *htmlString = [NSString stringWithFormat:@"<html>"
+//                          "<head> "
+//                          "<style type=\"text/css\"> "
+//                          "body {font-size: %f;; color: %@;}"
+//                          "a{color:#ccc}"
+//                          "</style>"
+//                          "</head>"
+//                          "<body><p>%@</p></body>"
+//                          "</html>", 11.0, @"#000",[itemDic objectForKey:@"name"]];
+//    [nameWebView loadHTMLString:htmlString baseURL:nil];
+//    [nameWebView setBackgroundColor:[UIColor clearColor]];
+//    [nameWebView setOpaque:NO];
+//    nameWebView.scrollView.scrollEnabled=NO;
     UILabel *priceLabel=[[UILabel alloc] initWithFrame:CGRectMake(120, 60, 60, 20)];
     priceLabel.text=[NSString stringWithFormat:@"%@",[itemDic objectForKey:@"price"]];
     priceLabel.textColor=[UIColor redColor];
-    UILabel *saveLabel=[[UILabel alloc] initWithFrame:CGRectMake(200, 60, 80, 20)];
-    saveLabel.text=[NSString stringWithFormat:@"可返利"];
-    saveLabel.backgroundColor=[UIColor redColor];
-    saveLabel.textColor=[UIColor whiteColor];
-    saveLabel.textAlignment=NSTextAlignmentCenter;
-    saveLabel.adjustsFontSizeToFitWidth=YES;
-    UILabel *sellLabel=[[UILabel alloc] initWithFrame:CGRectMake(120, 80, 180, 20)];
-    sellLabel.text=[NSString stringWithFormat:@"最近售出%@件",[itemDic objectForKey:@"sell"]];
+    priceLabel.backgroundColor=[UIColor clearColor];
+    UILabel *sellLabel=[[UILabel alloc] initWithFrame:CGRectMake(120, 90, 180, 20)];
+    sellLabel.text=[NSString stringWithFormat:@"最近售出%@件",[itemDic objectForKey:@"volume"]];
     sellLabel.font=[UIFont fontWithName:@"Arial" size:13];
-    priceLabel.backgroundColor=sellLabel.backgroundColor=[UIColor clearColor];
-    [cell addSubview:nameWebView];
+    sellLabel.backgroundColor=[UIColor clearColor];
+    [cell addSubview:nameLabel];
+  //  [cell addSubview:nameWebView];
     [cell addSubview:priceLabel];
-    [cell addSubview:saveLabel];
     [cell addSubview:sellLabel];
      return cell;
 }
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSDictionary *tmpDic=[NSDictionary dictionaryWithDictionary:[itemsArray objectAtIndex:indexPath.row]];
-    NSString *storeUrl=[NSString stringWithFormat:@"%@",[tmpDic objectForKey:@"url"]];
-    NSURL *url =[NSURL URLWithString:[storeUrl stringByReplacingOccurrencesOfString:@"\"" withString:@""]];
+    NSString *storeUrl=[NSString stringWithFormat:@"%@",[tmpDic objectForKey:@"num_iid"]];
+    CosjiServerHelper *serverHelper=[CosjiServerHelper shareCosjiServerHelper];
+    NSURL *url =[NSURL URLWithString:[serverHelper getClick_urlFromTop:storeUrl]];
     NSURLRequest *request =[NSURLRequest requestWithURL:url];
+    NSLog(@"request is %@",request);
     CosjiWebViewController *webViewController=[CosjiWebViewController shareCosjiWebViewController];
     [self presentViewController:webViewController animated:YES completion:nil];
     [webViewController.webView loadRequest:request];
-    [webViewController.storeName setText:[NSString stringWithFormat:@"%@",[tmpDic objectForKey:@"name"]]];
-    
+    [webViewController.storeName setText:[NSString stringWithFormat:@"%@",[tmpDic objectForKey:@"title"]]];
 }
 - (void)scrollViewWillEndDragging:(UIScrollView *)scrollView withVelocity:(CGPoint)velocity targetContentOffset:(inout CGPoint *)targetContentOffset
 {
@@ -191,7 +208,7 @@ static CosjiItemListViewController* shareCosjiItemListViewController;
 
 {
     
-    [SVProgressHUD showWithStatus:@"正在加载"];
+    [SVProgressHUD showWithStatus:@"正在加载..."];
     //  [self doneLoadingTableViewData];
     [self performSelector:@selector(doneLoadingTableViewData) withObject:nil afterDelay:1.0];
     
@@ -203,10 +220,8 @@ static CosjiItemListViewController* shareCosjiItemListViewController;
     NSLog(@"%d",currentPage);
     CosjiServerHelper *serverHelper=[CosjiServerHelper shareCosjiServerHelper];
     currentPage+=1;
-    NSDictionary *tmpDic=[NSDictionary dictionaryWithDictionary:[serverHelper getJsonDictionary:[NSString stringWithFormat:@"/taobao/search/?keyword=%@&num=10&page=%d",self.titleLabel.text,currentPage]]];
+    NSArray *loadArray=[[NSArray alloc] initWithArray:[serverHelper getItemsFromTopByKeyWord:self.titleLabel.text atPage:currentPage]];
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        NSDictionary *recordDic=[NSDictionary dictionaryWithDictionary:[tmpDic objectForKey:@"body"]];
-        NSArray *loadArray=[[NSArray alloc] initWithArray:[recordDic objectForKey:@"record"]];
         if ([loadArray count]>0) {
             NSLog(@"load Store %d",[itemsArray count]);
             [itemsArray addObjectsFromArray:loadArray];
