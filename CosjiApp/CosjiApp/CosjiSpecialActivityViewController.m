@@ -66,6 +66,7 @@
     searchBtn.frame=CGRectMake(self.CustomNav.frame.size.width-40, self.CustomNav.frame.size.height/2-82/4, 64/2, 82/2);
     [searchBtn setBackgroundImage:[UIImage imageNamed:@"工具栏背景-搜索"] forState:UIControlStateNormal];
     [searchBtn addTarget:self action:@selector(showSearchView) forControlEvents:UIControlEventTouchDown];
+    searchBtn.hidden=YES;
     [self.CustomNav addSubview:searchBtn];
     searchView=[[UIView alloc] initWithFrame:self.CustomNav.frame];
     searchView.backgroundColor=[UIColor whiteColor];
@@ -106,7 +107,7 @@
     {
         currentPage=1;
         CosjiServerHelper *serverHelper=[CosjiServerHelper shareCosjiServerHelper];
-     //   [serverHelper jsonTest];
+        //[serverHelper jsonTest];
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
 
         NSDictionary *tmpDic=[NSDictionary dictionaryWithDictionary:[serverHelper getJsonDictionary:@"/product/ship/?page=1&&num=16"]];
@@ -155,7 +156,7 @@
 
 -(CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return 200;
+    return 190;
 }
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -230,12 +231,12 @@
                 freightLabel.font=[UIFont fontWithName:@"Arial" size:9];
                 [leftItemBtn addSubview:freightLabel];
             }
-            UILabel *itemLeftPrice=[[UILabel alloc] initWithFrame:CGRectMake(12.5+155*x, 132,144, 28.5)];
+            UILabel *itemLeftPrice=[[UILabel alloc] initWithFrame:CGRectMake(12.5+155*x, 132,144, 23.5)];
             [itemLeftPrice setFont:font];
             itemLeftPrice.backgroundColor=[UIColor redColor];
             [itemLeftPrice setTextColor:[UIColor whiteColor]];
-            [itemLeftPrice setText:[NSString stringWithFormat:@"￥%@   有返利",[leftItemDic objectForKey:@"promotion"]]];
-            UILabel *itemLeftName=[[UILabel alloc] initWithFrame:CGRectMake(12.5+155*x, 162, 140, 28)];
+            [itemLeftPrice setText:[NSString stringWithFormat:@"￥%@       有返利",[leftItemDic objectForKey:@"promotion"]]];
+            UILabel *itemLeftName=[[UILabel alloc] initWithFrame:CGRectMake(12.5+155*x, 157, 140, 28)];
             [itemLeftName setText:[leftItemDic objectForKey:@"name"]];
             [itemLeftName setFont:nameFont];
             itemLeftName.numberOfLines=0;
@@ -270,7 +271,7 @@ void ItemImageFromURL( NSURL * URL, void (^imageBlock)(UIImage * image), void (^
     NSURL *url =[NSURL URLWithString:[storeUrl stringByReplacingOccurrencesOfString:@"\"" withString:@""]];
     NSURLRequest *request =[NSURLRequest requestWithURL:url];
     CosjiWebViewController *storeBrowseViewController=[CosjiWebViewController shareCosjiWebViewController];
-    [self presentViewController:storeBrowseViewController animated:YES completion:nil];
+    [self.navigationController pushViewController:storeBrowseViewController animated:YES ];
     [storeBrowseViewController.webView loadRequest:request];
     [storeBrowseViewController.storeName setText:[NSString stringWithFormat:@"%@",[tmpDic objectForKey:@"name"]]];
 
@@ -352,9 +353,58 @@ void ItemImageFromURL( NSURL * URL, void (^imageBlock)(UIImage * image), void (^
     if (textField!=nil&&![textField.text isEqualToString:@""])
     {
         NSLog(@"开始搜索");
-        CosjiItemListViewController *itemsListViewController=[CosjiItemListViewController shareCosjiItemListViewController];
-        [self presentViewController:itemsListViewController animated:YES completion:nil];
-        [itemsListViewController loadInfoWith:[NSString stringWithFormat:@"%@",searchField.text] atPage:1];
+        CosjiServerHelper *serverHelper=[CosjiServerHelper shareCosjiServerHelper];
+        switch ([serverHelper getSearchItemType:searchField.text]) {
+            case 0:
+            {
+                NSLog(@"这个是地址");
+                int location=[[NSString stringWithFormat:@"%@",searchField.text] rangeOfString:@"id="].location;
+                NSString *num_iid=[[NSString stringWithFormat:@"%@",searchField.text] substringWithRange:NSMakeRange(location+3, 11)];
+                CosjiServerHelper *serverHelper=[CosjiServerHelper shareCosjiServerHelper];
+                NSURL *url =[NSURL URLWithString:[serverHelper getClick_urlFromTop:num_iid]];
+                if (url==nil)
+                {
+                    [SVProgressHUD showErrorWithStatus:@"搜索不到该商品或该商品没有返利" duration:3];
+                }else
+                {
+                    NSURLRequest *request =[NSURLRequest requestWithURL:url];
+                    NSLog(@"request is %@",request);
+                    CosjiWebViewController *webViewController=[CosjiWebViewController shareCosjiWebViewController];
+                    [self.navigationController pushViewController:webViewController animated:YES ];
+                    [webViewController.webView loadRequest:request];
+                    [webViewController.storeName setText:[NSString stringWithFormat:@"搜索商品"]];
+                }
+            }
+                break;
+            case 1:
+            {
+                NSLog(@"这个是ID");
+                CosjiServerHelper *serverHelper=[CosjiServerHelper shareCosjiServerHelper];
+                NSURL *url =[NSURL URLWithString:[serverHelper getClick_urlFromTop:searchField.text]];
+                if (url==nil)
+                {
+                    [SVProgressHUD showErrorWithStatus:@"搜索不到该商品或该商品没有返利" duration:3];
+                }else
+                {
+                    NSURLRequest *request =[NSURLRequest requestWithURL:url];
+                    NSLog(@"request is %@",request);
+                    CosjiWebViewController *webViewController=[CosjiWebViewController shareCosjiWebViewController];
+                    [self.navigationController pushViewController:webViewController animated:YES];
+                    [webViewController.webView loadRequest:request];
+                    [webViewController.storeName setText:[NSString stringWithFormat:@"搜索商品"]];
+                }
+            }
+                break;
+            case 2:
+            {
+                CosjiItemListViewController *itemsListViewController=[CosjiItemListViewController shareCosjiItemListViewController];
+                [self presentViewController:itemsListViewController animated:YES completion:nil];
+                [itemsListViewController loadInfoWith:[NSString stringWithFormat:@"%@",searchField.text] atPage:1];
+            }
+            default:
+                break;
+        }
+
     }else
     {
         UIAlertView *alert=[[UIAlertView alloc] initWithTitle:@"错误" message:@"请输入您想要搜索的商品或查询的网址" delegate:nil cancelButtonTitle:@"好的" otherButtonTitles: nil];

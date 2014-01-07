@@ -28,7 +28,7 @@
 @property (strong, nonatomic) UIButton *tijifenbaoBtn;
 @property (strong, nonatomic) UIButton *qiandaoBtn;
 @property (strong,nonatomic) UIView *tixianLineView;
-@property (strong, nonatomic)  UIImageView *vipImage;
+@property (strong, nonatomic)  UIButton *vipImage;
 @property (strong, nonatomic)  UILabel *balanceLabel;
 @property (strong, nonatomic)  UILabel *scoreLabel;
 @property (strong, nonatomic)  UILabel *jifenbaoLabel;
@@ -42,4 +42,5 @@
 
 -(void)hideUserInfoView:(BOOL)isHide;
 - (IBAction)showOrHideBackView:(id)sender;
+-(void)toMessageViewController:(int)order;
 @end

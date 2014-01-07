@@ -16,5 +16,6 @@
     #import "CosjiServerHelper.h"
 #define CosjiAppKey             @"21602410"
 #define CosjiAppSecret          @"40b803eb95d919f230118ad0095bf55d"
-#define CosjiAppRedirectURI     @"http://cosjii.com"
+//#define CosjiAppRedirectURI     @"http://www.cosji.com"
+#define CosjiAppRedirectURI @"appcallback://"
 #endif

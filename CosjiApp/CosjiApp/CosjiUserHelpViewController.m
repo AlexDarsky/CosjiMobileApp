@@ -46,7 +46,7 @@ static CosjiUserHelpViewController *shareCosjiUserHelpViewController = nil;
     self.titleLabel.textAlignment=NSTextAlignmentCenter;
     [self.customNavBar addSubview:self.titleLabel];
     UIButton *backBtn=[UIButton buttonWithType:UIButtonTypeCustom];
-    backBtn.frame=CGRectMake(11, 12, 60/2, 41/2);
+    backBtn.frame=CGRectMake(11, 2.5, 100/2, 80/2);
     [backBtn setBackgroundImage:[UIImage imageNamed:@"返回"] forState:UIControlStateNormal];
     [backBtn addTarget:self  action:@selector(dismisThisViewController:) forControlEvents:UIControlEventTouchUpInside];
     [self.customNavBar addSubview:backBtn];
@@ -222,6 +222,7 @@ static CosjiUserHelpViewController *shareCosjiUserHelpViewController = nil;
 }
 - (void)dismisThisViewController:(id)sender
 {
+    [[NSUserDefaults standardUserDefaults] setObject:@"YES" forKey:@"firstLaunch"];
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 

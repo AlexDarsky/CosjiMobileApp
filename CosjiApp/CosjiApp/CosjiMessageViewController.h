@@ -21,4 +21,6 @@
 @property (strong, nonatomic) UIView *buttomToolBar;
 @property (strong, nonatomic)  UISegmentedControl *segmentCon;
 @property (nonatomic,strong) NSString *userID;
+
+-(void)loadFanLiListByOrder:(int)order;
 @end

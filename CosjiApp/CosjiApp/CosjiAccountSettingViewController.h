@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface CosjiAccountSettingViewController : UIViewController
+@interface CosjiAccountSettingViewController : UIViewController<UITextFieldDelegate>
 {
     int settingMode;
 }

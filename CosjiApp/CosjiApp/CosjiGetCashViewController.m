@@ -32,14 +32,15 @@
     self.view=primaryView;
     self.customNavBar=[[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 45)];
     self.customNavBar.backgroundColor=[UIColor colorWithPatternImage:[UIImage imageNamed:@"工具栏背景"]];
-    UILabel *titleLabel=[[UILabel alloc] initWithFrame:CGRectMake(90, 0, 140, 40)];
+    UILabel *titleLabel=[[UILabel alloc] initWithFrame:CGRectMake(90, 2.5, 140, 40)];
     titleLabel.backgroundColor=[UIColor clearColor];
     titleLabel.textColor=[UIColor whiteColor];
-    titleLabel.text=@"提现申请";
+    titleLabel.text=@"账户明细";
+    titleLabel.font=[UIFont fontWithName:@"Arial" size:18];
     titleLabel.textAlignment=NSTextAlignmentCenter;
     [self.customNavBar addSubview:titleLabel];
     UIButton *backBtn=[UIButton buttonWithType:UIButtonTypeCustom];
-    backBtn.frame=CGRectMake(11, 12, 60/2, 41/2);
+    backBtn.frame=CGRectMake(11, 2.5, 100/2, 80/2);
     [backBtn setBackgroundImage:[UIImage imageNamed:@"返回"] forState:UIControlStateNormal];
     [backBtn addTarget:self  action:@selector(dismisThisViewController:) forControlEvents:UIControlEventTouchUpInside];
     [self.customNavBar addSubview:backBtn];

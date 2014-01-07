@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>CFBundleDevelopmentRegion</key>
-	<string>en</string>
+	<string>zh_CN</string>
 	<key>CFBundleDisplayName</key>
 	<string>可及网</string>
 	<key>CFBundleExecutable</key>
@@ -35,7 +35,7 @@
 			<string>appcallback</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>cosjii.com</string>
+				<string>appcallback://</string>
 			</array>
 		</dict>
 	</array>
@@ -49,6 +49,8 @@
 	<array>
 		<string>armv7</string>
 	</array>
+	<key>CFBundleAllowMixedLocalizations</key>
+	<true/>
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>

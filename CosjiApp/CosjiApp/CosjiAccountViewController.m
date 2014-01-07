@@ -35,7 +35,14 @@
     UIButton *dismissBtn=[UIButton buttonWithType:UIButtonTypeCustom];
     [dismissBtn addTarget:self action:@selector(dismisThisViewController:) forControlEvents:UIControlEventTouchUpInside];
     [dismissBtn setBackgroundImage:[UIImage imageNamed:@"返回"] forState:UIControlStateNormal];
-    dismissBtn.frame=CGRectMake(11, 12, 60/2, 41/2);
+    dismissBtn.frame=CGRectMake(11, 2.5, 100/2, 80/2);
+    UILabel *title=[[UILabel alloc] initWithFrame:CGRectMake(90, 2.5, 140, 40)];
+    title.backgroundColor=[UIColor clearColor];
+    title.textColor=[UIColor whiteColor];
+    title.text=@"账户明细";
+    title.font=[UIFont fontWithName:@"Arial" size:18];
+    title.textAlignment=NSTextAlignmentCenter;
+    [self.customNavBar addSubview:title];
     [self.customNavBar addSubview:dismissBtn];
     self.myTableView=[[UITableView alloc] initWithFrame:CGRectMake(0, 88, 320, [UIScreen mainScreen].bounds.size.height-108)];
     self.myTableView.delegate=self;

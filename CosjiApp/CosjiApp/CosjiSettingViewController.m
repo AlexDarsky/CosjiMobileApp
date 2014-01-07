@@ -10,6 +10,7 @@
 #import "CosjiUserHelpViewController.h"
 #import "CosjiGuideViewController.h"
 #import "CosjiUserViewController.h"
+#import <BaiduSocialShare/BDSocialShareSDK.h>
 
 @interface CosjiSettingViewController ()
 
@@ -27,6 +28,7 @@
     }
     return self;
 }
+
 -(void)loadView
 {
     UIView *primaryView=[[UIView alloc] initWithFrame:[UIScreen mainScreen].bounds];
@@ -41,10 +43,10 @@
     self.myTableView.dataSource=self;
     self.myTableView.delegate=self;
     [self.view addSubview:self.myTableView];
-    itemArray=[[NSArray alloc] initWithObjects:@"用户指南",@"返利问题",@"常见问题",@"客服在线",@"分享软件",@"意见反馈",@"清除缓存",@"检测更新",@"流量节省模式",@"注销账户",nil];
+    itemArray=[[NSArray alloc] initWithObjects:@"返利教程",@"返利问题",@"常见问题",@"分享软件",@"意见反馈",@"清除缓存",@"检测更新",@"流量节省模式",@"注销账户",nil];
     saveBtn=[UIButton buttonWithType:UIButtonTypeCustom];
     saveBtn.frame=CGRectMake(180, 40/2-43/4, 69/2, 43/2);
-    [saveBtn setBackgroundImage:[UIImage imageNamed:@"设置开关槽-默认"] forState:UIControlStateNormal];
+    [saveBtn setBackgroundImage:[UIImage imageNamed:@"节省流量模式_默认"] forState:UIControlStateNormal];
     [saveBtn setBackgroundImage:[UIImage imageNamed:@"设置开关槽-打开"] forState:UIControlStateSelected];
     [saveBtn addTarget:self action:@selector(changeSaveMode) forControlEvents:UIControlEventTouchDown];
     if ([[[NSUserDefaults standardUserDefaults] objectForKey:@"saveMode"] isEqualToString:@"YES"]) {
@@ -54,7 +56,6 @@
     {
         NSLog(@"初始化不打开");
         saveBtn.selected=NO;
-
     }
 }
 -(void)viewWillAppear:(BOOL)animated
@@ -71,7 +72,7 @@
 - (NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     if (section==0) {
-        return 5;
+        return 4;
     }else
     return 5;
 }
@@ -125,24 +126,8 @@
     switch (indexPath.section) {
         case 0:
         {
-            if (indexPath.row==3)
-            {
-                UIImageView *iconImage=[[UIImageView alloc] initWithFrame:CGRectMake(10, 5, 34, 30)];
-                NSString *cellName=[NSString stringWithFormat:@"%@",[itemArray objectAtIndex:indexPath.row]];
-                [iconImage setImage:[UIImage imageNamed:cellName]];
-                UILabel *cellLabel=[[UILabel alloc] initWithFrame:CGRectMake(50, 5, 80, 30)];
-                cellLabel.text=[NSString stringWithFormat:@"%@",[itemArray objectAtIndex:indexPath.row]];
-                UILabel *number=[[UILabel alloc] initWithFrame:CGRectMake(130, 5, 150, 30)];
-                number.font=[UIFont fontWithName:@"Arial" size:12];
-                number.text=@"400-00347-678";
-                cellLabel.textColor=number.textColor=[UIColor lightTextColor];
-                cellLabel.backgroundColor=number.backgroundColor=[UIColor clearColor];
-                [cell addSubview:iconImage];
-                [cell addSubview:cellLabel];
-                [cell addSubview:number];
-            }else
-            {
-                UIImageView *iconImage=[[UIImageView alloc] initWithFrame:CGRectMake(10, 5, 34, 30)];
+
+                UIImageView *iconImage=[[UIImageView alloc] initWithFrame:CGRectMake(10, 3.5/2,  70/2, 73/2)];
                 NSString *cellName=[NSString stringWithFormat:@"%@",[itemArray objectAtIndex:indexPath.row]];
                 [iconImage setImage:[UIImage imageNamed:cellName]];
                 UILabel *cellLabel=[[UILabel alloc] initWithFrame:CGRectMake(50, 5, 240, 30)];
@@ -151,19 +136,17 @@
                 cellLabel.textColor=[UIColor lightTextColor];
                 [cell addSubview:iconImage];
                 [cell addSubview:cellLabel];
-
-            }
         }
             break;
         case 1:
         {
             if (indexPath.row==3)
             {
-                UIImageView *iconImage=[[UIImageView alloc] initWithFrame:CGRectMake(10, 5, 34, 30)];
-                NSString *cellName=[NSString stringWithFormat:@"%@",[itemArray objectAtIndex:indexPath.row+5]];
+                UIImageView *iconImage=[[UIImageView alloc] initWithFrame:CGRectMake(10, 3.5/2, 70/2, 73/2)];
+                NSString *cellName=[NSString stringWithFormat:@"%@",[itemArray objectAtIndex:indexPath.row+4]];
                 [iconImage setImage:[UIImage imageNamed:cellName]];
                 UILabel *cellLabel=[[UILabel alloc] initWithFrame:CGRectMake(50, 5, 240, 30)];
-                cellLabel.text=[NSString stringWithFormat:@"%@",[itemArray objectAtIndex:indexPath.row+5]];
+                cellLabel.text=[NSString stringWithFormat:@"%@",[itemArray objectAtIndex:indexPath.row+4]];
                 cellLabel.backgroundColor=[UIColor clearColor];
                 cellLabel.textColor=[UIColor lightTextColor];
                 [cell addSubview:saveBtn];
@@ -172,11 +155,11 @@
                 
             }else
             {
-                UIImageView *iconImage=[[UIImageView alloc] initWithFrame:CGRectMake(10, 5, 34, 30)];
-                NSString *cellName=[NSString stringWithFormat:@"%@",[itemArray objectAtIndex:indexPath.row+5]];
+                UIImageView *iconImage=[[UIImageView alloc] initWithFrame:CGRectMake(10, 3.5/2,  70/2, 73/2)];
+                NSString *cellName=[NSString stringWithFormat:@"%@",[itemArray objectAtIndex:indexPath.row+4]];
                 [iconImage setImage:[UIImage imageNamed:cellName]];
                 UILabel *cellLabel=[[UILabel alloc] initWithFrame:CGRectMake(50, 5, 240, 30)];
-                cellLabel.text=[NSString stringWithFormat:@"%@",[itemArray objectAtIndex:indexPath.row+5]];
+                cellLabel.text=[NSString stringWithFormat:@"%@",[itemArray objectAtIndex:indexPath.row+4]];
                 cellLabel.backgroundColor=[UIColor clearColor];
                 cellLabel.textColor=[UIColor lightTextColor];
                 if(indexPath.row==4)
@@ -239,15 +222,19 @@
                     break;
                 case 3:
                 {
-                    NSLog(@"打电话");
-                    NSString *num = [[NSString alloc] initWithFormat:@"tel://400-0034-7678"];                     
-                    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:num]]; 
+                    BDSocialShareContent *content = [BDSocialShareContent shareContentWithDescription:@"可及很吊" url:@"http://cosji.com" title:@"可及网"];
+                    [BDSocialShareSDK showShareMenuWithShareContent:content menuStyle:BD_SOCIAL_SHARE_MENU_BLACK_STYLE supportedInterfaceOrientations:UIInterfaceOrientationMaskAllButUpsideDown result:^(BD_SOCIAL_RESULT requestResult,NSString *platformType,id response,NSError *error) {
+                        if (requestResult == BD_SOCIAL_SUCCESS) { //分享成功的处理
+                        } else if (requestResult == BD_SOCIAL_CANCEL){ //用户取消分享的处理
+                        } else if (requestResult == BD_SOCIAL_FAIL){ //分享发生错误的处理
+                        }
+                    }];
+
                 }
                     break;
             }
         }
             break;
-            
         default:
         {
             UITableViewCell *cell=[self.myTableView cellForRowAtIndexPath:indexPath];
@@ -261,28 +248,57 @@
                 case 0:
                 {
                     NSLog(@"意见反馈");
-                    
+                    [settingDelegate toMessageViewController:1];
                 }
                     break;
                 case 1:
                 {
                     NSLog(@"清除缓存");
                     [CosjiFileManager quickCleanCacheFile];
+                    UIAlertView *alert=[[UIAlertView alloc] initWithTitle:@"提示" message:@"清除缓存成功" delegate:nil cancelButtonTitle:@"好的" otherButtonTitles: nil];
+                    [alert show];
                     
                 }
                     break;
                 case 2:
                 {
                     NSLog(@"检测更新");
-                    CosjiServerHelper *serverHelper=[CosjiServerHelper shareCosjiServerHelper];
-                    [serverHelper jsonTest];
+                    [SVProgressHUD showWithStatus:@"检测更新..."];
+                    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+                        CosjiServerHelper *serverHelper=[CosjiServerHelper shareCosjiServerHelper];
+                        NSDictionary *tmpDic=[NSDictionary dictionaryWithDictionary:[serverHelper getJsonDictionary:@"/version/check/?type=2"]];
+                        NSLog(@"%@",tmpDic);
+                        NSDictionary *headDic=[NSDictionary dictionaryWithDictionary:[tmpDic objectForKey:@"head"]];
+                        if ([[headDic objectForKey:@"msg"]isEqualToString:@"success"]) {
+                           NSDictionary *bodyDic=[NSDictionary dictionaryWithDictionary:[tmpDic objectForKey:@"body"]];
+                            NSString *versionString=[NSString stringWithFormat:@"%@",[bodyDic objectForKey:@"version"]];
+                            if ([versionString floatValue]>=[[NSUserDefaults standardUserDefaults] floatForKey:@"APPversion"]) {
+                                dispatch_async(dispatch_get_main_queue(), ^{
+                                    [SVProgressHUD dismiss];
+                                    //NSLog(@"%@",bodyDic);
+                                    UIAlertView *alert=[[UIAlertView alloc] initWithTitle:@"提示" message:@"已有新版本,是否前往更新" delegate:self cancelButtonTitle:@"不了" otherButtonTitles:@"马上更新", nil];
+                                    alert.tag=1;
+                                    [alert show];
+                                });
+                            }else
+                            {
+                                 [SVProgressHUD dismissWithSuccess:@"您使用的是最新版本" afterDelay:3.0];
+                            }
+                           
+                        }else
+                        {
+                            [SVProgressHUD dismiss];
+                            UIAlertView *alert=[[UIAlertView alloc] initWithTitle:@"提示" message:@"服务器无法连接，请稍后再试" delegate:nil cancelButtonTitle:@"好的" otherButtonTitles: nil];
+                            [alert show];
+                         //   [SVProgressHUD dismissWithSuccess:@"您已是最新版本" afterDelay:3.0];
+                        }
+                    });
                 }
                     break;
                 case 3:
                 {
                     NSLog(@"流量节省模式");
-
-                        [self changeSaveMode];
+                    [self changeSaveMode];
                 }
                     break;
                 case 4:
@@ -308,6 +324,24 @@
     }
 
 }
+-(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    if (alertView.tag==1) {
+        switch (buttonIndex) {
+            case 1:
+            {
+                NSString *urlStr = [NSString stringWithFormat:@"https://itunes.apple.com/cn"];
+                NSURL *url = [NSURL URLWithString:urlStr];
+                [[UIApplication sharedApplication] openURL:url];
+
+            }
+                break;
+        default:
+                break;
+        }
+    }
+}
+
 -(void)changeSaveMode
 {
     if (saveBtn.selected==YES)

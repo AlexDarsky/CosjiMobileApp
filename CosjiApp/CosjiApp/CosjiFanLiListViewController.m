@@ -32,13 +32,14 @@
     self.view=primary;
     self.customNarBar=[[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 45)];
     self.customNarBar.backgroundColor=[UIColor colorWithPatternImage:[UIImage imageNamed:@"工具栏背景"]];
-    self.fanliTitle=[[UILabel alloc] initWithFrame:CGRectMake(90, 0, 140, 40)];
+    self.fanliTitle=[[UILabel alloc] initWithFrame:CGRectMake(90, 2.5, 140, 40)];
     self.fanliTitle.backgroundColor=[UIColor clearColor];
     self.fanliTitle.textColor=[UIColor whiteColor];
+    self.fanliTitle.font=[UIFont fontWithName:@"Arial" size:18];
     self.fanliTitle.textAlignment=NSTextAlignmentCenter;
     [self.customNarBar addSubview:self.fanliTitle];
     UIButton *backBtn=[UIButton buttonWithType:UIButtonTypeCustom];
-    backBtn.frame=CGRectMake(11, 12, 60/2, 41/2);
+    backBtn.frame=CGRectMake(11, 2.5, 100/2, 80/2);
     [backBtn setBackgroundImage:[UIImage imageNamed:@"返回"] forState:UIControlStateNormal];
     [backBtn addTarget:self  action:@selector(exitThisView:) forControlEvents:UIControlEventTouchUpInside];
     [self.customNarBar addSubview:backBtn];
@@ -70,6 +71,11 @@
 -(void)viewWillAppear:(BOOL)animated
 {
     [self loadFanLiListFor:self.segmentCon];
+}
+-(void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:YES];
+    [SVProgressHUD dismiss];
 }
 #pragma mark mainMethod
 -(void)loadFanLiListFor:(UISegmentedControl *)Seg
@@ -211,7 +217,7 @@ void FanLiItemImageDownloadURL( NSURL * URL, void (^imageBlock)(UIImage * image)
     switch (indexPath.row) {
         case 0:
         {
-            UILabel *chengjiaoLabel=[[UILabel alloc] initWithFrame:CGRectMake(15, 5, 280, 20)];
+            UILabel *chengjiaoLabel=[[UILabel alloc] initWithFrame:CGRectMake(20, 5, 280, 20)];
             chengjiaoLabel.text=[NSString stringWithFormat:@"成交时间:%@",[NSString stringWithFormat:@"%@",[itemDic objectForKey:@"chargeTime"]]];
             chengjiaoLabel.textColor=[UIColor lightGrayColor];
             chengjiaoLabel.backgroundColor=[UIColor clearColor];
@@ -222,50 +228,39 @@ void FanLiItemImageDownloadURL( NSURL * URL, void (^imageBlock)(UIImage * image)
         case 1:
         {
             
-            UIImageView *itemImageView=[[UIImageView alloc] initWithFrame:CGRectMake(20, 5, 90, 90)];
-            NSString *imageUrl=[NSString stringWithFormat:@"%@",[itemDic objectForKey:@"imgUrl"]];
-            imageUrl=[imageUrl stringByReplacingOccurrencesOfString:@"\"" withString:@""];
-            FanLiItemImageDownloadURL([NSURL URLWithString:imageUrl], ^( UIImage * image )
-                                 {
-                                     [itemImageView setImage:image ];
-                                 }, ^(void){
-                                 });
-            [cell addSubview:itemImageView];
-            UILabel *orderIDLabel=[[UILabel alloc] initWithFrame:CGRectMake(120, 10, 180, 20)];
+            UILabel *orderIDLabel=[[UILabel alloc] initWithFrame:CGRectMake(20, 5, 280, 20)];
             orderIDLabel.font=[UIFont fontWithName:@"Arial" size:11];
             orderIDLabel.backgroundColor=[UIColor clearColor];
             [cell addSubview:orderIDLabel];
-            UILabel *nameLabel=[[UILabel alloc] initWithFrame:CGRectMake(120, 20, 180, 75/2)];
+            UILabel *nameLabel=[[UILabel alloc] initWithFrame:CGRectMake(20, 20, 280, 75/2)];
             nameLabel.numberOfLines=0;
             nameLabel.adjustsFontSizeToFitWidth=YES;
             nameLabel.backgroundColor=[UIColor clearColor];
             nameLabel.font=[UIFont fontWithName:@"Arial" size:12];
             [cell addSubview:nameLabel];
-            UILabel *priceLabel=[[UILabel alloc] initWithFrame:CGRectMake(120, 80, 180, 20)];
-            priceLabel.backgroundColor=[UIColor clearColor];
-            priceLabel.font=[UIFont fontWithName:@"Arial" size:12];
-            [cell addSubview:priceLabel];
+//            UILabel *priceLabel=[[UILabel alloc] initWithFrame:CGRectMake(20, 80, 180, 20)];
+//            priceLabel.backgroundColor=[UIColor clearColor];
+//            priceLabel.font=[UIFont fontWithName:@"Arial" size:12];
+//            [cell addSubview:priceLabel];
             switch (dingdanMode) {
                 case 0:
                 {
-                    nameLabel.frame=CGRectMake(120, 0, 180, 50);
+                    orderIDLabel.text=[NSString stringWithFormat:@"订单号：%@",[itemDic objectForKey:@"orderNo"]];
                     nameLabel.text=[NSString stringWithFormat:@"%@",[itemDic objectForKey:@"name"]];
-                    priceLabel.frame=CGRectMake(120, 50, 180, 20);
-                    priceLabel.text=[NSString stringWithFormat:@"￥ %@",[itemDic objectForKey:@"amount"]];
+               //     priceLabel.text=[NSString stringWithFormat:@"￥ %@元",[itemDic objectForKey:@"amount"]];
                 }
                     break;
                 case 1:
                 {
                     orderIDLabel.text=[NSString stringWithFormat:@"订单号：%@",[itemDic objectForKey:@"orderNo"]];
                     nameLabel.text=[NSString stringWithFormat:@"%@",[itemDic objectForKey:@"mallName"]];
-                    priceLabel.text=[NSString stringWithFormat:@"￥ %@",[itemDic objectForKey:@"price"]];
+             //       priceLabel.text=[NSString stringWithFormat:@"￥ %@元",[itemDic objectForKey:@"price"]];
                 }
                     break;
                 case 2:
                 {
                     orderIDLabel.text=[NSString stringWithFormat:@"订单号：%@",[itemDic objectForKey:@"orderNo"]];
-                    nameLabel.text=[NSString stringWithFormat:@"%@",[itemDic objectForKey:@"mallName"]];
-                    priceLabel.text=[NSString stringWithFormat:@"￥ %@",[itemDic objectForKey:@"price"]];
+                  //  nameLabel.text=[NSString stringWithFormat:@"%@",[itemDic objectForKey:@"mallName"]];
                 }
                     break;
                     
@@ -275,6 +270,11 @@ void FanLiItemImageDownloadURL( NSURL * URL, void (^imageBlock)(UIImage * image)
         case 2:
         {
             [cell setBackgroundColor:[UIColor colorWithRed:229.0/255.0 green:229.0/255.0 blue:229.0/255.0 alpha:0.8]];
+            UILabel *priceLabel=[[UILabel alloc] initWithFrame:CGRectMake(20, 9, 180, 20)];
+            priceLabel.backgroundColor=[UIColor clearColor];
+            priceLabel.font=[UIFont fontWithName:@"Arial" size:12];
+            [cell addSubview:priceLabel];
+            priceLabel.text=[NSString stringWithFormat:@"￥ %@元",[itemDic objectForKey:@"amount"]];
             UILabel *profitLabel=[[UILabel alloc] initWithFrame:CGRectMake(180, 9/2, 120, 30)];
             profitLabel.text=[NSString stringWithFormat:@"获得%@",[NSString stringWithFormat:@"%@",[itemDic objectForKey:@"profit"]]];
             profitLabel.backgroundColor=[UIColor clearColor];
@@ -287,7 +287,64 @@ void FanLiItemImageDownloadURL( NSURL * URL, void (^imageBlock)(UIImage * image)
     
     return cell;
 }
-
+- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
+{
+    NSLog(@"%f %f",scrollView.contentOffset.y,scrollView.contentSize.height - scrollView.frame.size.height);
+    if (scrollView.contentOffset.y>=(scrollView.contentSize.height - scrollView.frame.size.height)+100&&scrollView.contentOffset.y>0)
+    {
+        [SVProgressHUD showWithStatus:@"正在载入..."];
+        [self performSelector:@selector(loadDataBegin) withObject:Nil afterDelay:2.0];
+    }
+}
+-(void)loadDataBegin
+{
+    NSLog(@"%d",currentPage);
+    currentPage+=1;
+    NSDictionary *tmpDic=[NSDictionary dictionaryWithDictionary:[[NSUserDefaults standardUserDefaults] objectForKey:@"userInfo"]];
+    NSDictionary *infoDic=[NSDictionary dictionaryWithDictionary:[tmpDic objectForKey:@"body"]];
+    self.userID=[NSString stringWithFormat:@"%@",[infoDic objectForKey:@"userId"]];
+    NSString *requestURL=[NSString stringWithFormat:@"/order/"];
+    switch (dingdanMode) {
+        case 0:
+        {
+            requestURL=[requestURL stringByAppendingFormat:@"toList/"];
+            
+        }
+            break;
+        case 1:
+        {
+            requestURL=[requestURL stringByAppendingFormat:@"poList/"];
+        }
+            break;
+        case 2:
+        {
+            requestURL=[requestURL stringByAppendingFormat:@"moList/"];
+        }
+            break;
+    }
+    requestURL=[requestURL stringByAppendingFormat:@"?userID=%@&num=10&page=%d",self.userID,currentPage];
+    NSLog(@"userID is %@",self.userID);
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        CosjiServerHelper *serverHelper=[CosjiServerHelper shareCosjiServerHelper];
+        NSDictionary *requestDic=[NSDictionary dictionaryWithDictionary:[serverHelper getJsonDictionary:requestURL]];
+        if (requestDic!=nil)
+        {
+            NSDictionary *recordDic=[NSDictionary dictionaryWithDictionary:[requestDic objectForKey:@"body"]];
+            itemsArray=[NSMutableArray arrayWithArray:[recordDic objectForKey:@"record"]];
+            NSLog(@"get Store %d",[itemsArray count]);
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [SVProgressHUD dismiss];
+            });
+            
+        }else
+        {
+            [SVProgressHUD dismiss];
+            UIAlertView *alert=[[UIAlertView alloc] initWithTitle:@"错误" message:@"服务器无法连接，请稍后再试" delegate:nil cancelButtonTitle:@"好的" otherButtonTitles: nil];
+            [alert show];
+            currentPage-=1;
+        }
+    });
+}
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
   

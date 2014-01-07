@@ -76,24 +76,45 @@ static CosjiServerHelper *shareCosjiServerHelper=nil;
 {
     NSDictionary *tmpDic=[NSDictionary dictionaryWithDictionary:[[NSUserDefaults standardUserDefaults] objectForKey:@"userInfo"]];
     NSDictionary *infoDic=[NSDictionary dictionaryWithDictionary:[tmpDic objectForKey:@"body"]];
-    
     NSString *uid =[NSString stringWithFormat:@"%@",[infoDic objectForKey:@"userId"]];
-    
     NSMutableDictionary *params = [[NSMutableDictionary alloc]init];
-    
     [params setObject:@"taobao.tbk.items.get" forKey:@"method"];
     [params setObject:@"num_iid,title,price,volume,pic_url,item_url,click_url" forKey:@"fields"];
     [params setObject:@"1" forKey:@"start_price"];
     [params setObject:[NSString stringWithFormat:@"%d",pageNO] forKey:@"page_no"];
     [params setObject:keyword forKey:@"keyword"];
+    [params setObject:@"20" forKey:@"page_size"];
     [params setObject:@"100" forKey:@"start_commissionRate"];
-    [params setObject:@"50000" forKey:@"end_commissionRate"];
+    [params setObject:@"5000" forKey:@"end_commissionRate"];
     TopIOSClient *iosClient = [TopIOSClient getIOSClientByAppKey:CosjiAppKey];
     TopApiResponse * response = [iosClient tql:@"GET" params:params userId:uid];
     NSDictionary *responeDic =[[response content]  objectFromJSONString];
     NSDictionary *respone_getDIC=[responeDic objectForKey:@"tbk_items_get_response"];
     NSDictionary *tbk_items_IDC=[respone_getDIC objectForKey:@"tbk_items"];
+    NSLog(@"%@",tbk_items_IDC);
     return [NSArray arrayWithArray:[tbk_items_IDC objectForKey:@"tbk_item"]];
+}
+-(NSDictionary*)getItemFromTop:(NSString*)numiids
+{
+    NSDictionary *tmpDic=[NSDictionary dictionaryWithDictionary:[[NSUserDefaults standardUserDefaults] objectForKey:@"userInfo"]];
+    NSDictionary *infoDic=[NSDictionary dictionaryWithDictionary:[tmpDic objectForKey:@"body"]];
+    NSString *uid =[NSString stringWithFormat:@"%@",[infoDic objectForKey:@"userId"]];
+    NSMutableDictionary *params = [[NSMutableDictionary alloc]init];
+    [params setObject:@"taobao.tbk.items.detail.get" forKey:@"method"];
+    [params setObject:numiids  forKey:@"num_iids"];
+    [params setObject:@"num_iid,title,price,volume,pic_url,item_url,click_url" forKey:@"fields"];
+    TopIOSClient *iosClient = [TopIOSClient getIOSClientByAppKey:CosjiAppKey];
+    TopApiResponse * response = [iosClient tql:@"GET" params:params userId:uid];
+    NSDictionary *responeDic =[[response content]  objectFromJSONString];
+    NSDictionary *respone_getDIC=[responeDic objectForKey:@"tbk_items_detail_get_response"];
+    NSDictionary *tbk_items_DIC=[respone_getDIC objectForKey:@"tbk_items"];
+    NSDictionary *tbk_item_DIC=[[NSArray arrayWithArray:[tbk_items_DIC objectForKey:@"tbk_item"]]lastObject];
+    if (tbk_item_DIC!=nil)
+    {
+        NSLog(@"responeDic is %@",tbk_item_DIC);
+        return tbk_item_DIC;
+    }else
+    return nil;
 }
 -(NSString*)getClick_urlFromTop:(NSString*)numiids
 {
@@ -119,7 +140,54 @@ static CosjiServerHelper *shareCosjiServerHelper=nil;
     
     NSLog(@"click_url is %@",[tbk_item_DIC objectForKey:@"click_url"]);
     return [tbk_item_DIC objectForKey:@"click_url"];
+}
+-(int)getSearchItemType:(NSString*)searchItem
+{
+    if ([searchItem rangeOfString:@"http://"].location!=NSNotFound)
+    {
+        return 0;
+    }else
+    {
+        if ([self isPureInt:searchItem])
+        {
+            return 1;
+        }else
+            return 2;
+    }
+}
+- (BOOL)isPureInt:(NSString*)string{
+    NSScanner* scan = [NSScanner scannerWithString:string];
+    int val;
+    return[scan scanInt:&val] && [scan isAtEnd];
+}
+-(BOOL)quickLogin
+{
+    NSDictionary *loginDic=[NSDictionary dictionaryWithDictionary:[[NSUserDefaults standardUserDefaults] objectForKey:@"loginDic"]];
+    NSDictionary *tmpDic=[NSDictionary dictionaryWithDictionary: [self getJsonDictionary:[NSString stringWithFormat:@"/user/login/?account=%@&password=%@",[loginDic objectForKey:@"loginName"],[loginDic objectForKey:@"loginPWD"]]]];
+    if (tmpDic!=nil)
+    {
+            NSDictionary *headDic=[NSDictionary dictionaryWithDictionary:[tmpDic objectForKey:@"head"]];
+            if ([[headDic objectForKey:@"msg"] isEqualToString:@"success"])
+            {
+                NSDictionary *idDic=[NSDictionary dictionaryWithDictionary:[tmpDic objectForKey:@"body"]];
+                
+                NSDictionary *userInfo=[NSDictionary dictionaryWithDictionary:[self getJsonDictionary:[NSString stringWithFormat:@"/user/profile/?id=%@",[idDic objectForKey:@"userId"]]]];
+                [[NSUserDefaults standardUserDefaults] setObject:userInfo forKey:@"userInfo"];
+                [[NSUserDefaults standardUserDefaults] setObject:@"YES" forKey:@"logined"];
+                return YES;
+            }else
+            {
+                [[NSUserDefaults standardUserDefaults] setObject:@"NO" forKey:@"logined"];
+                [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"userInfo"];
+                return NO;
+            }
+    }else
+    {
+        [[NSUserDefaults standardUserDefaults] setObject:@"NO" forKey:@"logined"];
+        [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"userInfo"];
+        return NO;
 
+    }
 }
 - (BOOL) connectedToNetwork
 {

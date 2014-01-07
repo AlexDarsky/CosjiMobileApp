@@ -30,7 +30,7 @@
     UIView *primaryView=[[UIView alloc] initWithFrame:[UIScreen mainScreen].bounds];
     primaryView.backgroundColor=[UIColor colorWithRed:229.0/255.0 green:229.0/255.0 blue:229.0/255.0 alpha:100];
     self.view=primaryView;
-    self.mainTableView=[[UITableView alloc] initWithFrame:CGRectMake(0, 49, 320, [UIScreen mainScreen].bounds.size.height-49-20)];
+    self.mainTableView=[[UITableView alloc] initWithFrame:CGRectMake(0, 45, 320, [UIScreen mainScreen].bounds.size.height-45-20)];
     self.mainTableView.delegate=self;
     self.mainTableView.dataSource=self;
     self.mainTableView.backgroundColor=[UIColor clearColor];
@@ -40,7 +40,7 @@
     self.CustomHeadView=[[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 45)];
     self.CustomHeadView.backgroundColor=[UIColor colorWithPatternImage:[UIImage imageNamed:@"工具栏背景"]];
     UIButton *backBtn=[UIButton buttonWithType:UIButtonTypeCustom];
-    backBtn.frame=CGRectMake(11, 12,60/2, 41/2);
+    backBtn.frame=CGRectMake(11, 2.5, 100/2, 80/2);
     [backBtn setBackgroundImage:[UIImage imageNamed:@"返回"] forState:UIControlStateNormal];
     [backBtn addTarget:self  action:@selector(backAction:) forControlEvents:UIControlEventTouchUpInside];
     [self.CustomHeadView addSubview:backBtn];
@@ -61,7 +61,7 @@
         [SVProgressHUD showWithStatus:@"正在载入..."];
         currentPage=1;
         CosjiServerHelper *serverHelper=[CosjiServerHelper shareCosjiServerHelper];
-        NSDictionary *tmpDic=[NSDictionary dictionaryWithDictionary:[serverHelper getJsonDictionary:[NSString stringWithFormat:@"/mall/getAll/?page=%d&&num=15",currentPage]]];
+        NSDictionary *tmpDic=[NSDictionary dictionaryWithDictionary:[serverHelper getJsonDictionary:[NSString stringWithFormat:@"/mall/getAll/?page=%d&&num=21",currentPage]]];
         if ([tmpDic objectForKey:@"body"]!=nil)
         {
             dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
@@ -101,7 +101,7 @@
 -(CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     
-    return 82;
+    return 152/2;
 }
 
 
@@ -120,10 +120,10 @@
         if (indexPath.row*3+x<[storeListArray count])
         {
             NSDictionary *storeDic=[NSDictionary dictionaryWithDictionary:[storeListArray objectAtIndex:indexPath.row*3+x]];
-            UIView *btnView=[[UIView alloc] initWithFrame:CGRectMake(10+100*x, 0, 95, 55)];
+            UIView *btnView=[[UIView alloc] initWithFrame:CGRectMake(10+100*x, 0, 198/2, 150/2)];
             btnView.backgroundColor=[UIColor whiteColor];
             UIButton *button=[UIButton buttonWithType:UIButtonTypeCustom];
-            button.frame=CGRectMake(0,5, 95, 50);
+            button.frame=CGRectMake(198/4-95/1.5/2,150/4-50/1.5/2-10, 95/1.5, 50/1.5);
             button.tag=indexPath.row*3+x;
             NSString *imageUrl1=[NSString stringWithFormat:@"%@",[storeDic objectForKey:@"logo"]];
             imageUrl1=[imageUrl1 stringByReplacingOccurrencesOfString:@"\"" withString:@""];
@@ -168,6 +168,8 @@
             UILabel *label=[[UILabel alloc] initWithFrame:CGRectMake(0, 55, 95, 20)];
             label.adjustsFontSizeToFitWidth=YES;
             label.backgroundColor=[UIColor lightTextColor];
+            label.font=[UIFont fontWithName:@"Arial" size:10];
+            label.textAlignment=NSTextAlignmentCenter;
             label.text=[NSString stringWithFormat:@"最高返利%@",[storeDic objectForKey:@"profit" ]];
             [btnView addSubview:label];
         }
@@ -190,7 +192,7 @@
     NSLog(@"%d",currentPage);
     CosjiServerHelper *serverHelper=[CosjiServerHelper shareCosjiServerHelper];
     currentPage+=1;
-    NSDictionary *tmpDic=[NSDictionary dictionaryWithDictionary:[serverHelper getJsonDictionary:[NSString stringWithFormat:@"/mall/getAll/?page=%d&&num=15",currentPage]]];
+    NSDictionary *tmpDic=[NSDictionary dictionaryWithDictionary:[serverHelper getJsonDictionary:[NSString stringWithFormat:@"/mall/getAll/?page=%d&&num=21",currentPage]]];
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         NSDictionary *recordDic=[NSDictionary dictionaryWithDictionary:[tmpDic objectForKey:@"body"]];
         NSArray *loadArray=[[NSArray alloc] initWithArray:[recordDic objectForKey:@"record"]];
@@ -220,13 +222,13 @@
     selectedIndex=[sender tag];
     if ([[[NSUserDefaults standardUserDefaults] objectForKey:@"logined"]isEqualToString:@"YES"]) {
         NSDictionary *tmpDic=[NSDictionary dictionaryWithDictionary:[storeListArray objectAtIndex:selectedIndex]];
-        NSString *storeUrl=[NSString stringWithFormat:@"%@",[tmpDic objectForKey:@"url"]];
+        NSString *storeUrl=[NSString stringWithFormat:@"%@",[tmpDic objectForKey:@"yiqifaurl"]];
         NSLog(@"%@",[storeUrl stringByReplacingOccurrencesOfString:@"\"" withString:@""]);
         NSURL *url =[NSURL URLWithString:[storeUrl stringByReplacingOccurrencesOfString:@"\"" withString:@""]];
         NSURLRequest *request =[NSURLRequest requestWithURL:url];
         CosjiWebViewController *storeBrowseViewController=[CosjiWebViewController shareCosjiWebViewController];
         
-        [self presentViewController:storeBrowseViewController animated:YES completion:nil];
+        [self.navigationController pushViewController:storeBrowseViewController animated:YES ];
         [storeBrowseViewController.webView loadRequest:request];
         [storeBrowseViewController.storeName setText:[NSString stringWithFormat:@"%@",[tmpDic objectForKey:@"name"]]];
         
@@ -250,7 +252,7 @@
                 NSURL *url =[NSURL URLWithString:[storeUrl stringByReplacingOccurrencesOfString:@"\"" withString:@""]];
                 NSURLRequest *request =[NSURLRequest requestWithURL:url];
                 CosjiWebViewController *storeBrowseViewController=[CosjiWebViewController shareCosjiWebViewController];
-                [self presentViewController:storeBrowseViewController animated:YES completion:nil];
+                [self.navigationController pushViewController:storeBrowseViewController animated:YES ];
                 [storeBrowseViewController.webView loadRequest:request];
                 [storeBrowseViewController.storeName setText:[NSString stringWithFormat:@"%@",[tmpDic objectForKey:@"name"]]];
             }

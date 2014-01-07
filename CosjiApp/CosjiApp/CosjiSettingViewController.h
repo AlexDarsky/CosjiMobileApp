@@ -8,12 +8,13 @@
 
 #import <UIKit/UIKit.h>
 
-@interface CosjiSettingViewController : UIViewController<UITableViewDataSource,UITableViewDelegate>
+@interface CosjiSettingViewController : UIViewController<UITableViewDataSource,UITableViewDelegate,UIAlertViewDelegate>
 {
     NSArray *itemArray;
     UIImageView *grayImageView;
     UIButton *saveBtn;
 }
+
 @property (strong,nonatomic)UITableView *myTableView;
 @property (strong)id settingDelegate;
 @end

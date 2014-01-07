@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface CosjiWebViewController : UIViewController
+@interface CosjiWebViewController : UIViewController<UIWebViewDelegate>
 {
     
 }

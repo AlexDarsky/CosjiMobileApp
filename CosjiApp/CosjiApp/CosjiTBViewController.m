@@ -13,6 +13,7 @@
 #import "CosjiItemListViewController.h"
 #import "CosjiServerHelper.h"
 #import "SVProgressHUD.h"
+#import "CosjiItemFanliDetailViewController.h"
 
 @interface CosjiTBViewController ()
 
@@ -73,20 +74,18 @@
     // Do any additional setup after loading the view from its nib.
     self.navigationController.navigationBarHidden=YES;
     subjectsArray=[[NSMutableArray alloc] initWithCapacity:0];
-    self.searchField=[[UITextField alloc] initWithFrame:CGRectMake(10, 20, 300, 35)];
+    self.searchField=[[UITextField alloc] initWithFrame:CGRectMake(20+56/2, 20, 265, 35)];
     self.searchField.borderStyle=UITextBorderStyleNone;
     self.searchField.returnKeyType=UIReturnKeySearch;
-    self.searchField.textAlignment=UITextAlignmentCenter;
+    self.searchField.clearButtonMode=UITextFieldViewModeWhileEditing;
+    self.searchField.textAlignment=UITextAlignmentLeft;
     self.searchField.contentHorizontalAlignment=UIControlContentHorizontalAlignmentCenter;
     self.searchField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
     self.searchField.backgroundColor=[UIColor clearColor];
-    self.searchField.font=[UIFont fontWithName:@"Arial" size:18];
-    self.searchField.placeholder=@"输入商品名称或网址查询商品";
-    self.searchField.textAlignment=UITextAlignmentCenter;
+    self.searchField.font=[UIFont fontWithName:@"Arial" size:16];
+    self.searchField.placeholder=@"输入商品名称/网址/ID,查询返利";
     [self.searchField addTarget:self action:@selector(searchItemFrom:) forControlEvents:UIControlEventEditingDidEndOnExit];
-    UIImageView *imgv=[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"淘宝返利-搜索框放大镜"]];
-    imgv.frame=CGRectMake(2, 0, 16, 21);
-    [self.searchField addSubview:imgv];
+
 
     self.taoBtn=[UIButton buttonWithType:UIButtonTypeCustom];
     self.taoBtn.frame=CGRectMake(16.5, 15, 53, 31);
@@ -112,13 +111,14 @@
     [SVProgressHUD showWithStatus:@"正在载入..."];
     self.navigationController.navigationBarHidden=YES;
     self.tabBarController.tabBar.hidden=NO;
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+
     if ([subjectsArray count]==0)
     {
         CosjiServerHelper *serverHelper=[CosjiServerHelper shareCosjiServerHelper];
         NSDictionary *tmpDic=[NSDictionary dictionaryWithDictionary:[serverHelper getJsonDictionary:@"/taobao/category/"]];
         if ([tmpDic objectForKey:@"body"]!=nil)
         {
-            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
                 NSDictionary *subjectsListDic=[NSDictionary dictionaryWithDictionary:[tmpDic objectForKey:@"body"]];
                 for (int x=1; x<=7; x++) {
                     [subjectsArray addObject:[subjectsListDic objectForKey:[NSString stringWithFormat:@"%d",x]]];
@@ -129,7 +129,6 @@
                     [self.tableView reloadData];
                 });
                 
-            });
         }else
         {
             [SVProgressHUD dismiss];
@@ -140,6 +139,7 @@
     {
         
     }
+    });
     [SVProgressHUD dismiss];
 }
 - (NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
@@ -254,6 +254,9 @@
             UIImageView *searchFieldBG=[[UIImageView alloc] initWithFrame:CGRectMake(10, 15, 300, 45)];
             [searchFieldBG setImage:[UIImage imageNamed:@"淘宝返利-搜索框"]];
             searchFieldBG.userInteractionEnabled=YES;
+            UIImageView *imgv=[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"搜索框放大镜"]];
+            imgv.frame=CGRectMake(6, searchFieldBG.frame.size.height/2-57/4, 56/2, 57/2);
+            [searchFieldBG addSubview:imgv];
             [cell addSubview:searchFieldBG];
             [cell addSubview:self.searchField];
             [cell addSubview:taoBtnView];
@@ -298,7 +301,7 @@
                                        if (![[NSFileManager defaultManager] fileExistsAtPath:filename])
                                        {
                                            NSLog(@"download cacheImage %@",filename);
-                                           NSData * data = [[NSData alloc] initWithContentsOfURL:[NSURL URLWithString:imageUrl]];
+                                           NSData * data = [[NSData alloc] initWithContentsOfURL:[NSURL URLWithString:imageUrl]options:NSDataReadingMappedIfSafe error:nil];
                                            UIImage * cacheimage = [[UIImage alloc] initWithData:data];
                                            [UIImageJPEGRepresentation(cacheimage, 1.0) writeToFile:filename atomically:YES];
                                            dispatch_async(dispatch_get_main_queue(), ^{
@@ -386,9 +389,8 @@
         {
             NSURL *url =[NSURL URLWithString:@"http://m.taobao.com"];
             NSURLRequest *request =[NSURLRequest requestWithURL:url];
-            [self presentViewController:self.storeBrowseViewController animated:YES completion:nil];
-
-     //       [self.navigationController pushViewController:self.storeBrowseViewController animated:YES];
+        //    [self presentViewController:self.storeBrowseViewController animated:YES completion:nil];
+            [self.navigationController pushViewController:self.storeBrowseViewController animated:YES];
             [self.storeBrowseViewController.webView loadRequest:request];
             [self.storeBrowseViewController.storeName setText:@"已进入淘宝网"];
         }
@@ -397,8 +399,8 @@
         {
             NSURL *url =[NSURL URLWithString:@"http://m.tmall.com"];
             NSURLRequest *request =[NSURLRequest requestWithURL:url];
-            [self presentViewController:self.storeBrowseViewController animated:YES completion:nil];
-          //  [self.navigationController pushViewController:self.storeBrowseViewController animated:YES];
+          //  [self presentViewController:self.storeBrowseViewController animated:YES completion:nil];
+            [self.navigationController pushViewController:self.storeBrowseViewController animated:YES];
             [self.storeBrowseViewController.webView loadRequest:request];
             [self.storeBrowseViewController.storeName setText:@"已进入天猫"];
         }
@@ -407,9 +409,8 @@
         {
             NSURL *url =[NSURL URLWithString:@"http://ju.m.taobao.com"];
             NSURLRequest *request =[NSURLRequest requestWithURL:url];
-            [self presentViewController:self.storeBrowseViewController animated:YES completion:nil];
-
-         //   [self.navigationController pushViewController:self.storeBrowseViewController animated:YES];
+         //   [self presentViewController:self.storeBrowseViewController animated:YES completion:nil];
+           [self.navigationController pushViewController:self.storeBrowseViewController animated:YES];
             [self.storeBrowseViewController.webView loadRequest:request];
             [self.storeBrowseViewController.storeName setText:@"已进入聚划算"];
         }
@@ -452,10 +453,52 @@ void subjectItemImage( NSURL * URL, void (^imageBlock)(UIImage * image), void (^
     if (textField!=nil&&![textField.text isEqualToString:@""])
     {
         NSLog(@"开始搜索");
-        [self presentItemList:[NSString stringWithFormat:@"%@",self.searchField.text]];
-//        CosjiItemListViewController *itemsListViewController=[CosjiItemListViewController shareCosjiItemListViewController];
-//        [self presentViewController:itemsListViewController animated:YES completion:nil];
-//        [itemsListViewController loadInfoWith:[NSString stringWithFormat:@"%@",self.searchField.text] atPage:1];
+        CosjiServerHelper *serverHelper=[CosjiServerHelper shareCosjiServerHelper];
+        switch ([serverHelper getSearchItemType:searchField.text]) {
+            case 0:
+            {
+                NSLog(@"这个是地址");
+                int location=[[NSString stringWithFormat:@"%@",searchField.text] rangeOfString:@"id="].location;
+                NSString *num_iid=[[NSString stringWithFormat:@"%@",searchField.text] substringWithRange:NSMakeRange(location+3, 11)];
+                NSDictionary *infoDic=[NSDictionary dictionaryWithDictionary:[serverHelper getItemFromTop:num_iid]];
+                if (infoDic==nil)
+                {
+                    [SVProgressHUD showErrorWithStatus:@"搜索不到该商品或该商品没有返利" duration:3];
+                }else
+                {
+                    CosjiItemFanliDetailViewController *fanliDetailVC=[CosjiItemFanliDetailViewController shareCosjiItemFanliDetailViewController];
+                    
+                    [self presentViewController:fanliDetailVC animated:YES completion:nil];
+                    [fanliDetailVC loadItemInfoWithDic:infoDic];
+                }
+            }
+                break;
+            case 1:
+            {
+                NSLog(@"这个是ID");
+                NSString *num_iid=[NSString stringWithFormat:@"%@",searchField.text];
+                NSDictionary *infoDic=[NSDictionary dictionaryWithDictionary:[serverHelper getItemFromTop:num_iid]];
+                if (infoDic==nil)
+                {
+                    [SVProgressHUD showErrorWithStatus:@"搜索不到该商品或该商品没有返利" duration:3];
+                }else
+                {
+                    CosjiItemFanliDetailViewController *fanliDetailVC=[CosjiItemFanliDetailViewController shareCosjiItemFanliDetailViewController];
+                    
+                    [self presentViewController:fanliDetailVC animated:YES completion:nil];
+                    [fanliDetailVC loadItemInfoWithDic:infoDic];
+                }
+            }
+                break;
+            case 2:
+            {
+                    [self presentItemList:[NSString stringWithFormat:@"%@",self.searchField.text]];
+            }
+            default:
+                break;
+        }
+
+
     }else
     {
         UIAlertView *alert=[[UIAlertView alloc] initWithTitle:@"错误" message:@"请输入您想要搜索的商品或查询的网址" delegate:nil cancelButtonTitle:@"好的" otherButtonTitles: nil];

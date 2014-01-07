@@ -11,6 +11,10 @@
 @class CosjiViewController;
 
 @interface CosjiAppDelegate : UIResponder <UIApplicationDelegate>
+{
+    UITabBarController *rootTabBarController;
+    UIView *customTabBarView;
+}
 
 @property (strong, nonatomic) UIWindow *window;
 

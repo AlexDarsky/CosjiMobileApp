@@ -38,14 +38,15 @@
     self.view=primary;
     self.customNarBar=[[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 45)];
     self.customNarBar.backgroundColor=[UIColor colorWithPatternImage:[UIImage imageNamed:@"工具栏背景"]];
-    UILabel *title=[[UILabel alloc] initWithFrame:CGRectMake(90, 0, 140, 40)];
+    UILabel *title=[[UILabel alloc] initWithFrame:CGRectMake(90, 2.5, 140, 40)];
     title.backgroundColor=[UIColor clearColor];
     title.textColor=[UIColor whiteColor];
     title.text=@"站内消息";
+    title.font=[UIFont fontWithName:@"Arial" size:18];
     title.textAlignment=NSTextAlignmentCenter;
     [self.customNarBar addSubview:title];
     UIButton *backBtn=[UIButton buttonWithType:UIButtonTypeCustom];
-    backBtn.frame=CGRectMake(11, 12, 60/2, 41/2);
+    backBtn.frame=CGRectMake(11, 2.5, 100/2, 80/2);
     [backBtn setBackgroundImage:[UIImage imageNamed:@"返回"] forState:UIControlStateNormal];
     [backBtn addTarget:self  action:@selector(exitThisView:) forControlEvents:UIControlEventTouchUpInside];
     [self.customNarBar addSubview:backBtn];
@@ -67,12 +68,13 @@
     [self.buttomToolBar setBackgroundColor:[UIColor colorWithRed:70.0/255.0 green:59.0/255.0 blue:55.0/255.0 alpha:100]];
     [self.view addSubview:self.buttomToolBar];
     selectBtn=[UIButton buttonWithType:UIButtonTypeCustom];
-    selectBtn.frame=CGRectMake(10, self.buttomToolBar.frame.size.height/2-43/4, 42/2, 43/2);
-    [selectBtn setBackgroundImage:[UIImage imageNamed:@"登陆页-记住密码-默认"] forState:UIControlStateNormal];
-    [selectBtn setBackgroundImage:[UIImage imageNamed:@"登陆页-记住密码-动态"] forState:UIControlStateSelected];
+    selectBtn.frame=CGRectMake(10, self.buttomToolBar.frame.size.height/2-60/4, 60/2, 60/2);
+   // selectBtn.frame=CGRectMake(10, 0, 60/2, 60/2);
+    [selectBtn setBackgroundImage:[UIImage imageNamed:@"消息未选中"] forState:UIControlStateNormal];
+    [selectBtn setBackgroundImage:[UIImage imageNamed:@"消息选中"] forState:UIControlStateSelected];
     [selectBtn addTarget:self action:@selector(selectAllCell:) forControlEvents:UIControlEventTouchDown];
     [self.buttomToolBar addSubview:selectBtn];
-    selectAllLabel=[[UILabel alloc] initWithFrame:CGRectMake(selectBtn.frame.origin.x+selectBtn.frame.size.width+5, selectBtn.frame.origin.y, 74/2, 40/2)];
+    selectAllLabel=[[UILabel alloc] initWithFrame:CGRectMake(selectBtn.frame.origin.x+selectBtn.frame.size.width+5,  self.buttomToolBar.frame.size.height/2-40/4, 74/2, 40/2)];
     selectAllLabel.text=@"全选";
     selectAllLabel.backgroundColor=[UIColor clearColor];
     selectAllLabel.textColor=[UIColor whiteColor];
@@ -97,12 +99,22 @@
     [messageSendBtn addTarget:self action:@selector(sendAction:) forControlEvents:UIControlEventTouchDown];
     [messageSendBtn setTitle:@"发送" forState:UIControlStateNormal];
     [self.buttomToolBar addSubview:messageSendBtn];
+  //  [self loadFanLiListFor:self.segmentCon];
+
 }
 - (void)viewWillAppear:(BOOL)animated
 {
+}
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:YES];
+    [SVProgressHUD dismiss];
+}
+-(void)loadFanLiListByOrder:(int)order
+{
+    [self.segmentCon setSelectedSegmentIndex:order];
     [self loadFanLiListFor:self.segmentCon];
 }
-
 -(void)loadFanLiListFor:(UISegmentedControl *)Seg
 {
     [SVProgressHUD showWithStatus:@"正在载入..."];
@@ -174,18 +186,26 @@
 -(CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     float height;
-    switch (messageMode) {
-        case 0:
-        {
-            height=265/2;
-        }
-            break;
-        case 1:
-        {
-            height=160/2;;
-        }
-            break;
-}
+    NSDictionary *itemDic=[NSDictionary dictionaryWithDictionary:[itemsArray objectAtIndex:indexPath.section]];
+    NSString *contentString=[NSString stringWithFormat:@"%@",[itemDic objectForKey:@"content"]];
+    height=contentString.length/15*28+40;
+    if (height<=40) {
+        height=140/2;
+    }
+//    switch (messageMode) {
+//        case 0:
+//        {
+//
+//        }
+//            break;
+//        case 1:
+//        {
+//            NSDictionary *itemDic=[NSDictionary dictionaryWithDictionary:[itemsArray objectAtIndex:indexPath.section]];
+//            NSString *contentString=[NSString stringWithFormat:@"%@",[itemDic objectForKey:@"content"]];
+//            height=contentString.length/21*15+40;
+//        }
+//            break;
+//}
     return height;
 }
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -201,8 +221,16 @@
     timeLabel.font=[UIFont fontWithName:@"Arial" size:14];
     timeLabel.text=[NSString stringWithFormat:@"%@",[itemDic objectForKey:@"time"]];
     [cell addSubview:timeLabel];
-    UITextView *content=[[UITextView alloc] initWithFrame:CGRectMake(10, 65/2, 300, 200/2)];
-    content.text=[NSString stringWithFormat:@"%@",[itemDic objectForKey:@"content"]];
+    NSString *contentString=[NSString stringWithFormat:@"%@",[itemDic objectForKey:@"content"]];
+    float height=contentString.length/15*28;
+    if (height<=0)
+    {
+        height=100;
+    }
+    UITextView *content=[[UITextView alloc] initWithFrame:CGRectMake(10, 65/2-5, 300, height)];
+    content.text=[NSString stringWithFormat:@"%@",contentString];
+    content.scrollEnabled=NO;
+    content.font=[UIFont fontWithName:@"Arial" size:17];
     content.backgroundColor=[UIColor clearColor];
     content.editable=NO;
     [cell addSubview:content];
@@ -210,9 +238,10 @@
         case 0:
         {
             UIButton *selectCellBtn=[UIButton buttonWithType:UIButtonTypeCustom];
-            [selectCellBtn setBackgroundImage:[UIImage imageNamed:@"登陆页-记住密码-默认"] forState:UIControlStateNormal];
-            [selectCellBtn setBackgroundImage:[UIImage imageNamed:@"登陆页-记住密码-动态"] forState:UIControlStateSelected];
-            selectCellBtn.frame=CGRectMake(20, 5, 42/2, 43/2);
+            [selectCellBtn setBackgroundImage:[UIImage imageNamed:@"消息未选中"] forState:UIControlStateNormal];
+            [selectCellBtn setBackgroundImage:[UIImage imageNamed:@"消息选中"] forState:UIControlStateSelected];
+            selectCellBtn.frame=CGRectMake(15, 0, 60/2, 60/2);
+            timeLabel.frame=CGRectMake(50, 0, 240, 65/2);
             selectCellBtn.tag=indexPath.section;
             if ([[selectedArray objectAtIndex:indexPath.section] isEqualToString:@"YES"])
             {
@@ -222,10 +251,12 @@
                 selectCellBtn.selected=NO;
             [selectCellBtn addTarget:self action:@selector(didSelectedTouched:) forControlEvents:UIControlEventTouchDown];
             [cell addSubview:selectCellBtn];
- 
         }
             break;
         default:
+        {
+            timeLabel.frame=CGRectMake(20, 0, 240, 65/2);
+        }
             break;
     }
         return cell;

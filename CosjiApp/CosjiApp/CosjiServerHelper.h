@@ -17,4 +17,7 @@
 -(NSDictionary*)getJsonDictionary:(NSString*)orderString;
 - (NSArray*)getItemsFromTopByKeyWord:(NSString*)keyword atPage:(int)pageNO;
 -(NSString*)getClick_urlFromTop:(NSString*)numiids;
+-(NSDictionary*)getItemFromTop:(NSString*)numiids;
+-(BOOL)quickLogin;
+-(int)getSearchItemType:(NSString*)searchItem;
 @end

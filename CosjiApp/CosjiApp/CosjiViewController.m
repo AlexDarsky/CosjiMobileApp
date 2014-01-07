@@ -16,17 +16,19 @@
 #import "CosjiGuideViewController.h"
 #import "CosjiItemListViewController.h"
 #import "TopIOSClient.h"
+#import "CosjiItemFanliDetailViewController.h"
 #import "TopAttachment.h"
+#import "CosjiWelcomeViewController.h"
 
 
 
 @interface CosjiViewController ()
 {
-    UILabel *qq;
-    UIButton *qiandaoBtn;
+
     UIView *searchView;
     UITextField *searchField;
     BOOL searchViewShowing;
+    UIView *backgroundView;
     
 }
 @end
@@ -57,16 +59,16 @@ static UINavigationController* nc;
     [self.CustomHeadView addSubview:searchBtn];
     searchView=[[UIView alloc] initWithFrame:self.CustomHeadView.frame];
     searchView.backgroundColor=[UIColor whiteColor];
-    searchField=[[UITextField alloc] initWithFrame:CGRectMake(10, 0, 300, 35)];
-    searchField.borderStyle=UITextBorderStyleNone;
+    searchField=[[UITextField alloc] initWithFrame:CGRectMake(10, 5, 300, 35)];
+    searchField.borderStyle=UITextBorderStyleRoundedRect;
     searchField.returnKeyType=UIReturnKeySearch;
-    searchField.textAlignment=UITextAlignmentCenter;
+    searchField.clearButtonMode=UITextFieldViewModeWhileEditing;
+    searchField.textAlignment=UITextAlignmentLeft;
     searchField.contentHorizontalAlignment=UIControlContentHorizontalAlignmentCenter;
     searchField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
     searchField.backgroundColor=[UIColor clearColor];
     searchField.font=[UIFont fontWithName:@"Arial" size:18];
-    searchField.placeholder=@"输入商品名称或网址查询商品";
-    searchField.textAlignment=UITextAlignmentCenter;
+    searchField.placeholder=@"输入商品名称/网址/ID,查询返利";
     [searchView addSubview:searchField];
     [searchField addTarget:self action:@selector(searchItemFrom:) forControlEvents:UIControlEventEditingDidEndOnExit];
     [self.view addSubview:searchView];
@@ -78,28 +80,55 @@ static UINavigationController* nc;
     UIImageView *blogoImage=[[UIImageView alloc] initWithFrame:CGRectMake(129,13, 126/2, 42/2)];
     blogoImage.image=[UIImage imageNamed:@"工具栏背景-logo"];
     [self.CustomHeadView addSubview:blogoImage];
+    backgroundView=[[UIView alloc] initWithFrame:CGRectMake(10, 7, 300, 184/2)];
+    backgroundView.backgroundColor=[UIColor whiteColor];
+    UIButton *helperBtn=[UIButton buttonWithType:UIButtonTypeCustom];
+    helperBtn.frame=CGRectMake(10, 10, 155/2, 109/2);
+    [helperBtn addTarget:self action:@selector(presentStoreBrowseViewController:) forControlEvents:UIControlEventTouchUpInside];
+    [helperBtn setImage:[UIImage imageNamed:@"新返利教程图片"] forState:UIControlStateNormal];
+    UILabel *helperLabel=[[UILabel alloc] initWithFrame:CGRectMake(0, helperBtn.frame.size.height, 150/2, 40/2)];
+    helperLabel.text=@"返利教程";
+    helperLabel.textAlignment=NSTextAlignmentCenter;
+    helperLabel.backgroundColor=[UIColor clearColor];
+    helperLabel.font=[UIFont fontWithName:@"Arial" size:10];
+    [helperBtn addSubview:helperLabel];
+    helperBtn.tag=0;
+    [backgroundView addSubview:helperBtn];
+    UIImageView *shulineImage=[[UIImageView alloc] initWithFrame:CGRectMake(99, 184/4-170/4, 1, 170/2)];
+    [shulineImage setImage:[UIImage imageNamed:@"yishu1"]];
+    [backgroundView addSubview:shulineImage];
     
-    if (qiandaoBtn==nil) {
-        qiandaoBtn=[UIButton buttonWithType:UIButtonTypeCustom];
-        qiandaoBtn.frame=CGRectMake(10, 0, 218/2, 25);
-        [qiandaoBtn addTarget:self action:@selector(qiandaoServer:) forControlEvents:UIControlEventTouchUpInside];
-        [qiandaoBtn setBackgroundColor:[UIColor whiteColor]];
-        [qiandaoBtn setTitle:@"      签到赚线" forState:UIControlStateNormal];
-        qiandaoBtn.titleLabel.font=[UIFont fontWithName:@"Arial" size:12];
-        [qiandaoBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-        qq=[[UILabel alloc] initWithFrame:CGRectMake(30, -15, 30, 30)];
-        qq.backgroundColor=[UIColor clearColor];
-        qq.text=@"+15";
-        qq.textColor=[UIColor redColor];
-        qq.adjustsFontSizeToFitWidth=YES;
-        qq.alpha=0.0;
-        UIImageView *qiandaoImage=[[UIImageView alloc] initWithFrame:CGRectMake(5, 4, 18, 17)];
-        [qiandaoImage setImage:[UIImage imageNamed:@"首页-签到"]];
-        qiandaoImage.userInteractionEnabled=YES;
-        [qiandaoBtn addSubview:qiandaoImage];
-        [qiandaoBtn addSubview:qq];
-    }
-   }
+    UIButton *tmallBtn=[UIButton buttonWithType:UIButtonTypeCustom];
+    tmallBtn.frame=CGRectMake(111, 10, 155/2, 109/2);
+    [tmallBtn addTarget:self action:@selector(presentStoreBrowseViewController:) forControlEvents:UIControlEventTouchUpInside];
+    [tmallBtn setImage:[UIImage imageNamed:@"新首页天猫"] forState:UIControlStateNormal];
+    UILabel *tmallLabel=[[UILabel alloc] initWithFrame:CGRectMake(0, tmallBtn.frame.size.height, 150/2, 40/2)];
+    tmallLabel.text=@"天猫商城";
+    tmallLabel.textAlignment=NSTextAlignmentCenter;
+    tmallLabel.backgroundColor=[UIColor clearColor];
+    tmallLabel.font=[UIFont fontWithName:@"Arial" size:10];
+    [tmallBtn addSubview:tmallLabel];
+    tmallBtn.tag=2;
+    [backgroundView addSubview:tmallBtn];
+    
+    UIImageView *shulineImage2=[[UIImageView alloc] initWithFrame:CGRectMake(199, 184/4-170/4, 1, 170/2)];
+    [shulineImage2 setImage:[UIImage imageNamed:@"yishu1"]];
+    [backgroundView addSubview:shulineImage2];
+    
+    UIButton *juhuasuanBtn=[UIButton buttonWithType:UIButtonTypeCustom];
+    juhuasuanBtn.frame=CGRectMake(300-12-155/2, 20, 155/2, 109/2);
+    [juhuasuanBtn addTarget:self action:@selector(presentStoreBrowseViewController:) forControlEvents:UIControlEventTouchUpInside];
+    [juhuasuanBtn setImage:[UIImage imageNamed:@"新首页聚划算"] forState:UIControlStateNormal];
+    UILabel *juhuasuanLabel=[[UILabel alloc] initWithFrame:CGRectMake(0, juhuasuanBtn.frame.size.height-10, 150/2, 40/2)];
+    juhuasuanLabel.text=@"聚划算";
+    juhuasuanLabel.textAlignment=NSTextAlignmentCenter;
+    juhuasuanLabel.backgroundColor=[UIColor clearColor];
+    juhuasuanLabel.font=[UIFont fontWithName:@"Arial" size:10];
+    [juhuasuanBtn addSubview:juhuasuanLabel];
+    juhuasuanBtn.tag=1;
+    [backgroundView addSubview:juhuasuanBtn];
+    
+}
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -133,21 +162,8 @@ static UINavigationController* nc;
 -(void)viewWillAppear:(BOOL)animated
 {
     self.tabBarController.tabBar.hidden=NO;
+    
     CosjiServerHelper *serverHelper=[CosjiServerHelper shareCosjiServerHelper];
-    if ([[[NSUserDefaults standardUserDefaults] objectForKey:@"logined"]isEqualToString:@"YES"]&&qiandaoBtn.enabled==YES)
-    {
-        NSDictionary *tmpDic=[NSDictionary dictionaryWithDictionary:[serverHelper getJsonDictionary:@"/registry/status"]];
-        NSDictionary *statusDic=[NSDictionary dictionaryWithDictionary:[tmpDic objectForKey:@"body"]];
-        NSString *statusString=[NSString stringWithFormat:@"%@",[statusDic objectForKey:@"status"]];
-        if ([statusString isEqualToString:@"0"]) {
-            NSLog(@"qiandao enabled");
-            qiandaoBtn.enabled=YES;
-        }else
-        {
-            [qiandaoBtn setTitle:@"       已签到" forState:UIControlStateNormal];
-            qiandaoBtn.enabled=NO;
-        }
-    }
     if ([storeListArray count]==0)
     {
         [SVProgressHUD showWithStatus:@"正在载入..."];
@@ -173,48 +189,51 @@ static UINavigationController* nc;
 
     }
     [SVProgressHUD dismiss];
+    if (![[NSUserDefaults standardUserDefaults] boolForKey:@"everLaunch"])
+    {
+        CosjiWelcomeViewController *welcomeViewController=[[CosjiWelcomeViewController alloc] init];
+        [self presentViewController:welcomeViewController animated:YES completion:^{
+            [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"everLaunch"];
+        }];
+    }
 }
 -(void)checkDidResign
 {
     CosjiServerHelper *serverHelper=[CosjiServerHelper shareCosjiServerHelper];
     [serverHelper jsonTest];
-
 }
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
-    
 }
-- (void)scrollViewDidScroll:(UIScrollView *)scrollView{
-    
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView
+{
     page.currentPage=scrollView.contentOffset.x/320;
     [self setCurrentPage:page.currentPage];
 }
+
 - (void) handleTimer: (NSTimer *) timer
 {
     if (TimeNum % 5 == 0 ) {
         //Tend 默认值为No
         if (!Tend) {
-            NSLog(@"curretn page is %d",page.currentPage);
+           // NSLog(@"curretn page is %d",page.currentPage);
             page.currentPage++;
             if (page.currentPage==page.numberOfPages-1) {
                 Tend=YES;
             }
         }else{
-            NSLog(@"curretn page is %d",page.currentPage);
+           // NSLog(@"curretn page is %d",page.currentPage);
             page.currentPage--;
             if (page.currentPage==0) {
                 Tend=NO;
             }
         }
-        
         [UIView animateWithDuration:0.7 //速度0.7秒
                          animations:^{//修改坐标
                              sv.contentOffset = CGPointMake(page.currentPage*320,0);
                          }];
-        
-        
     }
     TimeNum ++;
 }
@@ -254,7 +273,7 @@ static UINavigationController* nc;
         case 0:
         {
             NSURLRequest *request =[NSURLRequest requestWithURL:[NSURL URLWithString:@"http://s.click.taobao.com/t?e=zGU34CA7K%2BPkqB05%2Bm7rfGGjlY60oHcc7bkKOQYnIZl9roglx55ogY7XuIFA0XBbk%2Fzm7aeOZ3PlyybISkbOM7EtEdqHK%2B3%2B2VdLKXhDskZ4%2Fp2dh4NGvuCXRstUW1YAfVUjzoW0F55hwbLHDGosDrPX%2FGtVj28pHoIIzbTeYkfNwFLQ7ML46dUp2gxPHRwH7gFin%2BDZsAILX5h9mGLjjAhRlA%3D%3D"]];
-            [self presentViewController:self.storeBrowseViewController animated:YES completion:nil];
+            [self.navigationController pushViewController:self.storeBrowseViewController animated:YES];
             [self.storeBrowseViewController.webView loadRequest:request];
             [self.storeBrowseViewController.storeName setText:@"底价抢大牌"];
 
@@ -263,7 +282,7 @@ static UINavigationController* nc;
         case 1:
         {
             NSURLRequest *request =[NSURLRequest requestWithURL:[NSURL URLWithString:@"http://s.click.taobao.com/t?e=zGU34CA7K%2BPkqB05%2Bm7rfGKas1PIKp0U37pZuBotzOg7OjY%2F2R0Ke3HHzv2kJZUH%2FehqodvBvxouiCPW7UkqmIn4pk08catp7aU2wpqfONSeQJM%3D&pid=mm_26039255_0_0"]];
-            [self presentViewController:self.storeBrowseViewController animated:YES completion:nil];
+            [self.navigationController pushViewController:self.storeBrowseViewController animated:YES];
             [self.storeBrowseViewController.webView loadRequest:request];
             [self.storeBrowseViewController.storeName setText:@"淘宝旅行"];
         }
@@ -335,12 +354,12 @@ void TopImageFromURL( NSURL * URL, void (^imageBlock)(UIImage * image), void (^e
             break;
         case 1:
         {
-            height=102.0;
+            height=184/2+7;
         }
             break;
         case 2:
         {
-            height=82.0;
+            height=152.0/2;
         }
             break;
     }
@@ -350,13 +369,8 @@ void TopImageFromURL( NSURL * URL, void (^imageBlock)(UIImage * image), void (^e
 -(UIView*)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
     if (section==2) {
-        UIView *headerView=[[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 35)];
+        UIView *headerView=[[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 7)];
         headerView.backgroundColor=[UIColor clearColor];
-        UIButton *moreButton=[UIButton buttonWithType:UIButtonTypeCustom];
-        moreButton.frame=CGRectMake(0, 0, 38, 35);
-        [moreButton setBackgroundImage:[UIImage imageNamed:@"首页-更多"] forState:UIControlStateNormal];
-        [moreButton addTarget:self action:@selector(allMalls) forControlEvents:UIControlEventTouchDown];
-        [headerView addSubview:moreButton];
         return headerView;
     }else
         return nil;
@@ -365,7 +379,7 @@ void TopImageFromURL( NSURL * URL, void (^imageBlock)(UIImage * image), void (^e
 -(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
     if (section==2) {
-        return 35;
+        return 7;
     }else
         return 0;
 }
@@ -388,28 +402,7 @@ void TopImageFromURL( NSURL * URL, void (^imageBlock)(UIImage * image), void (^e
         case 1:
         {
             [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
-            
-
-            [cell addSubview:qiandaoBtn];
-            UIButton *helperBtn=[UIButton buttonWithType:UIButtonTypeCustom];
-            helperBtn.frame=CGRectMake(10, 32, 218/2, 120/2);
-            [helperBtn addTarget:self action:@selector(presentStoreBrowseViewController:) forControlEvents:UIControlEventTouchUpInside];
-            [helperBtn setImage:[UIImage imageNamed:@"返利教程图片"] forState:UIControlStateNormal];
-            helperBtn.tag=0;
-            [cell addSubview:helperBtn];
-            UIButton *juhuasuanBtn=[UIButton buttonWithType:UIButtonTypeCustom];
-            juhuasuanBtn.frame=CGRectMake(125, 0, 176/2, 183/2);
-            [juhuasuanBtn addTarget:self action:@selector(presentStoreBrowseViewController:) forControlEvents:UIControlEventTouchUpInside];
-            [juhuasuanBtn setImage:[UIImage imageNamed:@"首页聚划算"] forState:UIControlStateNormal];
-            juhuasuanBtn.tag=1;
-            [cell addSubview:juhuasuanBtn];
-            UIButton *tmallBtn=[UIButton buttonWithType:UIButtonTypeCustom];
-            tmallBtn.frame=CGRectMake(130+180/2, 0, 176/2, 183/2);
-            [tmallBtn addTarget:self action:@selector(presentStoreBrowseViewController:) forControlEvents:UIControlEventTouchUpInside];
-            [tmallBtn setImage:[UIImage imageNamed:@"首页天猫"] forState:UIControlStateNormal];
-            tmallBtn.tag=2;
-            [cell addSubview:tmallBtn];
-
+            [cell addSubview:backgroundView];
         }
             break;
         case 2:
@@ -420,108 +413,90 @@ void TopImageFromURL( NSURL * URL, void (^imageBlock)(UIImage * image), void (^e
             {
                 if (indexPath.row*3+x<[storeListArray count])
                 {
-                    NSDictionary *storeDic=[NSDictionary dictionaryWithDictionary:[storeListArray objectAtIndex:indexPath.row*3+x]];
-                    UIView *btnView=[[UIView alloc] initWithFrame:CGRectMake(10+100*x, 0, 95, 55)];
-                    btnView.backgroundColor=[UIColor whiteColor];
-                    UIButton *button=[UIButton buttonWithType:UIButtonTypeCustom];
-                    button.frame=CGRectMake(0,5, 95, 50);
-                    button.tag=indexPath.row*3+x;
-                    NSString *imageUrl1=[NSString stringWithFormat:@"%@",[storeDic objectForKey:@"logo"]];
-                    imageUrl1=[imageUrl1 stringByReplacingOccurrencesOfString:@"\"" withString:@""];
-                    if ([imageUrl1 rangeOfString:@"http://www.Cosji.com/"].location==NSNotFound) {
-                        imageUrl1=[NSString stringWithFormat:@"http://www.Cosji.com/%@",imageUrl1];
+                    if (indexPath.row*3+x==[storeListArray count]-1)
+                    {
+                        UIView *btnView=[[UIView alloc] initWithFrame:CGRectMake(10+100*2, 0, 198/2, 150/2)];
+                        btnView.backgroundColor=[UIColor whiteColor];
+                        UIButton *moreButton=[UIButton buttonWithType:UIButtonTypeCustom];
+                        moreButton.frame=CGRectMake(15, 15, 69, 45);
+                       // [moreButton setBackgroundImage:[UIImage imageNamed:@"首页-更多"] forState:UIControlStateNormal];
+                        [moreButton setTitle:@"更多商城" forState:UIControlStateNormal];
+                      // [moreButton setBackgroundColor:[UIColor redColor]];
+                        [moreButton setTitleColor:[UIColor lightGrayColor] forState:UIControlStateNormal];
+                        moreButton.titleLabel.font=[UIFont fontWithName:@"Arial" size:15];
+                        [moreButton addTarget:self action:@selector(allMalls) forControlEvents:UIControlEventTouchDown];
+                        [btnView addSubview:moreButton];
+                        [cell addSubview:btnView];
+                    }else
+                    {
+                        NSDictionary *storeDic=[NSDictionary dictionaryWithDictionary:[storeListArray objectAtIndex:indexPath.row*3+x]];
+                        UIView *btnView=[[UIView alloc] initWithFrame:CGRectMake(10+100*x, 0, 198/2, 150/2)];
+                        btnView.backgroundColor=[UIColor whiteColor];
+                        UIButton *button=[UIButton buttonWithType:UIButtonTypeCustom];
+                        button.frame=CGRectMake(198/4-95/1.5/2,150/4-50/1.5/2-10, 95/1.5, 50/1.5);
+                        button.tag=indexPath.row*3+x;
+                        NSString *imageUrl1=[NSString stringWithFormat:@"%@",[storeDic objectForKey:@"logo"]];
+                        imageUrl1=[imageUrl1 stringByReplacingOccurrencesOfString:@"\"" withString:@""];
+                        if ([imageUrl1 rangeOfString:@"http://www.Cosji.com/"].location==NSNotFound) {
+                            imageUrl1=[NSString stringWithFormat:@"http://www.Cosji.com/%@",imageUrl1];
+                        }
+                        //缓存图片
+                        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0),
+                                       ^{
+                                           NSArray *paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
+                                           NSString *cachePath = [paths objectAtIndex:0];
+                                           BOOL isDir = YES;
+                                           NSString *dirName=[cachePath stringByAppendingPathComponent:@"cacheImages"];
+                                           if (![[NSFileManager defaultManager] fileExistsAtPath:dirName isDirectory:&isDir])
+                                           {
+                                               [[NSFileManager defaultManager] createDirectoryAtPath:dirName withIntermediateDirectories:YES attributes:nil error:nil];
+                                           }
+                                           NSString *filename = [dirName stringByAppendingPathComponent:[NSString stringWithFormat:@"%@",[storeDic objectForKey:@"id"]]];
+                                           if (![[NSFileManager defaultManager] fileExistsAtPath:filename])
+                                           {
+                                               NSLog(@"download cacheImage %@",filename);
+                                               NSData * data = [[NSData alloc] initWithContentsOfURL:[NSURL URLWithString:imageUrl1]];
+                                               UIImage * cacheimage = [[UIImage alloc] initWithData:data];
+                                               [UIImageJPEGRepresentation(cacheimage, 1.0) writeToFile:filename atomically:YES];
+                                               dispatch_async(dispatch_get_main_queue(), ^{
+                                                   NSData *imageData=[NSData dataWithContentsOfFile:filename];
+                                                   [button setBackgroundImage:[UIImage imageWithData:imageData] forState:UIControlStateNormal];
+                                               });
+                                           }else
+                                           {
+                                               dispatch_async(dispatch_get_main_queue(), ^{
+                                                   NSLog(@"load cacheImage %@",filename);
+                                                   NSData *imageData=[NSData dataWithContentsOfFile:filename];
+                                                   [button setBackgroundImage:[UIImage imageWithData:imageData] forState:UIControlStateNormal];
+                                               });
+                                           }
+                                       });
+                        [button addTarget:self action:@selector(opRemenshangcheng:) forControlEvents:UIControlEventTouchUpInside];
+                        [btnView addSubview:button];
+                        [cell addSubview:btnView];
+                        UILabel *label=[[UILabel alloc] initWithFrame:CGRectMake(0, 50, 95, 20)];
+                        label.font=[UIFont fontWithName:@"Arial" size:10];
+                        label.backgroundColor=[UIColor lightTextColor];
+                        label.textAlignment=NSTextAlignmentCenter;
+                        label.text=[NSString stringWithFormat:@"最高返利%@",[storeDic objectForKey:@"profit" ]];
+                        [btnView addSubview:label];
+
                     }
-                    //缓存图片
-                    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0),
-                                   ^{
-                                       NSArray *paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
-                                       NSString *cachePath = [paths objectAtIndex:0];
-                                       BOOL isDir = YES;
-                                       NSString *dirName=[cachePath stringByAppendingPathComponent:@"cacheImages"];
-                                       if (![[NSFileManager defaultManager] fileExistsAtPath:dirName isDirectory:&isDir])
-                                       {
-                                           [[NSFileManager defaultManager] createDirectoryAtPath:dirName withIntermediateDirectories:YES attributes:nil error:nil];
-                                       }
-                                       NSString *filename = [dirName stringByAppendingPathComponent:[NSString stringWithFormat:@"%@",[storeDic objectForKey:@"id"]]];
-                                       if (![[NSFileManager defaultManager] fileExistsAtPath:filename])
-                                       {
-                                           NSLog(@"download cacheImage %@",filename);
-                                           NSData * data = [[NSData alloc] initWithContentsOfURL:[NSURL URLWithString:imageUrl1]];
-                                           UIImage * cacheimage = [[UIImage alloc] initWithData:data];
-                                           [UIImageJPEGRepresentation(cacheimage, 1.0) writeToFile:filename atomically:YES];
-                                           dispatch_async(dispatch_get_main_queue(), ^{
-                                               NSData *imageData=[NSData dataWithContentsOfFile:filename];
-                                               [button setBackgroundImage:[UIImage imageWithData:imageData] forState:UIControlStateNormal];
-                                           });
-                                       }else
-                                       {
-                                           dispatch_async(dispatch_get_main_queue(), ^{
-                                               NSLog(@"load cacheImage %@",filename);
-                                               NSData *imageData=[NSData dataWithContentsOfFile:filename];
-                                               [button setBackgroundImage:[UIImage imageWithData:imageData] forState:UIControlStateNormal];
-                                           });
-                                       }
-                                   });
-                    [button addTarget:self action:@selector(opRemenshangcheng:) forControlEvents:UIControlEventTouchUpInside];
-                    [btnView addSubview:button];
-                    [cell addSubview:btnView];
-                    UILabel *label=[[UILabel alloc] initWithFrame:CGRectMake(0, 55, 95, 20)];
-                    label.adjustsFontSizeToFitWidth=YES;
-                    label.backgroundColor=[UIColor lightTextColor];
-                    label.text=[NSString stringWithFormat:@"最高返利%@",[storeDic objectForKey:@"profit" ]];
-                    [btnView addSubview:label];
                 }
             }
         }
             break;
+        case 3:
+        {
+            UIButton *moreButton=[UIButton buttonWithType:UIButtonTypeCustom];
+            moreButton.frame=CGRectMake(10, 0, 198/2, 150/2);
+            [moreButton setBackgroundImage:[UIImage imageNamed:@"首页-更多"] forState:UIControlStateNormal];
+            [moreButton addTarget:self action:@selector(allMalls) forControlEvents:UIControlEventTouchDown];
+            [cell addSubview:moreButton];
+        }
+            break;
     }
     return cell;
-}
-    
--(void)qiandaoServer:(id)sender
-{
-    if ([[[NSUserDefaults standardUserDefaults] objectForKey:@"logined"]isEqualToString:@"YES"])
-    {
-        CosjiServerHelper *serverHelper=[CosjiServerHelper shareCosjiServerHelper];
-        if (qiandaoBtn.enabled==YES)
-        {
-            NSDictionary *tmpDic=[NSDictionary dictionaryWithDictionary:[serverHelper getJsonDictionary:@"/registry/status"]];
-            NSDictionary *statusDic=[NSDictionary dictionaryWithDictionary:[tmpDic objectForKey:@"body"]];
-            NSString *statusString=[NSString stringWithFormat:@"%@",[statusDic objectForKey:@"status"]];
-            if ([statusString isEqualToString:@"0"]) {
-                NSLog(@"qiandao enabled");
-                NSDictionary *signDic=[NSDictionary dictionaryWithDictionary:[serverHelper getJsonDictionary:@"/registry/sign"]];
-                NSLog(@"qiandaoDIC is %@",signDic);
-                qq.alpha = 0.0f;
-                [UIView beginAnimations:@"fadeIn" context:nil];
-                [UIView setAnimationDuration:2];
-                qq.alpha = 1.0f;
-                CGFloat translation = -10;
-                qq.transform = CGAffineTransformMakeTranslation(0, translation);
-                [UIView commitAnimations];
-                [UIView beginAnimations:@"fadeIn" context:nil];
-                [UIView setAnimationDuration:2.5];
-                qq.alpha = 0.0f;
-                [qiandaoBtn setTitle:@"       已签到" forState:UIControlStateNormal];
-                qiandaoBtn.userInteractionEnabled=NO;
-                [UIView commitAnimations];
-                qq.transform = CGAffineTransformMakeTranslation(0, 0);
-
-            }else
-            {
-                [qiandaoBtn setTitle:@"       已签到" forState:UIControlStateNormal];
-                qiandaoBtn.enabled=NO;
-
-            }
-        }
-
-            }else
-    {
-        UIAlertView *alert=[[UIAlertView alloc] initWithTitle:@"提示" message:@"登录账号，签到赚线" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"登陆",nil];
-        [alert show];
-    }
-
-
 }
 
 -(void)opRemenshangcheng:(id)sender
@@ -529,12 +504,16 @@ void TopImageFromURL( NSURL * URL, void (^imageBlock)(UIImage * image), void (^e
     selectedIndex=[sender tag];
     if ([[[NSUserDefaults standardUserDefaults] objectForKey:@"logined"]isEqualToString:@"YES"]) {
         NSDictionary *tmpDic=[NSDictionary dictionaryWithDictionary:[storeListArray objectAtIndex:selectedIndex]];
-        NSString *storeUrl=[NSString stringWithFormat:@"%@",[tmpDic objectForKey:@"url"]];
+        NSString *storeUrl=[NSString stringWithFormat:@"%@",[tmpDic objectForKey:@"yiqifaurl"]];
+        NSLog(@"storeUrl is %@",tmpDic);
         NSURL *url =[NSURL URLWithString:[storeUrl stringByReplacingOccurrencesOfString:@"\"" withString:@""]];
         NSURLRequest *request =[NSURLRequest requestWithURL:url];
-        [self presentViewController:self.storeBrowseViewController animated:YES completion:nil];
-        [self.storeBrowseViewController.webView loadRequest:request];
+        //[self.storeBrowseViewController setUrlString:[NSString stringWithFormat:@"%@",storeUrl]];
+        [self.navigationController pushViewController:self.storeBrowseViewController animated:YES];
+
+      [self.storeBrowseViewController.webView loadRequest:request];
         [self.storeBrowseViewController.storeName setText:[NSString stringWithFormat:@"%@",[tmpDic objectForKey:@"name"]]];
+
 
     }else
     {
@@ -555,7 +534,7 @@ void TopImageFromURL( NSURL * URL, void (^imageBlock)(UIImage * image), void (^e
                 
                 NSURL *url =[NSURL URLWithString:[storeUrl stringByReplacingOccurrencesOfString:@"\"" withString:@""]];
                 NSURLRequest *request =[NSURLRequest requestWithURL:url];
-                [self presentViewController:self.storeBrowseViewController animated:YES completion:nil];
+                [self.navigationController pushViewController:self.storeBrowseViewController animated:YES];
                 [self.storeBrowseViewController.webView loadRequest:request];
                 [self.storeBrowseViewController.storeName setText:[NSString stringWithFormat:@"%@",[tmpDic objectForKey:@"name"]]];
             }
@@ -588,7 +567,7 @@ void TopImageFromURL( NSURL * URL, void (^imageBlock)(UIImage * image), void (^e
             NSLog(@"%@",[storeUrl stringByReplacingOccurrencesOfString:@"\"" withString:@""]);
             NSURL *url =[NSURL URLWithString:[storeUrl stringByReplacingOccurrencesOfString:@"\"" withString:@""]];
             NSURLRequest *request =[NSURLRequest requestWithURL:url];
-            [self presentViewController:self.storeBrowseViewController animated:YES completion:nil];
+            [self.navigationController pushViewController:self.storeBrowseViewController animated:YES];
             [self.storeBrowseViewController.webView loadRequest:request];
             [self.storeBrowseViewController.storeName setText:[NSString stringWithFormat:@"%@",[tmpDic objectForKey:@"name"]]];
             
@@ -618,9 +597,7 @@ void TopImageFromURL( NSURL * URL, void (^imageBlock)(UIImage * image), void (^e
         {
             NSURL *url =[NSURL URLWithString:@"http://ju.m.taobao.com"];
             NSURLRequest *request =[NSURLRequest requestWithURL:url];
-            [self presentViewController:self.storeBrowseViewController animated:YES completion:nil];
-            
-            //   [self.navigationController pushViewController:self.storeBrowseViewController animated:YES];
+            [self.navigationController pushViewController:self.storeBrowseViewController animated:YES];
             [self.storeBrowseViewController.webView loadRequest:request];
             [self.storeBrowseViewController.storeName setText:@"已进入聚划算"];
         }
@@ -629,8 +606,7 @@ void TopImageFromURL( NSURL * URL, void (^imageBlock)(UIImage * image), void (^e
         {
             NSURL *url =[NSURL URLWithString:@"http://m.tmall.com"];
             NSURLRequest *request =[NSURLRequest requestWithURL:url];
-            [self presentViewController:self.storeBrowseViewController animated:YES completion:nil];
-            //  [self.navigationController pushViewController:self.storeBrowseViewController animated:YES];
+             [self.navigationController pushViewController:self.storeBrowseViewController animated:YES];
             [self.storeBrowseViewController.webView loadRequest:request];
             [self.storeBrowseViewController.storeName setText:@"已进入天猫"];
         }
@@ -666,10 +642,54 @@ void TopImageFromURL( NSURL * URL, void (^imageBlock)(UIImage * image), void (^e
     {
         if (textField!=nil&&![textField.text isEqualToString:@""])
         {
-                NSLog(@"开始搜索");
-            CosjiItemListViewController *itemsListViewController=[CosjiItemListViewController shareCosjiItemListViewController];
-            [self presentViewController:itemsListViewController animated:YES completion:nil];
-            [itemsListViewController loadInfoWith:[NSString stringWithFormat:@"%@",searchField.text] atPage:1];
+            NSLog(@"开始搜索");
+            CosjiServerHelper *serverHelper=[CosjiServerHelper shareCosjiServerHelper];
+            switch ([serverHelper getSearchItemType:searchField.text]) {
+                case 0:
+                {
+                    NSLog(@"这个是地址");
+                    int location=[[NSString stringWithFormat:@"%@",searchField.text] rangeOfString:@"id="].location;
+                    NSString *num_iid=[[NSString stringWithFormat:@"%@",searchField.text] substringWithRange:NSMakeRange(location+3, 11)];
+                    NSDictionary *infoDic=[NSDictionary dictionaryWithDictionary:[serverHelper getItemFromTop:num_iid]];
+                    if (infoDic==nil)
+                    {
+                        [SVProgressHUD showErrorWithStatus:@"搜索不到该商品或该商品没有返利" duration:3];
+                    }else
+                    {
+                        CosjiItemFanliDetailViewController *fanliDetailVC=[CosjiItemFanliDetailViewController shareCosjiItemFanliDetailViewController];
+
+                        [self presentViewController:fanliDetailVC animated:YES completion:nil];
+                        [fanliDetailVC loadItemInfoWithDic:infoDic];
+                    }
+                }
+                    break;
+                case 1:
+                {
+                    NSLog(@"这个是ID");
+                    NSString *num_iid=[NSString stringWithFormat:@"%@",searchField.text];
+                    NSDictionary *infoDic=[NSDictionary dictionaryWithDictionary:[serverHelper getItemFromTop:num_iid]];
+                    if (infoDic==nil)
+                    {
+                        [SVProgressHUD showErrorWithStatus:@"搜索不到该商品或该商品没有返利" duration:3];
+                    }else
+                    {
+                        CosjiItemFanliDetailViewController *fanliDetailVC=[CosjiItemFanliDetailViewController shareCosjiItemFanliDetailViewController];
+                        
+                        [self presentViewController:fanliDetailVC animated:YES completion:nil];
+                        [fanliDetailVC loadItemInfoWithDic:infoDic];
+                    }
+                }
+                    break;
+                case 2:
+                {
+                    CosjiItemListViewController *itemsListViewController=[CosjiItemListViewController shareCosjiItemListViewController];
+                    [self presentViewController:itemsListViewController animated:YES completion:nil];
+                    [itemsListViewController loadInfoWith:[NSString stringWithFormat:@"%@",searchField.text] atPage:1];
+                }
+                default:
+                    break;
+            }
+
         }else
         {
             UIAlertView *alert=[[UIAlertView alloc] initWithTitle:@"错误" message:@"请输入您想要搜索的商品或查询的网址" delegate:nil cancelButtonTitle:@"好的" otherButtonTitles: nil];

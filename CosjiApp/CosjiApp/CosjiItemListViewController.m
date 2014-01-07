@@ -13,6 +13,7 @@
 #import "TopIOSClient.h"
 #import "TopAttachment.h"
 #import "JSONKit.h"
+#import "CosjiItemFanliDetailViewController.h"
 
 @interface CosjiItemListViewController ()
 
@@ -49,7 +50,7 @@ static CosjiItemListViewController* shareCosjiItemListViewController;
     self.titleLabel.textColor=[UIColor whiteColor];
     [self.customNavBar addSubview:self.titleLabel];
     UIButton *backBtn=[UIButton buttonWithType:UIButtonTypeCustom];
-    backBtn.frame=CGRectMake(11, 12,60/2, 41/2);
+    backBtn.frame=CGRectMake(11, 2.5, 100/2, 80/2);
     [backBtn setBackgroundImage:[UIImage imageNamed:@"返回"] forState:UIControlStateNormal];
     [backBtn addTarget:self  action:@selector(backAction:) forControlEvents:UIControlEventTouchUpInside];
     [self.customNavBar addSubview:backBtn];
@@ -69,7 +70,17 @@ static CosjiItemListViewController* shareCosjiItemListViewController;
     self.customNavBar.backgroundColor=[UIColor colorWithPatternImage:[UIImage imageNamed:@"工具栏背景"]];
 
 }
+-(void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:YES];
+    NSString *tmpPath=[NSTemporaryDirectory() stringByAppendingPathComponent:@"/tmpImage"];
+    BOOL isDir = YES;
+    if ([[NSFileManager defaultManager] fileExistsAtPath:tmpPath isDirectory:&isDir])
+    {
+        [[NSFileManager defaultManager] removeItemAtPath:tmpPath error:nil];
+    }
 
+}
 -(void)loadInfoWith:(NSString*)textString atPage:(int)pageNumber
 {
     [SVProgressHUD showWithStatus:@"正在载入..."];
@@ -82,19 +93,19 @@ static CosjiItemListViewController* shareCosjiItemListViewController;
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         CosjiServerHelper *serverHelper=[CosjiServerHelper shareCosjiServerHelper];
         itemsArray=[NSMutableArray arrayWithArray:[serverHelper getItemsFromTopByKeyWord:textString atPage:pageNumber]];
-        NSLog(@"get Store %d",[itemsArray count]);
-        if ([itemsArray count]>0) {
-            dispatch_async(dispatch_get_main_queue(), ^{
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if ([itemsArray count]>0) {
                 [SVProgressHUD dismiss];
                 [self.tableView reloadData];
-            });
-        }else
+            }else
             {
                 [SVProgressHUD dismiss];
                 UIAlertView *alert=[[UIAlertView alloc] initWithTitle:@"错误" message:@"服务器无法连接，请稍后再试" delegate:nil cancelButtonTitle:@"好的" otherButtonTitles: nil];
                 [alert show];
-        }
-//    从服务器获取商品数据
+            }
+
+        });
+        //    从服务器获取商品数据
 //    NSDictionary *tmpDic=[NSDictionary dictionaryWithDictionary:[serverHelper getJsonDictionary:[NSString stringWithFormat:@"/taobao/search/?keyword=%@&num=10&page=%d",textString,currentPage]]];
 //    if (tmpDic!=nil)
 //    {
@@ -141,11 +152,41 @@ static CosjiItemListViewController* shareCosjiItemListViewController;
     NSDictionary *itemDic=[NSDictionary dictionaryWithDictionary:[itemsArray objectAtIndex:indexPath.row]];
     UIImageView *itemImageView=[[UIImageView alloc] initWithFrame:CGRectMake(10, 10, 100, 100)];
     NSString *imageUrl=[NSString stringWithFormat:@"%@",[itemDic objectForKey:@"pic_url"]];
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0),
+                   ^{
+                       NSString *tmpPath=[NSTemporaryDirectory() stringByAppendingPathComponent:@"/tmpImage"];
+                       BOOL isDir = YES;
+                       if (![[NSFileManager defaultManager] fileExistsAtPath:tmpPath isDirectory:&isDir])
+                       {
+                           [[NSFileManager defaultManager] createDirectoryAtPath:tmpPath withIntermediateDirectories:YES attributes:nil error:nil];
+                       }
+                       NSString *filename = [tmpPath stringByAppendingPathComponent:[NSString stringWithFormat:@"%@",[itemDic objectForKey:@"num_iid"]]];
+                       if (![[NSFileManager defaultManager] fileExistsAtPath:filename])
+                       {
+                           NSLog(@"download cacheImage %@",filename);
+                           NSData * data = [[NSData alloc] initWithContentsOfURL:[NSURL URLWithString:imageUrl]];
+                           UIImage * cacheimage = [[UIImage alloc] initWithData:data];
+                           [UIImageJPEGRepresentation(cacheimage, 1.0) writeToFile:filename atomically:YES];
+                           dispatch_async(dispatch_get_main_queue(), ^{
+                               NSData *imageData=[NSData dataWithContentsOfFile:filename];
+                               [itemImageView setImage:[UIImage imageWithData:imageData]];
+                           });
+                       }else
+                       {
+                           dispatch_async(dispatch_get_main_queue(), ^{
+                               NSLog(@"load cacheImage %@",filename);
+                               NSData *imageData=[NSData dataWithContentsOfFile:filename];
+                               [itemImageView setImage:[UIImage imageWithData:imageData]];
+                           });
+                       }
+                   });
+/*
     ItemImageDownloadURL([NSURL URLWithString:imageUrl], ^( UIImage * image )
                     {
                         [itemImageView setImage:image ];
                     }, ^(void){
                     });
+ */
     [cell addSubview:itemImageView];
     UILabel *nameLabel=[[UILabel alloc] initWithFrame:CGRectMake(120, 10, 180, 50)];
     nameLabel.backgroundColor=[UIColor clearColor];
@@ -153,24 +194,17 @@ static CosjiItemListViewController* shareCosjiItemListViewController;
     nameLabel.text=[NSString stringWithFormat:@"%@",[itemDic objectForKey:@"title"]];
     nameLabel.font=[UIFont fontWithName:@"Arial" size:14];
     [cell addSubview:nameLabel];
-//    UIWebView *nameWebView=[[UIWebView alloc] initWithFrame:CGRectMake(110, 10, 180, 50)];
-//    NSString *htmlString = [NSString stringWithFormat:@"<html>"
-//                          "<head> "
-//                          "<style type=\"text/css\"> "
-//                          "body {font-size: %f;; color: %@;}"
-//                          "a{color:#ccc}"
-//                          "</style>"
-//                          "</head>"
-//                          "<body><p>%@</p></body>"
-//                          "</html>", 11.0, @"#000",[itemDic objectForKey:@"name"]];
-//    [nameWebView loadHTMLString:htmlString baseURL:nil];
-//    [nameWebView setBackgroundColor:[UIColor clearColor]];
-//    [nameWebView setOpaque:NO];
-//    nameWebView.scrollView.scrollEnabled=NO;
-    UILabel *priceLabel=[[UILabel alloc] initWithFrame:CGRectMake(120, 60, 60, 20)];
+
+    UILabel *priceLabel=[[UILabel alloc] initWithFrame:CGRectMake(120, 65, 60, 20)];
     priceLabel.text=[NSString stringWithFormat:@"%@",[itemDic objectForKey:@"price"]];
     priceLabel.textColor=[UIColor redColor];
     priceLabel.backgroundColor=[UIColor clearColor];
+    UILabel *fanliLabel=[[UILabel alloc] initWithFrame:CGRectMake(200, 65, 80, 20)];
+    fanliLabel.text=@"有返利";
+    fanliLabel.textColor=[UIColor whiteColor];
+    fanliLabel.backgroundColor=[UIColor redColor];
+    fanliLabel.textAlignment=NSTextAlignmentCenter;
+    [cell addSubview:fanliLabel];
     UILabel *sellLabel=[[UILabel alloc] initWithFrame:CGRectMake(120, 90, 180, 20)];
     sellLabel.text=[NSString stringWithFormat:@"最近售出%@件",[itemDic objectForKey:@"volume"]];
     sellLabel.font=[UIFont fontWithName:@"Arial" size:13];
@@ -184,15 +218,16 @@ static CosjiItemListViewController* shareCosjiItemListViewController;
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSDictionary *tmpDic=[NSDictionary dictionaryWithDictionary:[itemsArray objectAtIndex:indexPath.row]];
-    NSString *storeUrl=[NSString stringWithFormat:@"%@",[tmpDic objectForKey:@"num_iid"]];
-    CosjiServerHelper *serverHelper=[CosjiServerHelper shareCosjiServerHelper];
-    NSURL *url =[NSURL URLWithString:[serverHelper getClick_urlFromTop:storeUrl]];
-    NSURLRequest *request =[NSURLRequest requestWithURL:url];
-    NSLog(@"request is %@",request);
-    CosjiWebViewController *webViewController=[CosjiWebViewController shareCosjiWebViewController];
-    [self presentViewController:webViewController animated:YES completion:nil];
-    [webViewController.webView loadRequest:request];
-    [webViewController.storeName setText:[NSString stringWithFormat:@"%@",[tmpDic objectForKey:@"title"]]];
+    CosjiItemFanliDetailViewController *fanliDetailVC=[CosjiItemFanliDetailViewController shareCosjiItemFanliDetailViewController];
+    
+//    NSString *storeUrl=[NSString stringWithFormat:@"%@",[tmpDic objectForKey:@"num_iid"]];
+//    CosjiServerHelper *serverHelper=[CosjiServerHelper shareCosjiServerHelper];
+//    NSURL *url =[NSURL URLWithString:[serverHelper getClick_urlFromTop:storeUrl]];
+//    NSURLRequest *request =[NSURLRequest requestWithURL:url];
+//    NSLog(@"request is %@",request);
+//    CosjiWebViewController *webViewController=[CosjiWebViewController shareCosjiWebViewController];
+    [self presentViewController:fanliDetailVC animated:YES completion:nil];
+    [fanliDetailVC loadItemInfoWithDic:tmpDic];
 }
 - (void)scrollViewWillEndDragging:(UIScrollView *)scrollView withVelocity:(CGPoint)velocity targetContentOffset:(inout CGPoint *)targetContentOffset
 {

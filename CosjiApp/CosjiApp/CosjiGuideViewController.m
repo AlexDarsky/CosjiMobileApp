@@ -40,7 +40,7 @@ static CosjiGuideViewController *shareCosjiGuideViewController = nil;
     [super viewDidLoad];
 	// Do any additional setup after loading the view.
 
-    IntroModel *model1 = [[IntroModel alloc] initWithTitle:nil description:nil image:@"tab1.jpg"];
+    IntroModel *model1 = [[IntroModel alloc] initWithTitle:nil description:nil image:@"tab1"];
     
     IntroModel *model2 = [[IntroModel alloc] initWithTitle:nil description:nil image:@"tab2"];
     
