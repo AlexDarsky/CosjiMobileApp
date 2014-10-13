@@ -1666,7 +1666,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD)";
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Chengdu Keji Technology Co.,Ltd (8HDM4NC496)";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Sheng Zhou (8F29FUSYL2)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1691,7 +1691,7 @@
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = CosjiApp;
-				PROVISIONING_PROFILE = "BF5517F6-3426-426F-9D02-CEC1BD38455B";
+				PROVISIONING_PROFILE = "D3594E8B-18E3-44D6-A5EA-7E9875A95FE2";
 				SDKROOT = iphoneos7.1;
 				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
@@ -1702,7 +1702,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD)";
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Chengdu Keji Technology Co.,Ltd (8HDM4NC496)";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Sheng Zhou (8F29FUSYL2)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1727,7 +1727,7 @@
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = CosjiApp;
-				PROVISIONING_PROFILE = "BF5517F6-3426-426F-9D02-CEC1BD38455B";
+				PROVISIONING_PROFILE = "D3594E8B-18E3-44D6-A5EA-7E9875A95FE2";
 				SDKROOT = iphoneos7.1;
 				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;

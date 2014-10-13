@@ -9,7 +9,9 @@
 #import <UIKit/UIKit.h>
 
 @interface CosjiItemFanliDetailViewController : UIViewController<UIAlertViewDelegate,UIWebViewDelegate>
+
 @property (strong,nonatomic)NSString *clickURLString;
+
 +(CosjiItemFanliDetailViewController*)shareCosjiItemFanliDetailViewController;
 -(void)loadItemInfoWithDic:(NSDictionary*)itemDic;
 -(void)loadZheMainItemInfoWithDic:(NSDictionary*)itemDic;

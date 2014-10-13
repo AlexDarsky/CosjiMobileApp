@@ -16,7 +16,7 @@
     UILabel *nameLabel;
     UIImageView *itemImageView;
     UILabel *priceLabel;
-    UIWebView *webView;
+    UIWebView *_webView;
 }
 
 @end
@@ -128,10 +128,10 @@ static CosjiItemFanliDetailViewController* shareCosjiItemFanliDetailViewControll
     tishiLabel.backgroundColor=[UIColor clearColor];
     tishiLabel.text=@"根据淘宝最新规则，查询返利将不显示返利比例，且跳转到淘宝客户端购买，但返利仍正常发放，具体金额以到账时为准。";
     [self.view addSubview:tishiLabel];
-    webView=[[UIWebView alloc] initWithFrame:CGRectMake(0, 45, 320, [UIScreen mainScreen].bounds.size.height-45-20)];
-    [self.view addSubview:webView];
-    webView.delegate=self;
-    webView.hidden=YES;
+    _webView=[[UIWebView alloc] initWithFrame:CGRectMake(0, 45, 320, [UIScreen mainScreen].bounds.size.height-45-20)];
+    [self.view addSubview:_webView];
+    _webView.delegate=self;
+    _webView.hidden=YES;
 
 }
 -(void)viewWillDisappear:(BOOL)animated
@@ -206,18 +206,18 @@ void ItemFanliImageFromURL( NSURL * URL, void (^imageBlock)(UIImage * image), vo
 }
 -(void)backAction:(id)sender
 {
-    if (webView.hidden==NO)
+    if (_webView.hidden==NO)
     {
         [UIView beginAnimations:@"oglFlip"context:nil];//动画开始
         [UIView setAnimationDuration:0.75];
         [UIView setAnimationDelegate:self];
         [UIView  setAnimationTransition:UIViewAnimationTransitionFlipFromLeft forView:self.view cache:YES];
-        webView.hidden=YES;
+        _webView.hidden=YES;
         [UIView commitAnimations];
     }else
     {
         int index=[[self.navigationController viewControllers]indexOfObject:self];
-        [webView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:@"about:blank"]]];
+        [_webView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:@"about:blank"]]];
         if (index==0)
         {
             [self dismissViewControllerAnimated:YES completion:nil];
@@ -234,7 +234,7 @@ void ItemFanliImageFromURL( NSURL * URL, void (^imageBlock)(UIImage * image), vo
         [SVProgressHUD showWithStatus:@"正在跳转，安装最新淘宝客户端才能返利..."];
         NSURL *url =[NSURL  URLWithString:self.clickURLString];
         NSURLRequest *request =[NSURLRequest requestWithURL:url];
-        [webView loadRequest:request];
+        [_webView loadRequest:request];
         NSLog(@"正在打开链接%@",self.clickURLString);
 
     }else
@@ -245,7 +245,7 @@ void ItemFanliImageFromURL( NSURL * URL, void (^imageBlock)(UIImage * image), vo
             [SVProgressHUD showWithStatus:@"正在跳转，安装最新淘宝客户端才能返利..."];
             NSURL *url =[NSURL  URLWithString:self.clickURLString];
             NSURLRequest *request =[NSURLRequest requestWithURL:url];
-            [webView loadRequest:request];
+            [_webView loadRequest:request];
             NSLog(@"正在打开链接%@",self.clickURLString);
         }else
         {
@@ -269,7 +269,7 @@ void ItemFanliImageFromURL( NSURL * URL, void (^imageBlock)(UIImage * image), vo
                 [SVProgressHUD showWithStatus:@"正在跳转，安装最新淘宝客户端才能返利..."];
                 NSURL *url =[NSURL  URLWithString:self.clickURLString];
                 NSURLRequest *request =[NSURLRequest requestWithURL:url];
-                [webView loadRequest:request];
+                [_webView loadRequest:request];
             }
                 break;
         }

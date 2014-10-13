@@ -105,7 +105,7 @@ static CosjiServerHelper *shareCosjiServerHelper=nil;
                    forKey:@"keyword"];
         [params setObject:@"20"
                    forKey:@"page_size"];
-        [params setObject:@"100"
+        [params setObject:@"1000"
                    forKey:@"start_commissionRate"];
         [params setObject:@"5000"
                    forKey:@"end_commissionRate"];
@@ -190,6 +190,8 @@ static CosjiServerHelper *shareCosjiServerHelper=nil;
                    forKey:@"num_iids"];
         [params setObject:uid
                    forKey:@"outer_code"];
+        [params setObject:@"1"
+                   forKey:@"refer_type"];
         // [params setValue:@"http://www.cosji.com" forKey:@"callbackurl"];
         
         NSLog(@"输入参数%@",params);
