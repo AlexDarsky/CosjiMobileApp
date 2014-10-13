@@ -14,8 +14,11 @@
     #import "CosjiFileManager.h"
     #import "SVProgressHUD.h"
     #import "CosjiServerHelper.h"
+    #import "CosjiAppDelegate.h"
+#define CosjiAppleID            @"802627559"
 #define CosjiAppKey             @"21602410"
 #define CosjiAppSecret          @"40b803eb95d919f230118ad0095bf55d"
-//#define CosjiAppRedirectURI     @"http://www.cosji.com"
-#define CosjiAppRedirectURI @"appcallback://"
+#define CosjiAppRedirectURI     @"http://www.cosji.com"
+#define CosjiAppiTunesAddress   @"https://itunes.apple.com/cn/app/ke-ji-wang-tao-bao-sheng-qian/id802627559?ls=1&mt=8"
+//#define CosjiAppRedirectURI @"appcallback://"
 #endif

@@ -38,20 +38,38 @@ static CosjiUserHelpViewController *shareCosjiUserHelpViewController = nil;
     UIView *primary=[[UIView alloc] initWithFrame:[UIScreen mainScreen].bounds];
     self.view=primary;
     self.view.backgroundColor=[UIColor colorWithPatternImage:[UIImage imageNamed:@"我的可及-系统设置-背景"]];
-    self.customNavBar=[[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 45)];
-    self.customNavBar.backgroundColor=[UIColor colorWithPatternImage:[UIImage imageNamed:@"工具栏背景"]];
-    self.titleLabel=[[UILabel alloc] initWithFrame:CGRectMake(90, 0, 140, 40)];
-    self.titleLabel.backgroundColor=[UIColor clearColor];
-    self.titleLabel.textColor=[UIColor whiteColor];
-    self.titleLabel.textAlignment=NSTextAlignmentCenter;
-    [self.customNavBar addSubview:self.titleLabel];
-    UIButton *backBtn=[UIButton buttonWithType:UIButtonTypeCustom];
-    backBtn.frame=CGRectMake(11, 2.5, 100/2, 80/2);
-    [backBtn setBackgroundImage:[UIImage imageNamed:@"返回"] forState:UIControlStateNormal];
-    [backBtn addTarget:self  action:@selector(dismisThisViewController:) forControlEvents:UIControlEventTouchUpInside];
-    [self.customNavBar addSubview:backBtn];
+    if ([[[UIDevice currentDevice] systemVersion]floatValue]<7.0) {
+        self.customNavBar=[[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 45)];
+        self.customNavBar.backgroundColor=[UIColor colorWithPatternImage:[UIImage imageNamed:@"工具栏背景"]];
+        self.titleLabel=[[UILabel alloc] initWithFrame:CGRectMake(90, 0, 140, 40)];
+        self.titleLabel.backgroundColor=[UIColor clearColor];
+        self.titleLabel.textColor=[UIColor whiteColor];
+        self.titleLabel.textAlignment=NSTextAlignmentCenter;
+        [self.customNavBar addSubview:self.titleLabel];
+        UIButton *backBtn=[UIButton buttonWithType:UIButtonTypeCustom];
+        backBtn.frame=CGRectMake(11, 2.5, 100/2, 80/2);
+        [backBtn setBackgroundImage:[UIImage imageNamed:@"返回"] forState:UIControlStateNormal];
+        [backBtn addTarget:self  action:@selector(dismisThisViewController:) forControlEvents:UIControlEventTouchUpInside];
+        [self.customNavBar addSubview:backBtn];
         [self.view addSubview:self.customNavBar];
-    self.tableView=[[UITableView alloc] initWithFrame:CGRectMake(0, 45, 320, [UIScreen mainScreen].bounds.size.height-45) style:UITableViewStyleGrouped];
+        self.tableView=[[UITableView alloc] initWithFrame:CGRectMake(0, 45, 320, [UIScreen mainScreen].bounds.size.height-45) style:UITableViewStyleGrouped];
+    }else
+    {
+        self.customNavBar=[[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 65)];
+        self.customNavBar.backgroundColor=[UIColor colorWithRed:225.0/255.0 green:47.0/255.0 blue:50.0/255.0 alpha:100];
+        self.titleLabel=[[UILabel alloc] initWithFrame:CGRectMake(90, 20, 140, 40)];
+        self.titleLabel.backgroundColor=[UIColor clearColor];
+        self.titleLabel.textColor=[UIColor whiteColor];
+        self.titleLabel.textAlignment=NSTextAlignmentCenter;
+        [self.customNavBar addSubview:self.titleLabel];
+        UIButton *backBtn=[UIButton buttonWithType:UIButtonTypeCustom];
+        backBtn.frame=CGRectMake(11, 22.5, 100/2, 80/2);
+        [backBtn setBackgroundImage:[UIImage imageNamed:@"返回"] forState:UIControlStateNormal];
+        [backBtn addTarget:self  action:@selector(dismisThisViewController:) forControlEvents:UIControlEventTouchUpInside];
+        [self.customNavBar addSubview:backBtn];
+        [self.view addSubview:self.customNavBar];
+        self.tableView=[[UITableView alloc] initWithFrame:CGRectMake(0, 65, 320, [UIScreen mainScreen].bounds.size.height-65) style:UITableViewStyleGrouped];
+    }
     self.tableView.dataSource=self;
     self.tableView.delegate=self;
     self.tableView.backgroundView=nil;
@@ -157,7 +175,10 @@ static CosjiUserHelpViewController *shareCosjiUserHelpViewController = nil;
     else
     {
         UITextView *contextView=[[UITextView alloc] initWithFrame:CGRectMake(20, 10, 280, 160)];
-        contextView.text=[NSString stringWithFormat:@"%@",[itemDic objectForKey:@"content"]];
+        NSString *contentString=[NSString stringWithFormat:@"%@",[itemDic objectForKey:@"content"]];
+        contentString=[contentString stringByReplacingOccurrencesOfString:@"\r\n\r\n\r\n" withString:@""];
+        contentString=[contentString stringByReplacingOccurrencesOfString:@"\t" withString:@""];
+        contextView.text=[NSString stringWithFormat:@"%@",contentString];
         contextView.backgroundColor=[UIColor clearColor];
         [cell addSubview:contextView];
     }

@@ -11,6 +11,7 @@
 #import "StoreKit/SKProductsRequest.h"
 #import "CosjiWebViewController.h"
 #import "CosjiMallsListViewController.h"
+#import "CosjiUrlFilter.h"
 
 @interface CosjiViewController : UIViewController<UITableViewDataSource,UITableViewDelegate,UIScrollViewDelegate,UIActionSheetDelegate,UITextFieldDelegate>
 {
@@ -29,9 +30,11 @@
 @property (strong,nonatomic)  UITableView *mainTableView;
 @property (strong, nonatomic)UIView *CustomHeadView;
 @property (copy,nonatomic) NSMutableArray * userIds;
-@property (strong,nonatomic) CosjiWebViewController *storeBrowseViewController;
+@property (strong,nonatomic) UINavigationController *storeBrowse;
+@property (strong,nonatomic) CosjiWebViewController *webViewController;
+@property (strong,nonatomic) UINavigationController *itemsListNavCon;
 @property (strong,nonatomic) CosjiMallsListViewController *mallsListViewController;
 
 - (IBAction)exitKeyboard:(id)sender;
-
+-(void)detailRemoteNotification:(NSDictionary*)infoDic;
 @end

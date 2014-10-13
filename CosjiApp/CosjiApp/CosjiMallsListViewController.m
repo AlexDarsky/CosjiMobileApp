@@ -8,9 +8,14 @@
 
 #import "CosjiMallsListViewController.h"
 #import "CosjiWebViewController.h"
+#import "CosjiNormalWebViewController.h"
+#import "MJRefresh.h"
 #import "CosjiLoginViewController.h"
 
 @interface CosjiMallsListViewController ()
+{
+    MJRefreshFooterView *_footer;
+}
 
 @end
 
@@ -30,28 +35,65 @@
     UIView *primaryView=[[UIView alloc] initWithFrame:[UIScreen mainScreen].bounds];
     primaryView.backgroundColor=[UIColor colorWithRed:229.0/255.0 green:229.0/255.0 blue:229.0/255.0 alpha:100];
     self.view=primaryView;
-    self.mainTableView=[[UITableView alloc] initWithFrame:CGRectMake(0, 45, 320, [UIScreen mainScreen].bounds.size.height-45-20)];
+    if ([UIDevice currentDevice].systemVersion.floatValue >= 7.0)
+    {
+        self.CustomHeadView=[[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 65)];
+        //   self.CustomHeadView.backgroundColor=[UIColor colorWithPatternImage:[UIImage imageNamed:@"工具栏背景130"]];
+        self.CustomHeadView.backgroundColor=[UIColor colorWithRed:225.0/255.0 green:47.0/255.0 blue:50.0/255.0 alpha:100];
+        
+        self.mainTableView=[[UITableView alloc] initWithFrame:CGRectMake(0, 65, 320, [UIScreen mainScreen].bounds.size.height-65-49)];
+        //self.automaticallyAdjustsScrollViewInsets=NO;
+    }
+    else
+    {
+        self.mainTableView=[[UITableView alloc] initWithFrame:CGRectMake(0, 45, 320, [UIScreen mainScreen].bounds.size.height-45-49-20)];
+        self.CustomHeadView=[[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 45)];
+        self.CustomHeadView.backgroundColor=[UIColor colorWithPatternImage:[UIImage imageNamed:@"工具栏背景"]];
+    }
     self.mainTableView.delegate=self;
     self.mainTableView.dataSource=self;
     self.mainTableView.backgroundColor=[UIColor clearColor];
     self.mainTableView.backgroundView=nil;
     [self.mainTableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
     [self.view addSubview:self.mainTableView];
-    self.CustomHeadView=[[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 45)];
-    self.CustomHeadView.backgroundColor=[UIColor colorWithPatternImage:[UIImage imageNamed:@"工具栏背景"]];
     UIButton *backBtn=[UIButton buttonWithType:UIButtonTypeCustom];
-    backBtn.frame=CGRectMake(11, 2.5, 100/2, 80/2);
+    backBtn.frame=CGRectMake(11, self.CustomHeadView.frame.size.height/2-80/4, 100/2, 80/2);
     [backBtn setBackgroundImage:[UIImage imageNamed:@"返回"] forState:UIControlStateNormal];
     [backBtn addTarget:self  action:@selector(backAction:) forControlEvents:UIControlEventTouchUpInside];
     [self.CustomHeadView addSubview:backBtn];
     [self.view addSubview:self.CustomHeadView];
-    
+    [self addFooter];
 }
+- (void)addFooter
+{
+    MJRefreshFooterView *footer = [MJRefreshFooterView footer];
+    footer.scrollView = self.mainTableView;
+    footer.beginRefreshingBlock = ^(MJRefreshBaseView *refreshView) {
+        // 增加5条假数据
+        [self performSelector:@selector(loadDataBegin) withObject:Nil afterDelay:2.0];
+        // 模拟延迟加载数据，因此2秒后才调用）
+        // 这里的refreshView其实就是footer
+        [self performSelector:@selector(doneWithView:) withObject:refreshView afterDelay:2.0];
+        
+        NSLog(@"%@----开始进入刷新状态", refreshView.class);
+    };
+    _footer = footer;
+}
+- (void)doneWithView:(MJRefreshBaseView *)refreshView
+{
+    // 刷新表格
+    [self.mainTableView reloadData];
+    // (最好在刷新表格后调用)调用endRefreshing可以结束刷新状态
+    [refreshView endRefreshing];
+}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view.
     storeListArray=[[NSMutableArray alloc] initWithCapacity:0];
+    self.webViewController=[CosjiWebViewController shareCosjiWebViewController];
+    self.storeBrowse=[[UINavigationController alloc] initWithRootViewController:self.webViewController];
 }
 -(void)viewWillAppear:(BOOL)animated
 {
@@ -86,7 +128,7 @@
 }
 - (void)backAction:(id)sender
 {
-    [self dismissViewControllerAnimated:YES completion:nil];
+    [self.navigationController popToRootViewControllerAnimated:YES];
 }
 - (NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
@@ -114,6 +156,7 @@
     // static NSString *cellIdentifier = @"MyCell";
     UITableViewCell *cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:nil];
     [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
+    [cell setBackgroundColor:[UIColor clearColor]];
     //商城左
     for (int x=0; x<3; x++)
     {
@@ -144,10 +187,9 @@
                                NSString *filename = [dirName stringByAppendingPathComponent:[NSString stringWithFormat:@"%@",[storeDic objectForKey:@"id"]]];
                                if (![[NSFileManager defaultManager] fileExistsAtPath:filename])
                                {
-                                   NSLog(@"download cacheImage %@",filename);
                                    NSData * data = [[NSData alloc] initWithContentsOfURL:[NSURL URLWithString:imageUrl1]];
                                    UIImage * cacheimage = [[UIImage alloc] initWithData:data];
-                                   [UIImageJPEGRepresentation(cacheimage, 1.0) writeToFile:filename atomically:YES];
+                                   [UIImageJPEGRepresentation(cacheimage, 0.5) writeToFile:filename atomically:YES];
                                    dispatch_async(dispatch_get_main_queue(), ^{
                                        NSData *imageData=[NSData dataWithContentsOfFile:filename];
                                        [button setBackgroundImage:[UIImage imageWithData:imageData] forState:UIControlStateNormal];
@@ -155,7 +197,6 @@
                                }else
                                {
                                    dispatch_async(dispatch_get_main_queue(), ^{
-                                       NSLog(@"load cacheImage %@",filename);
                                        NSData *imageData=[NSData dataWithContentsOfFile:filename];
                                        [button setBackgroundImage:[UIImage imageWithData:imageData] forState:UIControlStateNormal];
                                    });
@@ -176,20 +217,19 @@
     }
     return cell;
 }
-
+/*
 - (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
 {
-    NSLog(@"%f %f",scrollView.contentOffset.y,scrollView.contentSize.height - scrollView.frame.size.height);
+   // NSLog(@"%f %f",scrollView.contentOffset.y,scrollView.contentSize.height - scrollView.frame.size.height);
     if (scrollView.contentOffset.y>=(scrollView.contentSize.height - scrollView.frame.size.height)+100&&scrollView.contentOffset.y>0)
     {
         [SVProgressHUD showWithStatus:@"正在载入..."];
         [self performSelector:@selector(loadDataBegin) withObject:Nil afterDelay:2.0];
     }
 }
-
+*/
 -(void)loadDataBegin
 {
-    NSLog(@"%d",currentPage);
     CosjiServerHelper *serverHelper=[CosjiServerHelper shareCosjiServerHelper];
     currentPage+=1;
     NSDictionary *tmpDic=[NSDictionary dictionaryWithDictionary:[serverHelper getJsonDictionary:[NSString stringWithFormat:@"/mall/getAll/?page=%d&&num=21",currentPage]]];
@@ -220,21 +260,23 @@
 -(void)opRemenshangcheng:(id)sender
 {
     selectedIndex=[sender tag];
-    if ([[[NSUserDefaults standardUserDefaults] objectForKey:@"logined"]isEqualToString:@"YES"]) {
+    if ([[NSUserDefaults standardUserDefaults] boolForKey:@"havelogined"]) {
+        NSDictionary *userDic=[NSDictionary dictionaryWithDictionary:[[NSUserDefaults standardUserDefaults] objectForKey:@"userInfo"]];
+        NSDictionary *infoDic=[NSDictionary dictionaryWithDictionary:[userDic objectForKey:@"body"]];
+        NSString *uid =[NSString stringWithFormat:@"%@",[infoDic objectForKey:@"userId"]];
         NSDictionary *tmpDic=[NSDictionary dictionaryWithDictionary:[storeListArray objectAtIndex:selectedIndex]];
         NSString *storeUrl=[NSString stringWithFormat:@"%@",[tmpDic objectForKey:@"yiqifaurl"]];
-        NSLog(@"%@",[storeUrl stringByReplacingOccurrencesOfString:@"\"" withString:@""]);
+        storeUrl=[storeUrl stringByReplacingOccurrencesOfString:@"&e=" withString:[NSString stringWithFormat:@"&e=%@",uid]];
+        NSLog(@"storeUrl is %@",storeUrl);
         NSURL *url =[NSURL URLWithString:[storeUrl stringByReplacingOccurrencesOfString:@"\"" withString:@""]];
         NSURLRequest *request =[NSURLRequest requestWithURL:url];
-        CosjiWebViewController *storeBrowseViewController=[CosjiWebViewController shareCosjiWebViewController];
-        
-        [self.navigationController pushViewController:storeBrowseViewController animated:YES ];
-        [storeBrowseViewController.webView loadRequest:request];
-        [storeBrowseViewController.storeName setText:[NSString stringWithFormat:@"%@",[tmpDic objectForKey:@"name"]]];
+        CosjiNormalWebViewController *normalWebViewController=[[CosjiNormalWebViewController alloc] init];
+        [self  presentViewController:normalWebViewController animated:YES completion:nil];
+        [normalWebViewController setThisWebViewWithName:request name:[NSString stringWithFormat:@"%@",[tmpDic objectForKey:@"name"]]];
         
     }else
     {
-        UIAlertView *alert=[[UIAlertView alloc] initWithTitle:@"提示" message:@"登录获取返利" delegate:self cancelButtonTitle:@"跳过" otherButtonTitles:@"登陆",nil];
+        UIAlertView *alert=[[UIAlertView alloc] initWithTitle:@"提示" message:@"登录获取返利" delegate:self cancelButtonTitle:@"跳过" otherButtonTitles:@"登录",nil];
         alert.tag=1;
         [alert show];
     }
@@ -244,23 +286,19 @@
     if (alertView.tag==1) {
         switch (buttonIndex) {
             case 0:{
-                NSLog(@"case 0");
                 NSDictionary *tmpDic=[NSDictionary dictionaryWithDictionary:[storeListArray objectAtIndex:selectedIndex]];
                 NSString *storeUrl=[NSString stringWithFormat:@"%@",[tmpDic objectForKey:@"yiqifaurl"]];
-                NSLog(@"%@",[storeUrl stringByReplacingOccurrencesOfString:@"\"" withString:@""]);
                 
                 NSURL *url =[NSURL URLWithString:[storeUrl stringByReplacingOccurrencesOfString:@"\"" withString:@""]];
-                NSURLRequest *request =[NSURLRequest requestWithURL:url];
-                CosjiWebViewController *storeBrowseViewController=[CosjiWebViewController shareCosjiWebViewController];
-                [self.navigationController pushViewController:storeBrowseViewController animated:YES ];
-                [storeBrowseViewController.webView loadRequest:request];
-                [storeBrowseViewController.storeName setText:[NSString stringWithFormat:@"%@",[tmpDic objectForKey:@"name"]]];
+                CosjiNormalWebViewController *normalWebViewController=[[CosjiNormalWebViewController alloc] init];
+                [self  presentViewController:normalWebViewController animated:YES completion:nil];
+                [normalWebViewController setThisWebViewWithName:[NSURLRequest requestWithURL:url] name:[NSString stringWithFormat:@"%@",[tmpDic objectForKey:@"name"]]];
+              
             }
                 break;
                 
             case 1:
             {
-                NSLog(@"case 1");
                 CosjiLoginViewController *loginViewController=[CosjiLoginViewController shareCosjiLoginViewController];
                 [self presentViewController:loginViewController animated:YES completion:nil];
                 

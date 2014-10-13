@@ -30,27 +30,51 @@
     UIView *primaryView=[[UIView alloc] initWithFrame:[UIScreen mainScreen].bounds];
     primaryView.backgroundColor=[UIColor whiteColor];
     self.view=primaryView;
-    self.customNavBar=[[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 44)];
-    self.customNavBar.backgroundColor=[UIColor colorWithPatternImage:[UIImage imageNamed:@"工具栏背景"]];
-    UIButton *dismissBtn=[UIButton buttonWithType:UIButtonTypeCustom];
-    [dismissBtn addTarget:self action:@selector(dismisThisViewController:) forControlEvents:UIControlEventTouchUpInside];
-    [dismissBtn setBackgroundImage:[UIImage imageNamed:@"返回"] forState:UIControlStateNormal];
-    dismissBtn.frame=CGRectMake(11, 2.5, 100/2, 80/2);
-    UILabel *title=[[UILabel alloc] initWithFrame:CGRectMake(90, 2.5, 140, 40)];
-    title.backgroundColor=[UIColor clearColor];
-    title.textColor=[UIColor whiteColor];
-    title.text=@"账户明细";
-    title.font=[UIFont fontWithName:@"Arial" size:18];
-    title.textAlignment=NSTextAlignmentCenter;
-    [self.customNavBar addSubview:title];
-    [self.customNavBar addSubview:dismissBtn];
-    self.myTableView=[[UITableView alloc] initWithFrame:CGRectMake(0, 88, 320, [UIScreen mainScreen].bounds.size.height-108)];
+    self.accountModelSC=[[UISegmentedControl alloc] initWithItems:[NSArray arrayWithObjects:@"我的收入",@"我的提现", nil]];
+    if ([[[UIDevice currentDevice] systemVersion]floatValue]<7.0) {
+        self.customNavBar=[[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 44)];
+        self.customNavBar.backgroundColor=[UIColor colorWithPatternImage:[UIImage imageNamed:@"工具栏背景"]];
+        UIButton *dismissBtn=[UIButton buttonWithType:UIButtonTypeCustom];
+        [dismissBtn addTarget:self action:@selector(dismisThisViewController:) forControlEvents:UIControlEventTouchUpInside];
+        [dismissBtn setBackgroundImage:[UIImage imageNamed:@"返回"] forState:UIControlStateNormal];
+        dismissBtn.frame=CGRectMake(11, 2.5, 100/2, 80/2);
+        UILabel *title=[[UILabel alloc] initWithFrame:CGRectMake(90, 2.5, 140, 40)];
+        title.backgroundColor=[UIColor clearColor];
+        title.textColor=[UIColor whiteColor];
+        title.text=@"账户明细";
+        title.font=[UIFont fontWithName:@"Arial" size:18];
+        title.textAlignment=NSTextAlignmentCenter;
+        [self.customNavBar addSubview:title];
+        [self.customNavBar addSubview:dismissBtn];
+        self.myTableView=[[UITableView alloc] initWithFrame:CGRectMake(0, 88, 320, [UIScreen mainScreen].bounds.size.height-108)];
+        self.accountModelSC.frame=CGRectMake(-10, 44, 340, 44);
+
+        
+    }else
+    {
+        self.customNavBar=[[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 65)];
+        self.customNavBar.backgroundColor=[UIColor colorWithRed:225.0/255.0 green:47.0/255.0 blue:50.0/255.0 alpha:100];
+        UIButton *dismissBtn=[UIButton buttonWithType:UIButtonTypeCustom];
+        [dismissBtn addTarget:self action:@selector(dismisThisViewController:) forControlEvents:UIControlEventTouchUpInside];
+        [dismissBtn setBackgroundImage:[UIImage imageNamed:@"返回"] forState:UIControlStateNormal];
+        dismissBtn.frame=CGRectMake(11, 22.5, 100/2, 80/2);
+        UILabel *title=[[UILabel alloc] initWithFrame:CGRectMake(90, 22.5, 140, 40)];
+        title.backgroundColor=[UIColor clearColor];
+        title.textColor=[UIColor whiteColor];
+        title.text=@"账户明细";
+        title.font=[UIFont fontWithName:@"Arial" size:18];
+        title.textAlignment=NSTextAlignmentCenter;
+        [self.customNavBar addSubview:title];
+        [self.customNavBar addSubview:dismissBtn];
+        self.myTableView=[[UITableView alloc] initWithFrame:CGRectMake(0, 108, 320, [UIScreen mainScreen].bounds.size.height-108)];
+        self.accountModelSC.frame=CGRectMake(-10, 65, 340, 44);
+
+    }
+
     self.myTableView.delegate=self;
     self.myTableView.dataSource=self;
     [self.view addSubview:self.myTableView];
     [self.view addSubview:self.customNavBar];
-    self.accountModelSC=[[UISegmentedControl alloc] initWithItems:[NSArray arrayWithObjects:@"我的收入",@"我的提现", nil]];
-    self.accountModelSC.frame=CGRectMake(-10, 44, 340, 44);
     [self.accountModelSC addTarget:self action:@selector(changeAccountModel:) forControlEvents:UIControlEventValueChanged];
     [self.accountModelSC setSelectedSegmentIndex:0];
     [self.view addSubview:self.accountModelSC];
@@ -65,7 +89,7 @@
 -(void)viewWillAppear:(BOOL)animated
 {
     [SVProgressHUD showWithStatus:@"正在载入..."];
-    if ([[[NSUserDefaults standardUserDefaults] objectForKey:@"logined"] isEqualToString:@"YES"])
+    if ([[NSUserDefaults standardUserDefaults] boolForKey:@"havelogined"] )
     {
         if ([itemsArray count]>0)
         {
@@ -128,7 +152,7 @@
 {
     static NSString *cellIdentifier = @"MyCell";
     UITableViewCell *cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:cellIdentifier];
-    [cell setSelectionStyle:UITableViewCellSelectionStyleGray];
+    [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
     switch (accountModel) {
         case 0:
         {
@@ -156,6 +180,7 @@
     if ([itemsArray count]>0)
     {
         [itemsArray removeAllObjects];
+        [self.myTableView reloadData];
     }
     UISegmentedControl *Seg=(UISegmentedControl*)sender;
     NSInteger Index = Seg.selectedSegmentIndex;
@@ -220,7 +245,7 @@
 }
 - (void)scrollViewWillEndDragging:(UIScrollView *)scrollView withVelocity:(CGPoint)velocity targetContentOffset:(inout CGPoint *)targetContentOffset
 {
-    NSLog(@"%f %f",scrollView.contentOffset.y,scrollView.contentSize.height - scrollView.frame.size.height);
+    //NSLog(@"%f %f",scrollView.contentOffset.y,scrollView.contentSize.height - scrollView.frame.size.height);
     if(scrollView.contentOffset.y > ((scrollView.contentSize.height - scrollView.frame.size.height))&&scrollView.contentOffset.y>0)
         
     {

@@ -30,20 +30,40 @@
     UIView *primaryView=[[UIView alloc] initWithFrame:[UIScreen mainScreen].bounds];
     [primaryView setBackgroundColor:[UIColor colorWithRed:229.0/255.0 green:229.0/255.0 blue:229.0/255.0 alpha:100]];
     self.view=primaryView;
-    self.customNavBar=[[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 45)];
-    self.customNavBar.backgroundColor=[UIColor colorWithPatternImage:[UIImage imageNamed:@"工具栏背景"]];
-    UILabel *titleLabel=[[UILabel alloc] initWithFrame:CGRectMake(90, 2.5, 140, 40)];
-    titleLabel.backgroundColor=[UIColor clearColor];
-    titleLabel.textColor=[UIColor whiteColor];
-    titleLabel.text=@"账户明细";
-    titleLabel.font=[UIFont fontWithName:@"Arial" size:18];
-    titleLabel.textAlignment=NSTextAlignmentCenter;
-    [self.customNavBar addSubview:titleLabel];
-    UIButton *backBtn=[UIButton buttonWithType:UIButtonTypeCustom];
-    backBtn.frame=CGRectMake(11, 2.5, 100/2, 80/2);
-    [backBtn setBackgroundImage:[UIImage imageNamed:@"返回"] forState:UIControlStateNormal];
-    [backBtn addTarget:self  action:@selector(dismisThisViewController:) forControlEvents:UIControlEventTouchUpInside];
-    [self.customNavBar addSubview:backBtn];
+    if ([[[UIDevice currentDevice] systemVersion]floatValue]<7.0)
+    {
+        self.customNavBar=[[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 45)];
+        self.customNavBar.backgroundColor=[UIColor colorWithPatternImage:[UIImage imageNamed:@"工具栏背景"]];
+        UILabel *titleLabel=[[UILabel alloc] initWithFrame:CGRectMake(90, 2.5, 140, 40)];
+        titleLabel.backgroundColor=[UIColor clearColor];
+        titleLabel.textColor=[UIColor whiteColor];
+        titleLabel.text=@"账户明细";
+        titleLabel.font=[UIFont fontWithName:@"Arial" size:18];
+        titleLabel.textAlignment=NSTextAlignmentCenter;
+        [self.customNavBar addSubview:titleLabel];
+        UIButton *backBtn=[UIButton buttonWithType:UIButtonTypeCustom];
+        backBtn.frame=CGRectMake(11, 2.5, 100/2, 80/2);
+        [backBtn setBackgroundImage:[UIImage imageNamed:@"返回"] forState:UIControlStateNormal];
+        [backBtn addTarget:self  action:@selector(dismisThisViewController:) forControlEvents:UIControlEventTouchUpInside];
+        [self.customNavBar addSubview:backBtn];
+    }else
+    {
+        self.customNavBar=[[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 65)];
+        self.customNavBar.backgroundColor=[UIColor colorWithRed:225.0/255.0 green:47.0/255.0 blue:50.0/255.0 alpha:100];
+        UILabel *titleLabel=[[UILabel alloc] initWithFrame:CGRectMake(90, 22.5, 140, 40)];
+        titleLabel.backgroundColor=[UIColor clearColor];
+        titleLabel.textColor=[UIColor whiteColor];
+        titleLabel.text=@"账户明细";
+        titleLabel.font=[UIFont fontWithName:@"Arial" size:18];
+        titleLabel.textAlignment=NSTextAlignmentCenter;
+        [self.customNavBar addSubview:titleLabel];
+        UIButton *backBtn=[UIButton buttonWithType:UIButtonTypeCustom];
+        backBtn.frame=CGRectMake(11, 22.5, 100/2, 80/2);
+        [backBtn setBackgroundImage:[UIImage imageNamed:@"返回"] forState:UIControlStateNormal];
+        [backBtn addTarget:self  action:@selector(dismisThisViewController:) forControlEvents:UIControlEventTouchUpInside];
+        [self.customNavBar addSubview:backBtn];
+    }
+
     [self.view addSubview:self.customNavBar];
     //可提现金额
     UILabel *avilibaleCashTitle=[[UILabel alloc] initWithFrame:CGRectMake(0, 170/2, 232/2, 82/2)];
@@ -132,11 +152,16 @@
     passwordField.secureTextEntry=YES;
     [self.view addSubview:passwordField];
     passwordField.font=passwordTitle.font=[UIFont fontWithName:@"Arial" size:14];
-    
+    requestCashField.delegate=self;
+    zhifubaoIDField.delegate=self;
+    payeeNameField.delegate=self;
+    phoneNumberField.delegate=self;
+    passwordField.delegate=self;
     UIButton *getCashBtn=[UIButton buttonWithType:UIButtonTypeCustom];
     getCashBtn.frame=CGRectMake(160-582/4, [UIScreen mainScreen].bounds.size.height-69, 582/2, 69/2);
     [getCashBtn setBackgroundImage:[UIImage imageNamed:@"按钮_登录"] forState:UIControlStateNormal];
     [getCashBtn setTitle:@"马上提现" forState:UIControlStateNormal];
+    [getCashBtn addTarget:self action:@selector(goTixian) forControlEvents:UIControlEventTouchDown];
     [getCashBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     [self.view addSubview:getCashBtn];
 }
@@ -145,17 +170,128 @@
     NSDictionary *tmpDic=[NSDictionary dictionaryWithDictionary:[[NSUserDefaults standardUserDefaults] objectForKey:@"userInfo"]];
     NSDictionary *infoDic=[NSDictionary dictionaryWithDictionary:[tmpDic objectForKey:@"body"]];
     avilibaleCashLabel.text=[NSString stringWithFormat:@"%@元",[infoDic objectForKey:@"balance"]];
+    CosjiServerHelper *serverHelper=[CosjiServerHelper shareCosjiServerHelper];
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        NSDictionary *tmpDic=[serverHelper getJsonDictionary:@"/user/getContact/"];
+        NSDictionary *bodyDic=[NSDictionary dictionaryWithDictionary:[tmpDic objectForKey:@"body"]];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (bodyDic!=nil)
+            {
+                [phoneNumberField setText:[NSString stringWithFormat:@"%@",[bodyDic objectForKey:@"mobile"]]];
+            }
+        });
+    });
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        
+        NSDictionary *tmpDic=[serverHelper getJsonDictionary:@"/account/getAlipay/"];
+        NSDictionary *bodyDic=[NSDictionary dictionaryWithDictionary:[tmpDic objectForKey:@"body"]];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (bodyDic!=nil)
+            {
+                [payeeNameField setText:[NSString stringWithFormat:@"%@",[bodyDic objectForKey:@"realname"]]];
+                [zhifubaoIDField setText:[NSString stringWithFormat:@"%@",[bodyDic objectForKey:@"alipay"]]];
+            }
+        });
+    });
+
+}
+-(void)goTixian
+{
+    if ([requestCashField.text isEqualToString:@""]||requestCashField.text==nil) {
+        UIAlertView *alert=[[UIAlertView alloc] initWithTitle:@"错误" message:@"请输入提现金额" delegate:nil cancelButtonTitle:@"好的" otherButtonTitles:nil];
+        [alert show];
+        return;
+    }
+    if ([requestCashField.text floatValue]>[avilibaleCashLabel.text floatValue])
+    {
+        UIAlertView *alert=[[UIAlertView alloc] initWithTitle:@"错误" message:@"提现金额大于可提现金额" delegate:nil cancelButtonTitle:@"好的" otherButtonTitles:nil];
+        [alert show];
+        return;
+    }
+    if ([zhifubaoIDField.text isEqualToString:@""]||zhifubaoIDField.text==nil) {
+        UIAlertView *alert=[[UIAlertView alloc] initWithTitle:@"错误" message:@"请输入支付宝账号" delegate:nil cancelButtonTitle:@"好的" otherButtonTitles:nil];
+        [alert show];
+        return;
+    }
+    if ([payeeNameField.text isEqualToString:@""]||payeeNameField.text==nil) {
+        UIAlertView *alert=[[UIAlertView alloc] initWithTitle:@"错误" message:@"请输入收款人姓名" delegate:nil cancelButtonTitle:@"好的" otherButtonTitles:nil];
+        [alert show];
+        return;
+    }
+    if ([phoneNumberField.text isEqualToString:@""]||phoneNumberField.text==nil) {
+        UIAlertView *alert=[[UIAlertView alloc] initWithTitle:@"错误" message:@"请输入手机号码" delegate:nil cancelButtonTitle:@"好的" otherButtonTitles:nil];
+        [alert show];
+        return;
+    }
+    if ([passwordField.text isEqualToString:@""]||passwordField.text==nil) {
+        UIAlertView *alert=[[UIAlertView alloc] initWithTitle:@"错误" message:@"请输入本站登录密码" delegate:nil cancelButtonTitle:@"好的" otherButtonTitles:nil];
+        [alert show];
+        return;
+    }
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        CosjiServerHelper *serverHelper=[CosjiServerHelper shareCosjiServerHelper];
+        NSDictionary *responeDIC=[serverHelper getJsonDictionary:[NSString stringWithFormat:@"/account/apply/?type=2&&money=%@&&code=%@&&realname=%@&&mobile=%@&&password=%@",requestCashField.text,zhifubaoIDField.text,payeeNameField.text,phoneNumberField.text,passwordField.text]];
+        if (responeDIC!=nil) {
+            NSDictionary *headDic=[NSDictionary dictionaryWithDictionary:[responeDIC objectForKey:@"head"]];
+            NSString *headString=[NSString stringWithFormat:@"%@",[headDic objectForKey:@"msg"]];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                UIAlertView *alert=[[UIAlertView alloc] initWithTitle:@"提示" message:headString delegate:nil cancelButtonTitle:@"好的" otherButtonTitles:nil];
+                [alert show];
+            });
+            
+        }else
+        {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                UIAlertView *alert=[[UIAlertView alloc] initWithTitle:@"错误" message:@"服务器无法连接" delegate:nil cancelButtonTitle:@"好的" otherButtonTitles:nil];
+                [alert show];
+            });
+
+
+        }
+    });
+    
 }
 - (void)dismisThisViewController:(id)sender
 {
     [self dismissViewControllerAnimated:YES completion:nil];
+}
+- (BOOL)textFieldShouldReturn:(UITextField *)textField
+{
+    [textField resignFirstResponder];
+    return YES;
+}
+-(void)textFieldDidBeginEditing:(UITextField *)textField
+{
+    CGRect frame = textField.frame;
+    int offset = frame.origin.y + 32 - (self.view.frame.size.height - 216.0);//键盘高度216
+    
+    NSTimeInterval animationDuration = 0.30f;
+    [UIView beginAnimations:@"ResizeForKeyboard" context:nil];
+    [UIView setAnimationDuration:animationDuration];
+    
+    //将视图的Y坐标向上移动offset个单位，以使下面腾出地方用于软键盘的显示
+    if(offset > 0)
+        self.view.frame = CGRectMake(0.0f, -offset, self.view.frame.size.width, self.view.frame.size.height);
+    
+    [UIView commitAnimations];
+}
+-(void)textFieldDidEndEditing:(UITextField *)textField
+{
+    self.view.frame =CGRectMake(0, 20, self.view.frame.size.width, self.view.frame.size.height);
 }
 - (void)viewDidLoad
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view.
 }
-
+- (void)cleanAllMessage
+{
+    requestCashField.text=nil;
+    zhifubaoIDField.text=nil;
+    payeeNameField.text=nil;
+    passwordField.text=nil;
+    phoneNumberField.text=nil;
+}
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];

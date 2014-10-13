@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-
+#import "CosjiWebViewController.h"
 @interface CosjiMallsListViewController : UIViewController<UITableViewDataSource,UITableViewDelegate>
 {
     NSMutableArray *storeListArray;
@@ -17,4 +17,6 @@
 }
 @property (strong,nonatomic)  UITableView *mainTableView;
 @property (strong, nonatomic)UIView *CustomHeadView;
+@property (strong,nonatomic) UINavigationController *storeBrowse;
+@property (strong,nonatomic) CosjiWebViewController *webViewController;
 @end

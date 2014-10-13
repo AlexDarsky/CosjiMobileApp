@@ -55,11 +55,11 @@ static CosjiLoginViewController *shareCosjiLoginViewController = nil;
     primaryView.backgroundColor=[UIColor colorWithRed:241.0/255.0 green:233/255.0 blue:230/255.0 alpha:100.0];
     self.view=primaryView;
     UIButton *backBtn=[UIButton buttonWithType:UIButtonTypeCustom];
-    backBtn.frame=CGRectMake(11, 2.5, 100/2, 80/2);
+    backBtn.frame=CGRectMake(11, 17.5, 100/2, 80/2);
     [backBtn setBackgroundImage:[UIImage imageNamed:@"返回"] forState:UIControlStateNormal];
     [backBtn addTarget:self action:@selector(back:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:backBtn];
-    UIImageView *cosjiLogo=[[UIImageView alloc] initWithFrame:CGRectMake(20, 54, 261/2, 81/2)];
+    UIImageView *cosjiLogo=[[UIImageView alloc] initWithFrame:CGRectMake(20, 64, 261/2, 81/2)];
     cosjiLogo.image=[UIImage imageNamed:@"登陆页-logo"];
     [self.view addSubview:cosjiLogo];
     //用户名输入框
@@ -99,12 +99,13 @@ static CosjiLoginViewController *shareCosjiLoginViewController = nil;
     self.rememberBtn.frame=CGRectMake(20, 226, 21, 22);
     [self.rememberBtn setBackgroundImage:[UIImage imageNamed:@"登陆页-记住密码-默认"] forState:UIControlStateNormal];
     [self.rememberBtn setBackgroundImage:[UIImage imageNamed:@"登陆页-记住密码-动态"] forState:UIControlStateSelected];
-    [self.rememberBtn setSelected:NO];
+    [self.rememberBtn setSelected:YES];
+
     [self.rememberBtn addTarget:self action:@selector(remember:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:self.rememberBtn];
     UILabel *rememberLabel=[[UILabel alloc] initWithFrame:CGRectMake(49, 226, 120, 21)];
     rememberLabel.backgroundColor=[UIColor clearColor];
-    rememberLabel.text=@"记住密码";
+    rememberLabel.text=@"下次自动登录";
     rememberLabel.textColor=[UIColor redColor];
     [self.view addSubview:rememberLabel];
     
@@ -153,12 +154,10 @@ static CosjiLoginViewController *shareCosjiLoginViewController = nil;
         NSDictionary *loginDic=[NSDictionary dictionaryWithDictionary:[[NSUserDefaults standardUserDefaults] objectForKey:@"loginDic"]];
         self.userName.text=[NSString stringWithFormat:@"%@",[loginDic objectForKey:@"loginName"]];
         self.passWord.text=[NSString stringWithFormat:@"%@",[loginDic objectForKey:@"loginPWD"]];
-        self.rememberBtn.selected=YES;
     }else
     {
         self.userName.text=[NSString stringWithFormat:@""];
         self.passWord.text=[NSString stringWithFormat:@""];
-        self.rememberBtn.selected=NO;
     }
 }
 - (void)viewDidLoad
@@ -180,6 +179,7 @@ static CosjiLoginViewController *shareCosjiLoginViewController = nil;
     loginBrn.userInteractionEnabled=YES;
     
 }
+
 -(BOOL)textFieldShouldReturn:(UITextField *)textField
 {
     [textField resignFirstResponder];
@@ -195,11 +195,7 @@ static CosjiLoginViewController *shareCosjiLoginViewController = nil;
 
 -(void)login:(id)sender
 {
-    NSLog(@"didEndEditing");
-
-
-        NSLog(@"tmpDic非空");
-        [SVProgressHUD showWithStatus:@"正在登陆..."];
+        [SVProgressHUD showWithStatus:@"正在登录..."];
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
             CosjiServerHelper *serverHelper=[CosjiServerHelper shareCosjiServerHelper];
         NSDictionary *tmpDic=[NSDictionary dictionaryWithDictionary: [serverHelper getJsonDictionary:[NSString stringWithFormat:@"/user/login/?account=%@&password=%@",self.userName.text,self.passWord.text]]];
@@ -212,9 +208,10 @@ static CosjiLoginViewController *shareCosjiLoginViewController = nil;
                     
                     NSDictionary *userInfo=[NSDictionary dictionaryWithDictionary:[serverHelper getJsonDictionary:[NSString stringWithFormat:@"/user/profile/?id=%@",[idDic objectForKey:@"userId"]]]];
                     [[NSUserDefaults standardUserDefaults] setObject:userInfo forKey:@"userInfo"];
-                    [[NSUserDefaults standardUserDefaults] setObject:@"YES" forKey:@"logined"];
+                    [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"havelogined"];
                     if (self.rememberBtn.selected==YES) {
                         NSDictionary *loginDic=[NSDictionary dictionaryWithObjectsAndKeys:self.userName.text,@"loginName",self.passWord.text,@"loginPWD", nil];
+                        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"AutoLogin"];
                         [[NSUserDefaults standardUserDefaults] setObject:loginDic forKey:@"loginDic"];
                     }else
                     {
@@ -222,14 +219,14 @@ static CosjiLoginViewController *shareCosjiLoginViewController = nil;
                     }
                     dispatch_async(dispatch_get_main_queue(), ^{
                         [SVProgressHUD dismiss];
-                        UIAlertView *alert=[[UIAlertView alloc] initWithTitle:@"恭喜你" message:@"登陆成功" delegate:self cancelButtonTitle:@"马上购物" otherButtonTitles: nil];
+                        UIAlertView *alert=[[UIAlertView alloc] initWithTitle:@"恭喜你" message:@"登录成功" delegate:self cancelButtonTitle:@"马上购物" otherButtonTitles: nil];
                         alert.tag=1;
                         [alert show];
                     });
                 }else
                 {
                     NSString *errString=[NSString stringWithFormat:@"%@",[headDic objectForKey:@"msg"]];
-                    [[NSUserDefaults standardUserDefaults] setObject:@"NO" forKey:@"logined"];
+                    [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"havelogined"];
                     dispatch_async(dispatch_get_main_queue(), ^{
                         [SVProgressHUD dismiss];
                         UIAlertView *alert=[[UIAlertView alloc] initWithTitle:@"错误" message:errString delegate:nil cancelButtonTitle:@"重新登录" otherButtonTitles: nil];
@@ -266,13 +263,12 @@ static CosjiLoginViewController *shareCosjiLoginViewController = nil;
 }
 - (void)textFieldDidBeginEditing:(UITextField *)textField           // became first responder
 {
+    [textField.window makeKeyAndVisible];
     if (textField==userName) {
-        NSLog(@"userName");
 
         [userNameBG setImage:[UIImage imageNamed:@"登陆页-登陆框-动态"]];
     }
     if (textField==passWord) {
-        NSLog(@"passWord");
         [passwordBG setImage:[UIImage imageNamed:@"登陆页-登陆框-动态"]];
 
     }
@@ -280,12 +276,10 @@ static CosjiLoginViewController *shareCosjiLoginViewController = nil;
 - (void)textFieldDidEndEditing:(UITextField *)textField
 {
     if (textField==userName) {
-        NSLog(@"userName-");
 
         [userNameBG setImage:[UIImage imageNamed:@"登陆页-登陆框-默认"]];
     }
     if (textField==passWord) {
-        NSLog(@"passWord-");
         [passwordBG setImage:[UIImage imageNamed:@"登陆页-登陆框-默认"]];
 
     }
@@ -296,7 +290,7 @@ static CosjiLoginViewController *shareCosjiLoginViewController = nil;
     NSURL *url =[NSURL URLWithString:[NSString stringWithFormat:@"http://rest.cosjii.com/user/register/"]];
     NSURLRequest *request =[NSURLRequest requestWithURL:url];
     CosjiWebViewController *webViewController=[CosjiWebViewController shareCosjiWebViewController];
-    [self.navigationController pushViewController:webViewController animated:YES ];
+    [self presentViewController:webViewController animated:YES completion:nil];
     [webViewController.webView loadRequest:request];
     [webViewController.storeName setText:[NSString stringWithFormat:@"注册"]];
 }
@@ -305,8 +299,7 @@ static CosjiLoginViewController *shareCosjiLoginViewController = nil;
     NSURL *url =[NSURL URLWithString:[NSString stringWithFormat:@"http://www.cosjii.com/index.php?mod=user&act=getpassword"]];
     NSURLRequest *request =[NSURLRequest requestWithURL:url];
     CosjiWebViewController *webViewController=[CosjiWebViewController shareCosjiWebViewController];
-    
-    [self.navigationController pushViewController:webViewController animated:YES ];
+    [self presentViewController:webViewController animated:YES completion:nil];
     [webViewController.webView loadRequest:request];
     [webViewController.storeName setText:[NSString stringWithFormat:@"忘记密码"]];
 

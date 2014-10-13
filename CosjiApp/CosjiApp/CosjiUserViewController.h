@@ -14,6 +14,7 @@
 #import "CosjiGetCashViewController.h"
 #import "CosjiMessageViewController.h"
 #import "CosjiAccountSettingViewController.h"
+#import "CosjiGetCashJifenbaoViewController.h"
 
 @interface CosjiUserViewController : UIViewController<UITableViewDelegate,UITableViewDataSource>
 {
@@ -37,10 +38,12 @@
 @property (strong,nonatomic) CosjiFanLiListViewController *fanliListViewController;
 @property (strong,nonatomic) CosjiAccountViewController *accountViewController;
 @property (strong,nonatomic) CosjiGetCashViewController *getCashViewController;
+@property (strong,nonatomic) CosjiGetCashJifenbaoViewController *getCashJifenbaoViewController;
 @property (strong,nonatomic) CosjiMessageViewController *messageViewController;
 @property (strong,nonatomic) CosjiAccountSettingViewController *accountSettingViewController;
 
 -(void)hideUserInfoView:(BOOL)isHide;
+-(void)userQuite;
 - (IBAction)showOrHideBackView:(id)sender;
 -(void)toMessageViewController:(int)order;
 @end

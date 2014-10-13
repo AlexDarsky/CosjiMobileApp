@@ -10,11 +10,12 @@
 #import "JSONKit.h"
 #import "TopIOSClient.h"
 #import "TopAttachment.h"
+#import "Reachability.h"
 
 #define login @"http://192.168.1.110"
 #define shouye @"/mall/getAll"
 #define httpAdd @"http://rest.cosjii.com"
-#define demoURL @"/registry/status"
+#define demoURL @"/slide/acquire/?num=5"
 #define allItems @"/taobao/category/"
 
 @implementation CosjiServerHelper
@@ -36,12 +37,15 @@ static CosjiServerHelper *shareCosjiServerHelper=nil;
     [request setHTTPMethod:@"GET"];
     NSHTTPURLResponse* urlResponse = nil;
     NSError *error = [[NSError alloc] init];
-    NSData *responseData = [NSURLConnection sendSynchronousRequest:request returningResponse:&urlResponse error:&error];
-    NSMutableString *string=[[NSMutableString alloc] initWithData:responseData encoding:NSUTF8StringEncoding];
-    NSString *jsonString=[string stringByReplacingOccurrencesOfString:@"ok" withString:@""];
-    NSLog(@"jsonTest Result is :%@",jsonString);
+    NSData *responseData = [NSURLConnection sendSynchronousRequest:request
+                                                 returningResponse:&urlResponse
+                                                             error:&error];
+    NSMutableString *string=[[NSMutableString alloc] initWithData:responseData
+                                                         encoding:NSUTF8StringEncoding];
+    NSString *jsonString=[string stringByReplacingOccurrencesOfString:@"ok"
+                                                           withString:@""];
+   // NSLog(@"jsonTest Result is :%@",jsonString);
     NSMutableDictionary *tmpDic =[jsonString objectFromJSONString];
-  //  NSLog(jsonString);
     if (tmpDic==nil) {
         NSLog(@"json error");
     }
@@ -55,91 +59,165 @@ static CosjiServerHelper *shareCosjiServerHelper=nil;
         [request setHTTPMethod:@"GET"];
         NSHTTPURLResponse* urlResponse = nil;
         NSError *error = [[NSError alloc] init];
-        NSData *responseData = [NSURLConnection sendSynchronousRequest:request returningResponse:&urlResponse error:&error];
-        NSMutableString *string=[[NSMutableString alloc] initWithData:responseData encoding:NSUTF8StringEncoding];
-        NSString *jsonString=[string stringByReplacingOccurrencesOfString:@"ok" withString:@""];
-        NSLog(@"jsonString is %@",jsonString);
+        NSData *responseData = [NSURLConnection sendSynchronousRequest:request
+                                                     returningResponse:&urlResponse
+                                                                 error:&error];
+        NSMutableString *string=[[NSMutableString alloc] initWithData:responseData
+                                                             encoding:NSUTF8StringEncoding];
+        NSString *jsonString=[string stringByReplacingOccurrencesOfString:@"ok"
+                                                               withString:@""];
+       // NSLog(@"jsonString is %@",jsonString);
         NSDictionary *tmpDic =[jsonString objectFromJSONString];
         if (tmpDic==nil) {
             NSLog(@"json error!!!!:%@",jsonString);
+            [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+
             return nil;
         }else{
-            NSLog(@"%@",jsonString);
+            [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
             return tmpDic;
         }
     }else
     {
+        [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
         return nil;
     }
 }
+
 - (NSArray*)getItemsFromTopByKeyWord:(NSString*)keyword atPage:(int)pageNO
 {
-    NSDictionary *tmpDic=[NSDictionary dictionaryWithDictionary:[[NSUserDefaults standardUserDefaults] objectForKey:@"userInfo"]];
-    NSDictionary *infoDic=[NSDictionary dictionaryWithDictionary:[tmpDic objectForKey:@"body"]];
-    NSString *uid =[NSString stringWithFormat:@"%@",[infoDic objectForKey:@"userId"]];
-    NSMutableDictionary *params = [[NSMutableDictionary alloc]init];
-    [params setObject:@"taobao.tbk.items.get" forKey:@"method"];
-    [params setObject:@"num_iid,title,price,volume,pic_url,item_url,click_url" forKey:@"fields"];
-    [params setObject:@"1" forKey:@"start_price"];
-    [params setObject:[NSString stringWithFormat:@"%d",pageNO] forKey:@"page_no"];
-    [params setObject:keyword forKey:@"keyword"];
-    [params setObject:@"20" forKey:@"page_size"];
-    [params setObject:@"100" forKey:@"start_commissionRate"];
-    [params setObject:@"5000" forKey:@"end_commissionRate"];
-    TopIOSClient *iosClient = [TopIOSClient getIOSClientByAppKey:CosjiAppKey];
-    TopApiResponse * response = [iosClient tql:@"GET" params:params userId:uid];
-    NSDictionary *responeDic =[[response content]  objectFromJSONString];
-    NSDictionary *respone_getDIC=[responeDic objectForKey:@"tbk_items_get_response"];
-    NSDictionary *tbk_items_IDC=[respone_getDIC objectForKey:@"tbk_items"];
-    NSLog(@"%@",tbk_items_IDC);
-    return [NSArray arrayWithArray:[tbk_items_IDC objectForKey:@"tbk_item"]];
+    if ([self connectedToNetwork])
+    {
+        NSDictionary *tmpDic=[NSDictionary dictionaryWithDictionary:[[NSUserDefaults standardUserDefaults] objectForKey:@"userInfo"]];
+        NSLog(@"userInfo is %@",tmpDic);
+        NSDictionary *infoDic=[NSDictionary dictionaryWithDictionary:[tmpDic objectForKey:@"body"]];
+        NSString *uid =[NSString stringWithFormat:@"%@",[infoDic objectForKey:@"userId"]];
+        NSMutableDictionary *params = [[NSMutableDictionary alloc]init];
+        [params setObject:@"taobao.tbk.items.get"
+                   forKey:@"method"];
+        [params setObject:@"num_iid,title,price,volume,pic_url,item_url,click_url"
+                   forKey:@"fields"];
+        [params setObject:@"1"
+                   forKey:@"start_price"];
+        [params setObject:[NSString stringWithFormat:@"%d",pageNO]
+                   forKey:@"page_no"];
+        [params setObject:keyword
+                   forKey:@"keyword"];
+        [params setObject:@"20"
+                   forKey:@"page_size"];
+        [params setObject:@"100"
+                   forKey:@"start_commissionRate"];
+        [params setObject:@"5000"
+                   forKey:@"end_commissionRate"];
+        TopIOSClient *iosClient = [TopIOSClient getIOSClientByAppKey:CosjiAppKey];
+        TopApiResponse * response = [iosClient tql:@"GET" params:params userId:uid];
+        NSDictionary *responeDic =[[response content]  objectFromJSONString];
+        NSDictionary *respone_getDIC=[responeDic objectForKey:@"tbk_items_get_response"];
+        NSDictionary *tbk_items_IDC=[respone_getDIC objectForKey:@"tbk_items"];
+        [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+        NSLog(@"%@",[tbk_items_IDC objectForKey:@"tbk_item"]);
+        if ([[tbk_items_IDC objectForKey:@"tbk_item"] isKindOfClass:[NSArray class]])
+        {
+            return [tbk_items_IDC objectForKey:@"tbk_item"];
+        }
+        else
+        return nil;
+    }
+    else{
+        [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+        return nil;
+    }
 }
 -(NSDictionary*)getItemFromTop:(NSString*)numiids
 {
-    NSDictionary *tmpDic=[NSDictionary dictionaryWithDictionary:[[NSUserDefaults standardUserDefaults] objectForKey:@"userInfo"]];
-    NSDictionary *infoDic=[NSDictionary dictionaryWithDictionary:[tmpDic objectForKey:@"body"]];
-    NSString *uid =[NSString stringWithFormat:@"%@",[infoDic objectForKey:@"userId"]];
-    NSMutableDictionary *params = [[NSMutableDictionary alloc]init];
-    [params setObject:@"taobao.tbk.items.detail.get" forKey:@"method"];
-    [params setObject:numiids  forKey:@"num_iids"];
-    [params setObject:@"num_iid,title,price,volume,pic_url,item_url,click_url" forKey:@"fields"];
-    TopIOSClient *iosClient = [TopIOSClient getIOSClientByAppKey:CosjiAppKey];
-    TopApiResponse * response = [iosClient tql:@"GET" params:params userId:uid];
-    NSDictionary *responeDic =[[response content]  objectFromJSONString];
-    NSDictionary *respone_getDIC=[responeDic objectForKey:@"tbk_items_detail_get_response"];
-    NSDictionary *tbk_items_DIC=[respone_getDIC objectForKey:@"tbk_items"];
-    NSDictionary *tbk_item_DIC=[[NSArray arrayWithArray:[tbk_items_DIC objectForKey:@"tbk_item"]]lastObject];
-    if (tbk_item_DIC!=nil)
+    if ([self connectedToNetwork])
     {
-        NSLog(@"responeDic is %@",tbk_item_DIC);
-        return tbk_item_DIC;
-    }else
-    return nil;
+        
+        NSDictionary *tmpDic=[NSDictionary dictionaryWithDictionary:[[NSUserDefaults standardUserDefaults] objectForKey:@"userInfo"]];
+        NSDictionary *infoDic=[NSDictionary dictionaryWithDictionary:[tmpDic objectForKey:@"body"]];
+        NSString *uid =[NSString stringWithFormat:@"%@",[infoDic objectForKey:@"userId"]];
+        NSMutableDictionary *params = [[NSMutableDictionary alloc]init];
+        [params setObject:@"taobao.tbk.items.detail.get"
+                   forKey:@"method"];
+        [params setObject:numiids
+                   forKey:@"num_iids"];
+        [params setObject:@"num_iid,title,price,volume,pic_url,item_url,click_url"
+                   forKey:@"fields"];
+        TopIOSClient *iosClient = [TopIOSClient getIOSClientByAppKey:CosjiAppKey];
+        TopApiResponse * response = [iosClient tql:@"GET"
+                                            params:params
+                                            userId:uid];
+        NSDictionary *responeDic =[[response content]  objectFromJSONString];
+        NSDictionary *respone_getDIC=[responeDic objectForKey:@"tbk_items_detail_get_response"];
+        NSDictionary *tbk_items_DIC=[respone_getDIC objectForKey:@"tbk_items"];
+        NSDictionary *tbk_item_DIC=[[NSArray arrayWithArray:[tbk_items_DIC objectForKey:@"tbk_item"]] lastObject];
+        if (tbk_item_DIC!=nil)
+        {
+            NSLog(@"responeDic is %@",tbk_item_DIC);
+            [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+            return tbk_item_DIC;
+        }else
+        {
+            NSLog(@"没有返利");
+            [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+
+            return nil;
+        }
+    }
+    else
+    {
+        [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+        return nil;
+    }
 }
 -(NSString*)getClick_urlFromTop:(NSString*)numiids
 {
-    NSDictionary *tmpDic=[NSDictionary dictionaryWithDictionary:[[NSUserDefaults standardUserDefaults] objectForKey:@"userInfo"]];
-    NSDictionary *infoDic=[NSDictionary dictionaryWithDictionary:[tmpDic objectForKey:@"body"]];
-    
-    NSString *uid =[NSString stringWithFormat:@"%@",[infoDic objectForKey:@"userId"]];
-    
-    NSMutableDictionary *params = [[NSMutableDictionary alloc]init];
-    
-    [params setObject:@"taobao.tbk.mobile.items.convert" forKey:@"method"];
-    [params setObject:@"click_url" forKey:@"fields"];
-    [params setObject:numiids forKey:@"num_iids"];
-    [params setObject:uid forKey:@"outer_code"];
+    if ([self connectedToNetwork])
+    {
+        
+        NSDictionary *tmpDic=[NSDictionary dictionaryWithDictionary:[[NSUserDefaults standardUserDefaults] objectForKey:@"userInfo"]];
+        NSDictionary *infoDic=[NSDictionary dictionaryWithDictionary:[tmpDic objectForKey:@"body"]];
+        
+        NSString *uid =[NSString stringWithFormat:@"%@",[infoDic objectForKey:@"userId"]];
+        
+        NSMutableDictionary *params = [[NSMutableDictionary alloc]init];
+        
+        [params setObject:@"taobao.tbk.mobile.items.convert"
+                   forKey:@"method"];
+        [params setObject:@"click_url"
+                   forKey:@"fields"];
+        [params setObject:numiids
+                   forKey:@"num_iids"];
+        [params setObject:uid
+                   forKey:@"outer_code"];
+        // [params setValue:@"http://www.cosji.com" forKey:@"callbackurl"];
+        
+        NSLog(@"输入参数%@",params);
+        TopIOSClient *iosClient = [TopIOSClient getIOSClientByAppKey:CosjiAppKey];
+        TopApiResponse * response = [iosClient tql:@"GET"
+                                            params:params
+                                            userId:uid];
+        NSDictionary *responeDic =[[response content]  objectFromJSONString];
+        NSDictionary *respone_getDIC=[responeDic objectForKey:@"tbk_mobile_items_convert_response"];
+        NSDictionary *tbk_items_DIC=[respone_getDIC objectForKey:@"tbk_items"];
+        NSDictionary *tbk_item_DIC=[[NSArray arrayWithArray:[tbk_items_DIC objectForKey:@"tbk_item"]]lastObject];
+        // NSLog(@"%@",[NSString stringWithFormat:@"%@",[[NSArray arrayWithArray:[tbk_items_DIC objectForKey:@"tbk_item"]]lastObject]]);
+        if([tbk_item_DIC objectForKey:@"click_url"]==nil)
+        {
+            [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+            return nil;
+        }else
+        {
+            NSLog(@"click_url is %@",[tbk_item_DIC objectForKey:@"click_url"]);
+            [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+            return [tbk_item_DIC objectForKey:@"click_url"];
+        }
+    }else
+    {
+        [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+        return nil;
+    }
 
-    TopIOSClient *iosClient = [TopIOSClient getIOSClientByAppKey:CosjiAppKey];
-    TopApiResponse * response = [iosClient tql:@"GET" params:params userId:uid];
-    NSDictionary *responeDic =[[response content]  objectFromJSONString];
-    NSDictionary *respone_getDIC=[responeDic objectForKey:@"tbk_mobile_items_convert_response"];
-    NSDictionary *tbk_items_DIC=[respone_getDIC objectForKey:@"tbk_items"];
-    NSDictionary *tbk_item_DIC=[[NSArray arrayWithArray:[tbk_items_DIC objectForKey:@"tbk_item"]]lastObject];
-   // NSLog(@"%@",[NSString stringWithFormat:@"%@",[[NSArray arrayWithArray:[tbk_items_DIC objectForKey:@"tbk_item"]]lastObject]]);
-    
-    NSLog(@"click_url is %@",[tbk_item_DIC objectForKey:@"click_url"]);
-    return [tbk_item_DIC objectForKey:@"click_url"];
 }
 -(int)getSearchItemType:(NSString*)searchItem
 {
@@ -162,62 +240,89 @@ static CosjiServerHelper *shareCosjiServerHelper=nil;
 }
 -(BOOL)quickLogin
 {
-    NSDictionary *loginDic=[NSDictionary dictionaryWithDictionary:[[NSUserDefaults standardUserDefaults] objectForKey:@"loginDic"]];
-    NSDictionary *tmpDic=[NSDictionary dictionaryWithDictionary: [self getJsonDictionary:[NSString stringWithFormat:@"/user/login/?account=%@&password=%@",[loginDic objectForKey:@"loginName"],[loginDic objectForKey:@"loginPWD"]]]];
-    if (tmpDic!=nil)
+    if ([self connectedToNetwork])
     {
-            NSDictionary *headDic=[NSDictionary dictionaryWithDictionary:[tmpDic objectForKey:@"head"]];
-            if ([[headDic objectForKey:@"msg"] isEqualToString:@"success"])
+        NSLog(@"开始自动快速");
+        NSDictionary *loginDic=[[NSUserDefaults standardUserDefaults] objectForKey:@"loginDic"];
+        if (loginDic!=nil) {
+            NSDictionary *tmpDic=[NSDictionary dictionaryWithDictionary: [self getJsonDictionary:[NSString stringWithFormat:@"/user/login/?account=%@&password=%@",[loginDic objectForKey:@"loginName"],[loginDic objectForKey:@"loginPWD"]]]];
+            if (tmpDic!=nil)
             {
-                NSDictionary *idDic=[NSDictionary dictionaryWithDictionary:[tmpDic objectForKey:@"body"]];
-                
-                NSDictionary *userInfo=[NSDictionary dictionaryWithDictionary:[self getJsonDictionary:[NSString stringWithFormat:@"/user/profile/?id=%@",[idDic objectForKey:@"userId"]]]];
-                [[NSUserDefaults standardUserDefaults] setObject:userInfo forKey:@"userInfo"];
-                [[NSUserDefaults standardUserDefaults] setObject:@"YES" forKey:@"logined"];
-                return YES;
+                NSDictionary *headDic=[NSDictionary dictionaryWithDictionary:[tmpDic objectForKey:@"head"]];
+                if ([[headDic objectForKey:@"msg"] isEqualToString:@"success"])
+                {
+                    NSDictionary *idDic=[NSDictionary dictionaryWithDictionary:[tmpDic objectForKey:@"body"]];
+                    
+                    NSDictionary *userInfo=[NSDictionary dictionaryWithDictionary:[self getJsonDictionary:[NSString stringWithFormat:@"/user/profile/?id=%@",[idDic objectForKey:@"userId"]]]];
+                    NSLog(@"成功，更新本地用户信息%@",userInfo);
+                    [[NSUserDefaults standardUserDefaults] setObject:userInfo
+                                                              forKey:@"userInfo"];
+                    [[NSUserDefaults standardUserDefaults] setBool:YES
+                                                            forKey:@"havelogined"];
+                    [[NSUserDefaults standardUserDefaults] setBool:YES
+                                                            forKey:@"quickLogin"];
+                    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+                    return YES;
+                }else
+                {
+                    [[NSUserDefaults standardUserDefaults] setBool:NO
+                                                            forKey:@"havelogined"];
+                    [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"userInfo"];
+                    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+                    return NO;
+                }
             }else
             {
-                [[NSUserDefaults standardUserDefaults] setObject:@"NO" forKey:@"logined"];
+                [[NSUserDefaults standardUserDefaults] setBool:NO
+                                                        forKey:@"havelogined"];
                 [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"userInfo"];
+                [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
                 return NO;
+                
             }
+            
+        }else
+        {
+            [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+            return NO;
+        }
     }else
     {
-        [[NSUserDefaults standardUserDefaults] setObject:@"NO" forKey:@"logined"];
-        [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"userInfo"];
+        NSLog(@"错误,本地用户信息为空");
+        [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
         return NO;
-
     }
 }
 - (BOOL) connectedToNetwork
 {
-    // Create zero addy
-    struct sockaddr_in zeroAddress;
-    bzero(&zeroAddress, sizeof(zeroAddress));
-    zeroAddress.sin_len = sizeof(zeroAddress);
-    zeroAddress.sin_family = AF_INET;
-	
-    // Recover reachability flags
-    SCNetworkReachabilityRef defaultRouteReachability = SCNetworkReachabilityCreateWithAddress(NULL, (struct sockaddr *)&zeroAddress);
-    SCNetworkReachabilityFlags flags;
-	
-    BOOL didRetrieveFlags = SCNetworkReachabilityGetFlags(defaultRouteReachability, &flags);
-    CFRelease(defaultRouteReachability);
-	
-    if (!didRetrieveFlags)
-    {
-        NSLog(@"Error. Could not recover network reachability flags");
-        return NO;
+    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
+    BOOL isReachability=NO;
+    Reachability *reachability=[Reachability reachabilityForInternetConnection];
+    switch ([reachability currentReachabilityStatus]) {
+        case NotReachable:
+            // 没有网络连接
+        {
+            isReachability=NO;
+        }
+            break;
+        case ReachableViaWWAN:
+            // 使用3G网络
+        {
+            if (![[NSUserDefaults standardUserDefaults] boolForKey:@"low"]) {
+                [[NSUserDefaults standardUserDefaults] setBool:YES
+                                                        forKey:@"lowMode"];
+            }
+            isReachability=YES;
+        }
+            break;
+        case ReachableViaWiFi:
+            // 使用WiFi网络
+        {
+            isReachability=YES;
+        }
+            break;
     }
-    BOOL isReachable = flags & kSCNetworkFlagsReachable;
-    BOOL needsConnection = flags & kSCNetworkFlagsConnectionRequired;
-	BOOL nonWiFi = flags & kSCNetworkReachabilityFlagsTransientConnection;
-	
-    
-	NSURL *testURL = [NSURL URLWithString:@"http://www.baidu.com/"];
-	NSURLRequest *testRequest = [NSURLRequest requestWithURL:testURL  cachePolicy:NSURLRequestReloadIgnoringLocalCacheData timeoutInterval:10.0];
-	NSURLConnection *testConnection = [[NSURLConnection alloc] initWithRequest:testRequest delegate:self];
-    return ((isReachable && !needsConnection) || nonWiFi) ? (testConnection ? YES : NO) : NO;
+    return isReachability;
 }
 -(NSString*)getEncodedString:(NSString*)urlString
 {

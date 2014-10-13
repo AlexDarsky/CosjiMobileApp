@@ -5,31 +5,31 @@
 	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
 	<false/>
 	<key>IDESourceControlProjectIdentifier</key>
-	<string>10C0F2F7-195B-4E0C-843C-75F97887FD67</string>
+	<string>A1A687EC-E4ED-4277-A4E3-7E339AFCD9E2</string>
 	<key>IDESourceControlProjectName</key>
 	<string>CosjiApp</string>
 	<key>IDESourceControlProjectOriginsDictionary</key>
 	<dict>
-		<key>240FF72C-75F1-409C-995D-86EE4AA8F28F</key>
-		<string>https://github.com/AlexDarsky/MyWorkSpace.git</string>
 		<key>EAE81DB2-ECA2-4D4B-80E2-9953BE536C59</key>
 		<string>ssh://github.com/AlexDarsky/CosjiMobileApp.git</string>
+		<key>FD961DB1-15FE-43E8-B8B9-875FAD7CA8F9</key>
+		<string>https://github.com/AlexDarsky/MyWorkSpace.git</string>
 	</dict>
 	<key>IDESourceControlProjectPath</key>
 	<string>CosjiMobileApp/CosjiApp/CosjiApp.xcodeproj/project.xcworkspace</string>
 	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
 	<dict>
-		<key>240FF72C-75F1-409C-995D-86EE4AA8F28F</key>
-		<string>../../../..</string>
 		<key>EAE81DB2-ECA2-4D4B-80E2-9953BE536C59</key>
 		<string>../../..</string>
+		<key>FD961DB1-15FE-43E8-B8B9-875FAD7CA8F9</key>
+		<string>../../../..</string>
 	</dict>
 	<key>IDESourceControlProjectURL</key>
-	<string>ssh://github.com/AlexDarsky/CosjiMobileApp.git</string>
+	<string>https://github.com/AlexDarsky/MyWorkSpace.git</string>
 	<key>IDESourceControlProjectVersion</key>
 	<integer>110</integer>
 	<key>IDESourceControlProjectWCCIdentifier</key>
-	<string>240FF72C-75F1-409C-995D-86EE4AA8F28F</string>
+	<string>FD961DB1-15FE-43E8-B8B9-875FAD7CA8F9</string>
 	<key>IDESourceControlProjectWCConfigurations</key>
 	<array>
 		<dict>
@@ -44,7 +44,7 @@
 			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
 			<string>public.vcs.git</string>
 			<key>IDESourceControlWCCIdentifierKey</key>
-			<string>240FF72C-75F1-409C-995D-86EE4AA8F28F</string>
+			<string>FD961DB1-15FE-43E8-B8B9-875FAD7CA8F9</string>
 			<key>IDESourceControlWCCName</key>
 			<string>MyWorkSpace</string>
 		</dict>

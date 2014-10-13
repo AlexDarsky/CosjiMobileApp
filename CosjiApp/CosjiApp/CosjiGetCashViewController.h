@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface CosjiGetCashViewController : UIViewController
+@interface CosjiGetCashViewController : UIViewController<UITextFieldDelegate>
 
 @property (strong, nonatomic)  UIView *customNavBar;
 @end

@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "CosjiWebViewController.h"
 
 @interface CosjiSpecialActivityViewController : UIViewController<UITableViewDataSource,UITableViewDelegate>
 {
@@ -18,5 +19,7 @@
 }
 @property (strong, nonatomic)  UITableView *tableView;
 @property (strong, nonatomic)  UIView *CustomNav;
+@property (strong, nonatomic) UINavigationController *itemBrose;
+@property (strong,nonatomic) CosjiWebViewController *webViewController;
 
 @end

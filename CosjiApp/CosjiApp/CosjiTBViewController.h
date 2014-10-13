@@ -8,8 +8,9 @@
 
 #import <UIKit/UIKit.h>
 #import "CosjiWebViewController.h"
+#import "CosjiUrlFilter.h"
 
-@interface CosjiTBViewController : UIViewController<UITableViewDataSource,UITableViewDelegate,UITextFieldDelegate>
+@interface CosjiTBViewController : UIViewController<UITableViewDataSource,UITableViewDelegate,UITextFieldDelegate,NSURLConnectionDelegate>
 {
     NSMutableArray *subjectsArray;
 }
@@ -19,7 +20,9 @@
 @property (strong,nonatomic) UIButton *taoBtn;
 @property (strong,nonatomic) UIButton *tmallBtn;
 @property (strong,nonatomic) UIButton *juBtn;
-@property (strong,nonatomic) CosjiWebViewController *storeBrowseViewController;
+@property (strong,nonatomic) UINavigationController *storeBrowse;
+@property (strong,nonatomic) UINavigationController *itemsListNavCon;
+@property (strong,nonatomic) CosjiWebViewController *webViewController;
 
 
 @end

@@ -62,24 +62,37 @@
     UIView *primaryView=[[UIView alloc] initWithFrame:[UIScreen mainScreen].bounds];
     [primaryView setBackgroundColor:[UIColor colorWithRed:229.0/255.0 green:229.0/255.0 blue:229.0/255.0 alpha:100]];
     self.view=primaryView;
-    self.customNarBar=[[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 45)];
-    self.customNarBar.backgroundColor=[UIColor colorWithPatternImage:[UIImage imageNamed:@"工具栏背景"]];
-    self.settingTitle=[[UILabel alloc] initWithFrame:CGRectMake(90, 2.5, 140, 40)];
+    UIButton *backBtn=[UIButton buttonWithType:UIButtonTypeCustom];
+    self.segmentCon=[[UISegmentedControl alloc] initWithItems:[NSArray arrayWithObjects:@"个人信息",@"密码修改",@"财务管理", nil]];
+    if ([[[UIDevice currentDevice] systemVersion]floatValue]<7.0)
+    {
+        self.customNarBar=[[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 45)];
+        self.customNarBar.backgroundColor=[UIColor colorWithPatternImage:[UIImage imageNamed:@"工具栏背景"]];
+        self.settingTitle=[[UILabel alloc] initWithFrame:CGRectMake(90, 2.5, 140, 40)];
+        backBtn.frame=CGRectMake(11, 2.5, 100/2, 80/2);
+        self.segmentCon.frame=CGRectMake(-10, 45, 340, 29);
+    }else
+    {
+        self.customNarBar=[[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 65)];
+        self.customNarBar.backgroundColor=[UIColor colorWithRed:225.0/255.0 green:47.0/255.0 blue:50.0/255.0 alpha:100];
+        self.settingTitle=[[UILabel alloc] initWithFrame:CGRectMake(90, 22.5, 140, 40)];
+        backBtn.frame=CGRectMake(11, 22.5, 100/2, 80/2);
+        self.segmentCon.frame=CGRectMake(-10, 65, 340, 29);
+
+    }
+
     self.settingTitle.backgroundColor=[UIColor clearColor];
     self.settingTitle.textColor=[UIColor whiteColor];
     self.settingTitle.text=@"账户设置";
     self.settingTitle.font=[UIFont fontWithName:@"Arial" size:18];
     self.settingTitle.textAlignment=NSTextAlignmentCenter;
     [self.customNarBar addSubview:self.settingTitle];
-    UIButton *backBtn=[UIButton buttonWithType:UIButtonTypeCustom];
-    backBtn.frame=CGRectMake(11, 2.5, 100/2, 80/2);
     [backBtn setBackgroundImage:[UIImage imageNamed:@"返回"] forState:UIControlStateNormal];
     [backBtn addTarget:self  action:@selector(exitThisView:) forControlEvents:UIControlEventTouchUpInside];
     [self.customNarBar addSubview:backBtn];
     [self.view addSubview:self.customNarBar];
     [self.view setBackgroundColor:[UIColor colorWithRed:229.0/255.0 green:229.0/255.0 blue:229.0/255.0 alpha:100]];
-    self.segmentCon=[[UISegmentedControl alloc] initWithItems:[NSArray arrayWithObjects:@"个人信息",@"密码修改",@"财务管理", nil]];
-    self.segmentCon.frame=CGRectMake(-10, 45, 340, 29);
+
     self.segmentCon.multipleTouchEnabled=NO;
     [self.segmentCon addTarget:self action:@selector(layoutBySegmentControl:) forControlEvents:UIControlEventValueChanged];
     [self.segmentCon setSelectedSegmentIndex:0];
@@ -234,7 +247,7 @@
             personView.hidden=NO;
             passwordView.hidden=zhifubaoView.hidden=YES;
             dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-                NSDictionary *tmpDic=[NSDictionary dictionaryWithDictionary:[serverHelper getJsonDictionary:@"/user/getContact/"]];
+                NSDictionary *tmpDic=[serverHelper getJsonDictionary:@"/user/getContact/"];
                 NSDictionary *bodyDic=[NSDictionary dictionaryWithDictionary:[tmpDic objectForKey:@"body"]];
                 dispatch_async(dispatch_get_main_queue(), ^{
                     if (bodyDic!=nil)
@@ -265,7 +278,7 @@
             personView.hidden=passwordView.hidden=YES;
             dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
                 
-                NSDictionary *tmpDic=[NSDictionary dictionaryWithDictionary:[serverHelper getJsonDictionary:@"/account/getAlipay/"]];
+                NSDictionary *tmpDic=[serverHelper getJsonDictionary:@"/account/getAlipay/"];
                 NSDictionary *bodyDic=[NSDictionary dictionaryWithDictionary:[tmpDic objectForKey:@"body"]];
                 dispatch_async(dispatch_get_main_queue(), ^{
                     if (bodyDic!=nil)
@@ -294,7 +307,6 @@
 - (void)modifiedAction
 {
     CosjiServerHelper *serverHelper=[CosjiServerHelper shareCosjiServerHelper];
-    NSLog(@"提交修改");
     
     switch (settingMode) {
         case 0:
@@ -367,6 +379,7 @@
 - (void)textFieldDidBeginEditing:(UITextField *)textField           // became first responder
 {
     [textField setBackground:[UIImage imageNamed:@"登陆页-登陆框-动态"]];
+    [textField.window makeKeyAndVisible];
 }
 - (void)textFieldDidEndEditing:(UITextField *)textField
 {

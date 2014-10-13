@@ -36,35 +36,58 @@
     [super loadView];
     UIView *primary=[[UIView alloc] initWithFrame:[UIScreen mainScreen].bounds];
     self.view=primary;
-    self.customNarBar=[[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 45)];
-    self.customNarBar.backgroundColor=[UIColor colorWithPatternImage:[UIImage imageNamed:@"工具栏背景"]];
-    UILabel *title=[[UILabel alloc] initWithFrame:CGRectMake(90, 2.5, 140, 40)];
-    title.backgroundColor=[UIColor clearColor];
-    title.textColor=[UIColor whiteColor];
-    title.text=@"站内消息";
-    title.font=[UIFont fontWithName:@"Arial" size:18];
-    title.textAlignment=NSTextAlignmentCenter;
-    [self.customNarBar addSubview:title];
-    UIButton *backBtn=[UIButton buttonWithType:UIButtonTypeCustom];
-    backBtn.frame=CGRectMake(11, 2.5, 100/2, 80/2);
-    [backBtn setBackgroundImage:[UIImage imageNamed:@"返回"] forState:UIControlStateNormal];
-    [backBtn addTarget:self  action:@selector(exitThisView:) forControlEvents:UIControlEventTouchUpInside];
-    [self.customNarBar addSubview:backBtn];
+    self.segmentCon=[[UISegmentedControl alloc] initWithItems:[NSArray arrayWithObjects:@"收到的消息",@"意见反馈", nil]];
+    if ([[[UIDevice currentDevice] systemVersion]floatValue]<7.0) {
+        self.customNarBar=[[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 45)];
+        self.customNarBar.backgroundColor=[UIColor colorWithPatternImage:[UIImage imageNamed:@"工具栏背景"]];
+        UILabel *title=[[UILabel alloc] initWithFrame:CGRectMake(90, 2.5, 140, 40)];
+        title.backgroundColor=[UIColor clearColor];
+        title.textColor=[UIColor whiteColor];
+        title.text=@"站内消息";
+        title.font=[UIFont fontWithName:@"Arial" size:18];
+        title.textAlignment=NSTextAlignmentCenter;
+        [self.customNarBar addSubview:title];
+        UIButton *backBtn=[UIButton buttonWithType:UIButtonTypeCustom];
+        backBtn.frame=CGRectMake(11, 2.5, 100/2, 80/2);
+        [backBtn setBackgroundImage:[UIImage imageNamed:@"返回"] forState:UIControlStateNormal];
+        [backBtn addTarget:self  action:@selector(exitThisView:) forControlEvents:UIControlEventTouchUpInside];
+        [self.customNarBar addSubview:backBtn];
+        self.listTableView=[[UITableView alloc] initWithFrame:CGRectMake(0, 74, 320, [UIScreen mainScreen].bounds.size.height-74-100/2) style:UITableViewStyleGrouped];
+        self.buttomToolBar=[[UIView alloc] initWithFrame:CGRectMake(0, [UIScreen mainScreen].bounds.size.height-100/2-20, 320, 100/2)];
+        self.segmentCon.frame=CGRectMake(-10, 45, 340, 29);
+
+    }else
+    {
+        self.customNarBar=[[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 65)];
+        self.customNarBar.backgroundColor=[UIColor colorWithRed:225.0/255.0 green:47.0/255.0 blue:50.0/255.0 alpha:100];
+        UILabel *title=[[UILabel alloc] initWithFrame:CGRectMake(90, 22.5, 140, 40)];
+        title.backgroundColor=[UIColor clearColor];
+        title.textColor=[UIColor whiteColor];
+        title.text=@"站内消息";
+        title.font=[UIFont fontWithName:@"Arial" size:18];
+        title.textAlignment=NSTextAlignmentCenter;
+        [self.customNarBar addSubview:title];
+        UIButton *backBtn=[UIButton buttonWithType:UIButtonTypeCustom];
+        backBtn.frame=CGRectMake(11, 22.5, 100/2, 80/2);
+        [backBtn setBackgroundImage:[UIImage imageNamed:@"返回"] forState:UIControlStateNormal];
+        [backBtn addTarget:self  action:@selector(exitThisView:) forControlEvents:UIControlEventTouchUpInside];
+        [self.customNarBar addSubview:backBtn];
+        self.listTableView=[[UITableView alloc] initWithFrame:CGRectMake(0, 94, 320, [UIScreen mainScreen].bounds.size.height-94-100/2) style:UITableViewStyleGrouped];
+        self.buttomToolBar=[[UIView alloc] initWithFrame:CGRectMake(0, [UIScreen mainScreen].bounds.size.height-100/2, 320, 100/2)];
+        self.segmentCon.frame=CGRectMake(-10, 65, 340, 29);
+    }
     [self.view addSubview:self.customNarBar];
     [self.view setBackgroundColor:[UIColor colorWithRed:229.0/255.0 green:229.0/255.0 blue:229.0/255.0 alpha:100]];
-    self.segmentCon=[[UISegmentedControl alloc] initWithItems:[NSArray arrayWithObjects:@"收到的消息",@"意见反馈", nil]];
-    self.segmentCon.frame=CGRectMake(-10, 45, 340, 29);
     self.segmentCon.multipleTouchEnabled=NO;
     [self.segmentCon setSelectedSegmentIndex:0];
     messageMode=self.segmentCon.selectedSegmentIndex;
     [self.segmentCon addTarget:self action:@selector(loadFanLiListFor:) forControlEvents:UIControlEventValueChanged];
     [self.view addSubview:self.segmentCon];
-    self.listTableView=[[UITableView alloc] initWithFrame:CGRectMake(0, 74, 320, [UIScreen mainScreen].bounds.size.height-74-100/2) style:UITableViewStyleGrouped];
     self.listTableView.dataSource=self;
     self.listTableView.delegate=self;
     self.listTableView.backgroundView=nil;
     [self.view addSubview:self.listTableView];
-    self.buttomToolBar=[[UIView alloc] initWithFrame:CGRectMake(0, [UIScreen mainScreen].bounds.size.height-100/2-20, 320, 100/2)];
+
     [self.buttomToolBar setBackgroundColor:[UIColor colorWithRed:70.0/255.0 green:59.0/255.0 blue:55.0/255.0 alpha:100]];
     [self.view addSubview:self.buttomToolBar];
     selectBtn=[UIButton buttonWithType:UIButtonTypeCustom];
@@ -135,6 +158,7 @@
         {
             requestURL=[requestURL stringByAppendingFormat:@"inbox/"];
             selectBtn.hidden=deleteBtn.hidden=NO;
+            [self textFieldDidEndEditing:messageSenderField];
             messageSenderField.hidden=messageSendBtn.hidden=YES;
         }
             break;
@@ -188,7 +212,7 @@
     float height;
     NSDictionary *itemDic=[NSDictionary dictionaryWithDictionary:[itemsArray objectAtIndex:indexPath.section]];
     NSString *contentString=[NSString stringWithFormat:@"%@",[itemDic objectForKey:@"content"]];
-    height=contentString.length/15*28+40;
+    height=contentString.length/15*24+40;
     if (height<=40) {
         height=140/2;
     }
@@ -222,7 +246,7 @@
     timeLabel.text=[NSString stringWithFormat:@"%@",[itemDic objectForKey:@"time"]];
     [cell addSubview:timeLabel];
     NSString *contentString=[NSString stringWithFormat:@"%@",[itemDic objectForKey:@"content"]];
-    float height=contentString.length/15*28;
+    float height=contentString.length/15*24;
     if (height<=0)
     {
         height=100;
@@ -230,7 +254,7 @@
     UITextView *content=[[UITextView alloc] initWithFrame:CGRectMake(10, 65/2-5, 300, height)];
     content.text=[NSString stringWithFormat:@"%@",contentString];
     content.scrollEnabled=NO;
-    content.font=[UIFont fontWithName:@"Arial" size:17];
+    content.font=[UIFont fontWithName:@"Arial" size:16];
     content.backgroundColor=[UIColor clearColor];
     content.editable=NO;
     [cell addSubview:content];
@@ -279,14 +303,36 @@
 }
 - (void)textFieldDidBeginEditing:(UITextField *)textField
 {
-    self.buttomToolBar.frame=CGRectMake(0, [UIScreen mainScreen].bounds.size.height-240-self.buttomToolBar.frame.size.height, self.buttomToolBar.frame.size.width, self.buttomToolBar.frame.size.height);
-    
-}// became first responder
+    if ([[[UIDevice currentDevice] systemVersion]floatValue]<7.0)
+    {
+        self.buttomToolBar.frame=CGRectMake(0, [UIScreen mainScreen].bounds.size.height-240-self.buttomToolBar.frame.size.height, self.buttomToolBar.frame.size.width, self.buttomToolBar.frame.size.height);
+    }else
+    {
+    self.buttomToolBar.frame=CGRectMake(0, [UIScreen mainScreen].bounds.size.height-220-self.buttomToolBar.frame.size.height, self.buttomToolBar.frame.size.width, self.buttomToolBar.frame.size.height);
+    }
+    [textField.window makeKeyAndVisible];
+}
+// became first responder
 - (BOOL)textFieldShouldReturn:(UITextField *)textField;
 {
     [textField resignFirstResponder];
-    self.buttomToolBar.frame=CGRectMake(0, [UIScreen mainScreen].bounds.size.height-100/2-20, self.buttomToolBar.frame.size.width, self.buttomToolBar.frame.size.height);
+    if ([[[UIDevice currentDevice]systemVersion]floatValue]<7.0) {
+        self.buttomToolBar.frame=CGRectMake(0, [UIScreen mainScreen].bounds.size.height-100/2-20, self.buttomToolBar.frame.size.width, self.buttomToolBar.frame.size.height);
+    }else
+    {
+        self.buttomToolBar.frame=CGRectMake(0, [UIScreen mainScreen].bounds.size.height-100/2, self.buttomToolBar.frame.size.width, self.buttomToolBar.frame.size.height);
+    }
     return YES;
+}
+- (void)textFieldDidEndEditing:(UITextField *)textField
+{
+    [textField resignFirstResponder];
+    if ([[[UIDevice currentDevice]systemVersion]floatValue]<7.0) {
+        self.buttomToolBar.frame=CGRectMake(0, [UIScreen mainScreen].bounds.size.height-100/2-20, self.buttomToolBar.frame.size.width, self.buttomToolBar.frame.size.height);
+    }else
+    {
+        self.buttomToolBar.frame=CGRectMake(0, [UIScreen mainScreen].bounds.size.height-100/2, self.buttomToolBar.frame.size.width, self.buttomToolBar.frame.size.height);
+    }
 }
 -(void)selectAllCell:(UIButton*)sender
 {
@@ -383,6 +429,7 @@
     [self.listTableView performSelector:@selector(reloadData) withObject:nil afterDelay:0.5];
     self.listTableView.userInteractionEnabled=YES;
 }
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];

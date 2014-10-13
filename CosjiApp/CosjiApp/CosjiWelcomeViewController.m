@@ -49,14 +49,29 @@
 - (void) setCurrentPage:(NSInteger)secondPage {
     
     for (NSUInteger subviewIndex = 0; subviewIndex < [page.subviews count]; subviewIndex++) {
+       // float version = [[[UIDevice currentDevice] systemVersion] floatValue];
+#if __IPHONE_OS_VERSION_MAX_ALLOWED >= 70000
         UIImageView* subview = [page.subviews objectAtIndex:subviewIndex];
         CGSize size;
-        size.height = 8;
-        size.width = 8;
+        size.height = 6;
+        size.width = 6;
         [subview setFrame:CGRectMake(subview.frame.origin.x, subview.frame.origin.y,
                                      size.width,size.height)];
-        if (subviewIndex == secondPage) [subview setImage:[UIImage imageNamed:@"引导页动态"]];
-        else [subview setImage:[UIImage imageNamed:@"引导页默认"]];
+        if (subviewIndex == secondPage)
+            [subview setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"引导页动态"]]];
+        else [subview setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"引导页默认"]]];
+        
+#else
+        UIImageView* subview = [page.subviews objectAtIndex:subviewIndex];
+        CGSize size;
+        size.height = 6;
+        size.width = 6;
+        [subview setFrame:CGRectMake(subview.frame.origin.x, subview.frame.origin.y,
+                                     size.width,size.height)];
+        if (subviewIndex == secondPage)
+            [subview setImage:[UIImage imageNamed:@"首页-焦点图-动态"]];
+        else [subview setImage:[UIImage imageNamed:@"首页-焦点图-默认"]];
+#endif
     }
 }
 -(void)AdImg:(NSMutableArray*)arr{

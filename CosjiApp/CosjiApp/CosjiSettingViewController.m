@@ -34,7 +34,13 @@
     UIView *primaryView=[[UIView alloc] initWithFrame:[UIScreen mainScreen].bounds];
     self.view=primaryView;
     self.view.backgroundColor=[UIColor colorWithPatternImage:[UIImage imageNamed:@"我的可及_置_背景"]];
-    self.myTableView=[[UITableView alloc] initWithFrame:CGRectMake(40, 0, 280,[UIScreen mainScreen].bounds.size.height-49-20)];
+
+    float version = [[[UIDevice currentDevice] systemVersion] floatValue];
+    if (version <7.0)
+    {
+            self.myTableView=[[UITableView alloc] initWithFrame:CGRectMake(40, 0, 280,[UIScreen mainScreen].bounds.size.height-49-20)];
+    }else
+            self.myTableView=[[UITableView alloc] initWithFrame:CGRectMake(40, 20, 280,[UIScreen mainScreen].bounds.size.height-49)];
    // self.myTableView.backgroundColor=[UIColor colorWithPatternImage:[UIImage imageNamed:@"我的可及-系统设置-背景"]];
     self.myTableView.backgroundColor=[UIColor clearColor];
     [self.myTableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
@@ -49,7 +55,7 @@
     [saveBtn setBackgroundImage:[UIImage imageNamed:@"节省流量模式_默认"] forState:UIControlStateNormal];
     [saveBtn setBackgroundImage:[UIImage imageNamed:@"设置开关槽-打开"] forState:UIControlStateSelected];
     [saveBtn addTarget:self action:@selector(changeSaveMode) forControlEvents:UIControlEventTouchDown];
-    if ([[[NSUserDefaults standardUserDefaults] objectForKey:@"saveMode"] isEqualToString:@"YES"]) {
+    if ([[NSUserDefaults standardUserDefaults] boolForKey:@"lowMode"]) {
         NSLog(@"初始化打开");
         saveBtn.selected=YES;
     }else
@@ -123,6 +129,11 @@
     // static NSString *cellIdentifier = @"MyCell";
     UITableViewCell *cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:nil];
     [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
+    float version = [[[UIDevice currentDevice] systemVersion] floatValue];
+    if (version >=7.0)
+    {
+        [cell setBackgroundColor:[UIColor clearColor]];
+    }
     switch (indexPath.section) {
         case 0:
         {
@@ -152,7 +163,6 @@
                 [cell addSubview:saveBtn];
                 [cell addSubview:iconImage];
                 [cell addSubview:cellLabel];
-                
             }else
             {
                 UIImageView *iconImage=[[UIImageView alloc] initWithFrame:CGRectMake(10, 3.5/2,  70/2, 73/2)];
@@ -162,14 +172,6 @@
                 cellLabel.text=[NSString stringWithFormat:@"%@",[itemArray objectAtIndex:indexPath.row+4]];
                 cellLabel.backgroundColor=[UIColor clearColor];
                 cellLabel.textColor=[UIColor lightTextColor];
-                if(indexPath.row==4)
-                {
-                    if ([[[NSUserDefaults standardUserDefaults] objectForKey:@"logined"] isEqualToString:@"YES"]) {
-                        cellLabel.textColor=[UIColor redColor];
-                    }else
-                        cellLabel.textColor=[UIColor lightTextColor];
-                }else
-                    cellLabel.textColor=[UIColor lightTextColor];
                 [cell addSubview:iconImage];
                 [cell addSubview:cellLabel];
             }
@@ -179,7 +181,10 @@
 
     return cell;
 }
-
+- (void)textFieldDidBeginEditing:(UITextField *)textField           // became first responder
+{
+    [textField.window makeKeyAndVisible];
+}
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     switch (indexPath.section) {
@@ -198,14 +203,13 @@
                     NSLog(@"返利教程");
                     CosjiGuideViewController *guideViewController=[CosjiGuideViewController shareCosjiGuideViewController];
                     [self presentViewController:guideViewController animated:YES completion:nil];
-                    
                 }
                     break;
                 case 1:
                 {
                     CosjiUserHelpViewController *userHelpViewController=[CosjiUserHelpViewController shareCosjiUserHelpViewController];
                     [self presentViewController:userHelpViewController animated:YES completion:nil];
-                    [userHelpViewController setUserHelpFor:30];
+                    [userHelpViewController setUserHelpFor:29];
                     [userHelpViewController.titleLabel setText:[NSString stringWithFormat:@"%@",[itemArray objectAtIndex:indexPath.row]]];
                     
                 }
@@ -215,14 +219,14 @@
                     CosjiUserHelpViewController *userHelpViewController=[CosjiUserHelpViewController shareCosjiUserHelpViewController];
                     NSLog(@"%@",[itemArray objectAtIndex:indexPath.row]);
                     [self presentViewController:userHelpViewController animated:YES completion:nil];
-                    [userHelpViewController setUserHelpFor:29];
+                    [userHelpViewController setUserHelpFor:30];
                     [userHelpViewController.titleLabel setText:[NSString stringWithFormat:@"%@",[itemArray objectAtIndex:indexPath.row]]];
-
                 }
                     break;
                 case 3:
                 {
-                    BDSocialShareContent *content = [BDSocialShareContent shareContentWithDescription:@"可及很吊" url:@"http://cosji.com" title:@"可及网"];
+                    BDSocialShareContent *content = [BDSocialShareContent shareContentWithDescription:@"可及网是淘宝省钱助手，通过可及网进入淘宝等商城购物最高可返利50%，推荐你也来试一试吧" url:CosjiAppiTunesAddress title:@"可及网"];
+                    [content addImageWithImageSource:[UIImage imageNamed:@"Icon"] imageUrl:nil];
                     [BDSocialShareSDK showShareMenuWithShareContent:content menuStyle:BD_SOCIAL_SHARE_MENU_BLACK_STYLE supportedInterfaceOrientations:UIInterfaceOrientationMaskAllButUpsideDown result:^(BD_SOCIAL_RESULT requestResult,NSString *platformType,id response,NSError *error) {
                         if (requestResult == BD_SOCIAL_SUCCESS) { //分享成功的处理
                         } else if (requestResult == BD_SOCIAL_CANCEL){ //用户取消分享的处理
@@ -248,7 +252,14 @@
                 case 0:
                 {
                     NSLog(@"意见反馈");
-                    [settingDelegate toMessageViewController:1];
+                    if ([[NSUserDefaults standardUserDefaults] boolForKey:@"havelogined"] )
+                    {
+                        [settingDelegate toMessageViewController:1];
+                    }else
+                    {
+                        UIAlertView *alert=[[UIAlertView alloc] initWithTitle:@"提示" message:@"请登录账号" delegate:nil cancelButtonTitle:@"好的" otherButtonTitles:nil];
+                        [alert show];
+                    }
                 }
                     break;
                 case 1:
@@ -275,7 +286,6 @@
                             if ([versionString floatValue]>=[[NSUserDefaults standardUserDefaults] floatForKey:@"APPversion"]) {
                                 dispatch_async(dispatch_get_main_queue(), ^{
                                     [SVProgressHUD dismiss];
-                                    //NSLog(@"%@",bodyDic);
                                     UIAlertView *alert=[[UIAlertView alloc] initWithTitle:@"提示" message:@"已有新版本,是否前往更新" delegate:self cancelButtonTitle:@"不了" otherButtonTitles:@"马上更新", nil];
                                     alert.tag=1;
                                     [alert show];
@@ -304,22 +314,22 @@
                 case 4:
                 {
                     NSLog(@"注销");
-                    if ([[[NSUserDefaults standardUserDefaults] objectForKey:@"logined"] isEqualToString:@"YES"])
+                    if ([[NSUserDefaults standardUserDefaults] boolForKey:@"havelogined"] )
                     {
-                    [[NSUserDefaults standardUserDefaults] setObject:@"NO" forKey:@"logined"];
+                    [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"havelogined"];
+                    [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"AutoLogin"];
                     [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"userInfo"];
-                    [settingDelegate hideUserInfoView:YES];
+                    [settingDelegate userQuite];
+                    [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"loginDic"];
                     UIAlertView *alert=[[UIAlertView alloc] initWithTitle:@"提示" message:@"已注销用户" delegate:self cancelButtonTitle:@"好的" otherButtonTitles:nil];
                     [alert show];
                     [self.myTableView reloadData];
-                    [settingDelegate showOrHideBackView:nil];
                     }
                 }
                     break;
             }
 
         }
-            
             break;
     }
 
@@ -330,7 +340,7 @@
         switch (buttonIndex) {
             case 1:
             {
-                NSString *urlStr = [NSString stringWithFormat:@"https://itunes.apple.com/cn"];
+                NSString *urlStr = [NSString stringWithFormat:@"https://itunes.apple.com/us/app/ke-ji-wang-tao-bao-sheng-qian/id802627559?ls=1&mt=8"];
                 NSURL *url = [NSURL URLWithString:urlStr];
                 [[UIApplication sharedApplication] openURL:url];
 
@@ -347,12 +357,12 @@
     if (saveBtn.selected==YES)
     {
         NSLog(@"不节省流量");
-        [[NSUserDefaults standardUserDefaults] setObject:@"NO" forKey:@"saveMode"];
+        [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"lowMode"];
         saveBtn.selected=NO;
     }else
     {
         NSLog(@"节省流量");
-        [[NSUserDefaults standardUserDefaults] setObject:@"YES" forKey:@"saveMode"];
+        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"lowMode"];
         saveBtn.selected=YES;
     }
 }

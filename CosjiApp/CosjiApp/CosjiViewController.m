@@ -10,6 +10,7 @@
 #import "StoreKit/StoreKit.h"
 #import "CosjiMP3Player.h"
 #import "MobileProbe.h"
+#import "CosjiNormalWebViewController.h"
 #import "CosjiServerHelper.h"
 #import "CosjiLoginViewController.h"
 #import "SVProgressHUD.h"
@@ -19,7 +20,6 @@
 #import "CosjiItemFanliDetailViewController.h"
 #import "TopAttachment.h"
 #import "CosjiWelcomeViewController.h"
-
 
 
 @interface CosjiViewController ()
@@ -43,43 +43,65 @@ static UINavigationController* nc;
     UIView *primaryView=[[UIView alloc] initWithFrame:[UIScreen mainScreen].bounds];
     primaryView.backgroundColor=[UIColor colorWithRed:229.0/255.0 green:229.0/255.0 blue:229.0/255.0 alpha:100];
     self.view=primaryView;
-    self.mainTableView=[[UITableView alloc] initWithFrame:CGRectMake(0, 48, 320, [UIScreen mainScreen].bounds.size.height-48-49-20)];
+    if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 7.0)
+    {
+        self.automaticallyAdjustsScrollViewInsets=NO;
+        self.CustomHeadView=[[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 65)];
+        // self.CustomHeadView.backgroundColor=[UIColor colorWithPatternImage:[UIImage imageNamed:@"工具栏背景130"]];
+        self.CustomHeadView.backgroundColor=[UIColor colorWithRed:225.0/255.0 green:47.0/255.0 blue:50.0/255.0 alpha:100];
+        
+        self.mainTableView=[[UITableView alloc] initWithFrame:CGRectMake(0, 65, 320, [UIScreen mainScreen].bounds.size.height-65-49)];
+        searchField=[[UITextField alloc] initWithFrame:CGRectMake(10, 25, 300, 35)];
+        UIImageView *blogoImage=[[UIImageView alloc] initWithFrame:CGRectMake(160-124/4,self.CustomHeadView.frame.size.height-34, 124/2, 40/2)];
+        blogoImage.image=[UIImage imageNamed:@"kejiwang扁平"];
+        [self.CustomHeadView addSubview:blogoImage];
+    }
+    else
+    {
+        self.mainTableView=[[UITableView alloc] initWithFrame:CGRectMake(0, 45, 320, [UIScreen mainScreen].bounds.size.height-45-49-20)];
+        self.CustomHeadView=[[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 45)];
+        self.CustomHeadView.backgroundColor=[UIColor colorWithPatternImage:[UIImage imageNamed:@"工具栏背景"]];
+        searchField=[[UITextField alloc] initWithFrame:CGRectMake(10, 5, 300, 35)];
+        UIImageView *blogoImage=[[UIImageView alloc] initWithFrame:CGRectMake(129,self.CustomHeadView.frame.size.height-34, 126/2, 42/2)];
+        blogoImage.image=[UIImage imageNamed:@"工具栏背景-logo"];
+        [self.CustomHeadView addSubview:blogoImage];
+
+    }
     self.mainTableView.delegate=self;
     self.mainTableView.dataSource=self;
     self.mainTableView.backgroundColor=[UIColor clearColor];
     self.mainTableView.backgroundView=nil;
     [self.mainTableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
     [self.view addSubview:self.mainTableView];
-    self.CustomHeadView=[[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 45)];
-    self.CustomHeadView.backgroundColor=[UIColor colorWithPatternImage:[UIImage imageNamed:@"工具栏背景"]];
+    //初始化生成搜索按钮
     UIButton *searchBtn=[UIButton buttonWithType:UIButtonTypeCustom];
-    searchBtn.frame=CGRectMake(self.CustomHeadView.frame.size.width-40, self.CustomHeadView.frame.size.height/2-82/4, 64/2, 82/2);
+    searchBtn.frame=CGRectMake(self.CustomHeadView.frame.size.width-40, self.self.CustomHeadView.frame.size.height-44, 64/2, 82/2);
     [searchBtn setBackgroundImage:[UIImage imageNamed:@"工具栏背景-搜索"] forState:UIControlStateNormal];
     [searchBtn addTarget:self action:@selector(showSearchView) forControlEvents:UIControlEventTouchDown];
     [self.CustomHeadView addSubview:searchBtn];
+    //搜索框
     searchView=[[UIView alloc] initWithFrame:self.CustomHeadView.frame];
     searchView.backgroundColor=[UIColor whiteColor];
-    searchField=[[UITextField alloc] initWithFrame:CGRectMake(10, 5, 300, 35)];
     searchField.borderStyle=UITextBorderStyleRoundedRect;
     searchField.returnKeyType=UIReturnKeySearch;
+    searchField.delegate=self;
     searchField.clearButtonMode=UITextFieldViewModeWhileEditing;
-    searchField.textAlignment=UITextAlignmentLeft;
+    searchField.textAlignment=NSTextAlignmentLeft;
     searchField.contentHorizontalAlignment=UIControlContentHorizontalAlignmentCenter;
     searchField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
     searchField.backgroundColor=[UIColor clearColor];
     searchField.font=[UIFont fontWithName:@"Arial" size:18];
-    searchField.placeholder=@"输入商品名称/网址/ID,查询返利";
+    searchField.placeholder=@"粘贴商品全名或输入关键字，拿返利";
     [searchView addSubview:searchField];
     [searchField addTarget:self action:@selector(searchItemFrom:) forControlEvents:UIControlEventEditingDidEndOnExit];
     [self.view addSubview:searchView];
     searchViewShowing=NO;
     [self.view addSubview:self.CustomHeadView];
-    UIImageView *llogoImage=[[UIImageView alloc] initWithFrame:CGRectMake(14, 6, 156/2, 65/2)];
+    
+    UIImageView *llogoImage=[[UIImageView alloc] initWithFrame:CGRectMake(6,self.CustomHeadView.frame.size.height-39, 156/2, 65/2)];
     llogoImage.image=[UIImage imageNamed:@"工具栏背景-标语"];
     [self.CustomHeadView addSubview:llogoImage];
-    UIImageView *blogoImage=[[UIImageView alloc] initWithFrame:CGRectMake(129,13, 126/2, 42/2)];
-    blogoImage.image=[UIImage imageNamed:@"工具栏背景-logo"];
-    [self.CustomHeadView addSubview:blogoImage];
+
     backgroundView=[[UIView alloc] initWithFrame:CGRectMake(10, 7, 300, 184/2)];
     backgroundView.backgroundColor=[UIColor whiteColor];
     UIButton *helperBtn=[UIButton buttonWithType:UIButtonTypeCustom];
@@ -101,9 +123,9 @@ static UINavigationController* nc;
     UIButton *tmallBtn=[UIButton buttonWithType:UIButtonTypeCustom];
     tmallBtn.frame=CGRectMake(111, 10, 155/2, 109/2);
     [tmallBtn addTarget:self action:@selector(presentStoreBrowseViewController:) forControlEvents:UIControlEventTouchUpInside];
-    [tmallBtn setImage:[UIImage imageNamed:@"新首页天猫"] forState:UIControlStateNormal];
+    [tmallBtn setImage:[UIImage imageNamed:@"zhemai"] forState:UIControlStateNormal];
     UILabel *tmallLabel=[[UILabel alloc] initWithFrame:CGRectMake(0, tmallBtn.frame.size.height, 150/2, 40/2)];
-    tmallLabel.text=@"天猫商城";
+    tmallLabel.text=@"折买特惠";
     tmallLabel.textAlignment=NSTextAlignmentCenter;
     tmallLabel.backgroundColor=[UIColor clearColor];
     tmallLabel.font=[UIFont fontWithName:@"Arial" size:10];
@@ -133,7 +155,7 @@ static UINavigationController* nc;
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view, typically from a nib.
-    topListArray=[[NSMutableArray alloc] initWithObjects:@"ggtu",@"tbly", nil];
+    topListArray=[[NSMutableArray alloc] initWithCapacity:0];
     storeListArray=[[NSMutableArray alloc] initWithCapacity:0];
     brandListArray=[[NSMutableArray alloc] initWithCapacity:0];
     page=[[UIPageControl alloc] initWithFrame:CGRectMake(141, 110, 38,36)];
@@ -143,10 +165,11 @@ static UINavigationController* nc;
     sv.showsHorizontalScrollIndicator=NO;
     sv.backgroundColor=[UIColor clearColor];
     
-    [NSTimer scheduledTimerWithTimeInterval:1 target: self selector: @selector(handleTimer:)  userInfo:nil  repeats: YES];
+    [NSTimer scheduledTimerWithTimeInterval:0.7 target: self selector: @selector(handleTimer:)  userInfo:nil  repeats: YES];
     [self AdImg:topListArray];
     [self setCurrentPage:page.currentPage];
-    self.storeBrowseViewController=[[CosjiWebViewController alloc] initWithNibName:@"CosjiWebViewController" bundle:nil];
+    self.webViewController=[[CosjiWebViewController alloc] init];
+    self.storeBrowse=[[UINavigationController alloc] initWithRootViewController:self.webViewController];
     self.navigationController.navigationBarHidden=YES;
     selectSection=99;
 }
@@ -162,31 +185,45 @@ static UINavigationController* nc;
 -(void)viewWillAppear:(BOOL)animated
 {
     self.tabBarController.tabBar.hidden=NO;
-    
+   // float version = [[[UIDevice currentDevice] systemVersion] floatValue];
+    #if __IPHONE_OS_VERSION_MAX_ALLOWED >= 70000
+    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
+    #endif
     CosjiServerHelper *serverHelper=[CosjiServerHelper shareCosjiServerHelper];
     if ([storeListArray count]==0)
     {
         [SVProgressHUD showWithStatus:@"正在载入..."];
-
-        NSDictionary *tmpDic=[NSDictionary dictionaryWithDictionary:[serverHelper getJsonDictionary:@"/mall/hot/"]];
-        if ([tmpDic objectForKey:@"body"]!=nil)
-        {
+       // [topListArray addObjectsFromArray:[NSArray arrayWithObjects:@"ggtu",@"tbly", nil]];
+        
+       
             dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-                storeListArray=[NSMutableArray arrayWithArray:[tmpDic objectForKey:@"body"]];
-                NSLog(@"get Store %d",[storeListArray count]);
+                NSDictionary *tmpDic=[serverHelper getJsonDictionary:@"/mall/hot/"];
+                NSDictionary *topDic=[serverHelper getJsonDictionary:@"/slide/acquire/?num=5"];
+                if (topDic!=nil) {
+                    NSDictionary *body=[topDic objectForKey:@"body"];
+                    topListArray=[NSMutableArray arrayWithArray:[body objectForKey:@"record"]];
+                }
+                if ([tmpDic objectForKey:@"body"]!=nil)
+                {
+                    storeListArray=[NSMutableArray arrayWithArray:[tmpDic objectForKey:@"body"]];
+                    NSLog(@"get Store %d",[storeListArray count]);
                     dispatch_async(dispatch_get_main_queue(), ^{
+                        [self AdImg:topListArray];
+                        [self setCurrentPage:page.currentPage];
                         [self.mainTableView reloadData];
                     });
-               
+                }else
+                {
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        UIAlertView *alert=[[UIAlertView alloc] initWithTitle:@"错误" message:@"服务器无法连接，请稍后再试" delegate:nil cancelButtonTitle:@"好的" otherButtonTitles: nil];
+                        [alert show];
+
+                    });
+                    
+                }
             });
-        }else
-        {
-            UIAlertView *alert=[[UIAlertView alloc] initWithTitle:@"错误" message:@"服务器无法连接，请稍后再试" delegate:nil cancelButtonTitle:@"好的" otherButtonTitles: nil];
-            [alert show];
-        }
     }else
     {
-
     }
     [SVProgressHUD dismiss];
     if (![[NSUserDefaults standardUserDefaults] boolForKey:@"everLaunch"])
@@ -240,16 +277,28 @@ static UINavigationController* nc;
 - (void) setCurrentPage:(NSInteger)secondPage {
     
     for (NSUInteger subviewIndex = 0; subviewIndex < [page.subviews count]; subviewIndex++) {
+     //   float version = [[[UIDevice currentDevice] systemVersion] floatValue];
+#if __IPHONE_OS_VERSION_MAX_ALLOWED >= 70000
         UIImageView* subview = [page.subviews objectAtIndex:subviewIndex];
         CGSize size;
         size.height = 6;
         size.width = 6;
         [subview setFrame:CGRectMake(subview.frame.origin.x, subview.frame.origin.y,
                                      size.width,size.height)];
-        
-        if (subviewIndex == secondPage) [subview setImage:[UIImage imageNamed:@"首页-焦点图-动态"]];
+        if (subviewIndex == secondPage)
+            [subview setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"引导页动态"]]];
+        else [subview setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"引导页默认"]]];
+#else
+        UIImageView* subview = [page.subviews objectAtIndex:subviewIndex];
+        CGSize size;
+        size.height = 6;
+        size.width = 6;
+        [subview setFrame:CGRectMake(subview.frame.origin.x, subview.frame.origin.y,
+                                     size.width,size.height)];
+        if (subviewIndex == secondPage)
+            [subview setImage:[UIImage imageNamed:@"首页-焦点图-动态"]];
         else [subview setImage:[UIImage imageNamed:@"首页-焦点图-默认"]];
-        
+#endif
     }
 }
 -(void)AdImg:(NSMutableArray*)arr{
@@ -257,37 +306,55 @@ static UINavigationController* nc;
     page.numberOfPages=[arr count];
     
     for ( int i=0; i<[topListArray count]; i++) {
-        
+        NSDictionary *item=[topListArray objectAtIndex:i];
         UIButton *img=[[UIButton alloc]initWithFrame:CGRectMake(320*i, 0, 300, 130)];
         [img addTarget:self action:@selector(Action:) forControlEvents:UIControlEventTouchUpInside];
         img.tag=i;
         [sv addSubview:img];
-        [img setImage:[UIImage imageNamed:[topListArray objectAtIndex:i]] forState:UIControlStateNormal];
+        NSString *imageUrl=[NSString stringWithFormat:@"%@",[item objectForKey:@"imgUrl"]];
+        imageUrl=[imageUrl stringByReplacingOccurrencesOfString:@"\"" withString:@""];
+        if ([imageUrl rangeOfString:@"http://www.Cosji.com/"].location==NSNotFound) {
+            imageUrl=[NSString stringWithFormat:@"http://www.Cosji.com/%@",imageUrl];
+        }
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0),
+                       ^{
+                           NSArray *paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
+                           NSString *cachePath = [paths objectAtIndex:0];
+                           BOOL isDir = YES;
+                           NSString *dirName=[cachePath stringByAppendingPathComponent:@"cacheImages"];
+                           if (![[NSFileManager defaultManager] fileExistsAtPath:dirName isDirectory:&isDir])
+                           {
+                               [[NSFileManager defaultManager] createDirectoryAtPath:dirName withIntermediateDirectories:YES attributes:nil error:nil];
+                           }
+                           NSString *filename = [dirName stringByAppendingPathComponent:[NSString stringWithFormat:@"top%@",[item objectForKey:@"id"]]];
+                           if (![[NSFileManager defaultManager] fileExistsAtPath:filename])
+                           {
+                               NSData * data = [[NSData alloc] initWithContentsOfURL:[NSURL URLWithString:imageUrl]];
+                               UIImage * cacheimage = [[UIImage alloc] initWithData:data];
+                               [UIImageJPEGRepresentation(cacheimage, 0.5) writeToFile:filename atomically:YES];
+                               dispatch_async(dispatch_get_main_queue(), ^{
+                                   NSData *imageData=[NSData dataWithContentsOfFile:filename];
+                                   [img setBackgroundImage:[UIImage imageWithData:imageData] forState:UIControlStateNormal];
+                               });
+                           }else
+                           {
+                               dispatch_async(dispatch_get_main_queue(), ^{
+                                   NSData *imageData=[NSData dataWithContentsOfFile:filename];
+                                   [img setBackgroundImage:[UIImage imageWithData:imageData] forState:UIControlStateNormal];
+                               });
+                           }
+                       });
     }
     
 }
 -(void)Action:(id)sender
 {
     UIButton *btn=(UIButton*)sender;
-    switch (btn.tag) {
-        case 0:
-        {
-            NSURLRequest *request =[NSURLRequest requestWithURL:[NSURL URLWithString:@"http://s.click.taobao.com/t?e=zGU34CA7K%2BPkqB05%2Bm7rfGGjlY60oHcc7bkKOQYnIZl9roglx55ogY7XuIFA0XBbk%2Fzm7aeOZ3PlyybISkbOM7EtEdqHK%2B3%2B2VdLKXhDskZ4%2Fp2dh4NGvuCXRstUW1YAfVUjzoW0F55hwbLHDGosDrPX%2FGtVj28pHoIIzbTeYkfNwFLQ7ML46dUp2gxPHRwH7gFin%2BDZsAILX5h9mGLjjAhRlA%3D%3D"]];
-            [self.navigationController pushViewController:self.storeBrowseViewController animated:YES];
-            [self.storeBrowseViewController.webView loadRequest:request];
-            [self.storeBrowseViewController.storeName setText:@"底价抢大牌"];
-
-       }
-            break;
-        case 1:
-        {
-            NSURLRequest *request =[NSURLRequest requestWithURL:[NSURL URLWithString:@"http://s.click.taobao.com/t?e=zGU34CA7K%2BPkqB05%2Bm7rfGKas1PIKp0U37pZuBotzOg7OjY%2F2R0Ke3HHzv2kJZUH%2FehqodvBvxouiCPW7UkqmIn4pk08catp7aU2wpqfONSeQJM%3D&pid=mm_26039255_0_0"]];
-            [self.navigationController pushViewController:self.storeBrowseViewController animated:YES];
-            [self.storeBrowseViewController.webView loadRequest:request];
-            [self.storeBrowseViewController.storeName setText:@"淘宝旅行"];
-        }
-            break;
-    }
+    NSDictionary *topDic=[topListArray objectAtIndex:btn.tag];
+    NSURLRequest *request =[NSURLRequest requestWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@",[topDic objectForKey:@"url"]]]];
+    CosjiNormalWebViewController *normalWebViewController=[[CosjiNormalWebViewController alloc] init];
+    [self  presentViewController:normalWebViewController animated:YES completion:nil];
+    [normalWebViewController setThisWebViewWithName:request name:[NSString stringWithFormat:@"%@",[topDic objectForKey:@"title"]]];
 }
 void TopImageFromURL( NSURL * URL, void (^imageBlock)(UIImage * image), void (^errorBlock)(void) )
 {
@@ -389,7 +456,11 @@ void TopImageFromURL( NSURL * URL, void (^imageBlock)(UIImage * image), void (^e
     UITableViewCell *cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:nil];
     
     // cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
-    
+    float version = [[[UIDevice currentDevice] systemVersion] floatValue];
+    if (version >=7.0)
+    {
+        [cell setBackgroundColor:[UIColor clearColor]];
+    }
     
     switch (indexPath.section) {
         case 0:
@@ -454,10 +525,9 @@ void TopImageFromURL( NSURL * URL, void (^imageBlock)(UIImage * image), void (^e
                                            NSString *filename = [dirName stringByAppendingPathComponent:[NSString stringWithFormat:@"%@",[storeDic objectForKey:@"id"]]];
                                            if (![[NSFileManager defaultManager] fileExistsAtPath:filename])
                                            {
-                                               NSLog(@"download cacheImage %@",filename);
                                                NSData * data = [[NSData alloc] initWithContentsOfURL:[NSURL URLWithString:imageUrl1]];
                                                UIImage * cacheimage = [[UIImage alloc] initWithData:data];
-                                               [UIImageJPEGRepresentation(cacheimage, 1.0) writeToFile:filename atomically:YES];
+                                               [UIImageJPEGRepresentation(cacheimage, 0.5) writeToFile:filename atomically:YES];
                                                dispatch_async(dispatch_get_main_queue(), ^{
                                                    NSData *imageData=[NSData dataWithContentsOfFile:filename];
                                                    [button setBackgroundImage:[UIImage imageWithData:imageData] forState:UIControlStateNormal];
@@ -465,9 +535,8 @@ void TopImageFromURL( NSURL * URL, void (^imageBlock)(UIImage * image), void (^e
                                            }else
                                            {
                                                dispatch_async(dispatch_get_main_queue(), ^{
-                                                   NSLog(@"load cacheImage %@",filename);
                                                    NSData *imageData=[NSData dataWithContentsOfFile:filename];
-                                                   [button setBackgroundImage:[UIImage imageWithData:imageData] forState:UIControlStateNormal];
+                                                   [button setBackgroundImage:[UIImage imageWithData:imageData scale:0.8] forState:UIControlStateNormal];
                                                });
                                            }
                                        });
@@ -502,22 +571,23 @@ void TopImageFromURL( NSURL * URL, void (^imageBlock)(UIImage * image), void (^e
 -(void)opRemenshangcheng:(id)sender
 {
     selectedIndex=[sender tag];
-    if ([[[NSUserDefaults standardUserDefaults] objectForKey:@"logined"]isEqualToString:@"YES"]) {
+    if ([[NSUserDefaults standardUserDefaults] boolForKey:@"havelogined"]) {
+        NSDictionary *userDic=[NSDictionary dictionaryWithDictionary:[[NSUserDefaults standardUserDefaults] objectForKey:@"userInfo"]];
+        NSDictionary *infoDic=[NSDictionary dictionaryWithDictionary:[userDic objectForKey:@"body"]];
+        NSString *uid =[NSString stringWithFormat:@"%@",[infoDic objectForKey:@"userId"]];
         NSDictionary *tmpDic=[NSDictionary dictionaryWithDictionary:[storeListArray objectAtIndex:selectedIndex]];
         NSString *storeUrl=[NSString stringWithFormat:@"%@",[tmpDic objectForKey:@"yiqifaurl"]];
-        NSLog(@"storeUrl is %@",tmpDic);
+        storeUrl=[storeUrl stringByReplacingOccurrencesOfString:@"&e=" withString:[NSString stringWithFormat:@"&e=%@",uid]];
+        NSLog(@"storeUrl is %@",storeUrl);
         NSURL *url =[NSURL URLWithString:[storeUrl stringByReplacingOccurrencesOfString:@"\"" withString:@""]];
         NSURLRequest *request =[NSURLRequest requestWithURL:url];
-        //[self.storeBrowseViewController setUrlString:[NSString stringWithFormat:@"%@",storeUrl]];
-        [self.navigationController pushViewController:self.storeBrowseViewController animated:YES];
-
-      [self.storeBrowseViewController.webView loadRequest:request];
-        [self.storeBrowseViewController.storeName setText:[NSString stringWithFormat:@"%@",[tmpDic objectForKey:@"name"]]];
-
+        CosjiNormalWebViewController *normalWebViewController=[[CosjiNormalWebViewController alloc] init];
+        [self  presentViewController:normalWebViewController animated:YES completion:nil];
+        [normalWebViewController setThisWebViewWithName:request name:[NSString stringWithFormat:@"%@",[tmpDic objectForKey:@"name"]]];
 
     }else
     {
-        UIAlertView *alert=[[UIAlertView alloc] initWithTitle:@"提示" message:@"登录获取返利" delegate:self cancelButtonTitle:@"跳过" otherButtonTitles:@"登陆",nil];
+        UIAlertView *alert=[[UIAlertView alloc] initWithTitle:@"提示" message:@"登录获取返利" delegate:self cancelButtonTitle:@"跳过" otherButtonTitles:@"登录",nil];
         alert.tag=1;
         [alert show];
     }
@@ -527,29 +597,34 @@ void TopImageFromURL( NSURL * URL, void (^imageBlock)(UIImage * image), void (^e
     if (alertView.tag==1) {
         switch (buttonIndex) {
             case 0:{
-                NSLog(@"case 0");
                 NSDictionary *tmpDic=[NSDictionary dictionaryWithDictionary:[storeListArray objectAtIndex:selectedIndex]];
                 NSString *storeUrl=[NSString stringWithFormat:@"%@",[tmpDic objectForKey:@"yiqifaurl"]];
-                NSLog(@"%@",[storeUrl stringByReplacingOccurrencesOfString:@"\"" withString:@""]);
                 
                 NSURL *url =[NSURL URLWithString:[storeUrl stringByReplacingOccurrencesOfString:@"\"" withString:@""]];
                 NSURLRequest *request =[NSURLRequest requestWithURL:url];
-                [self.navigationController pushViewController:self.storeBrowseViewController animated:YES];
-                [self.storeBrowseViewController.webView loadRequest:request];
-                [self.storeBrowseViewController.storeName setText:[NSString stringWithFormat:@"%@",[tmpDic objectForKey:@"name"]]];
+                CosjiNormalWebViewController *normalWebViewController=[[CosjiNormalWebViewController alloc] init];
+                [self  presentViewController:normalWebViewController animated:YES completion:nil];
+                [normalWebViewController setThisWebViewWithName:request name:[NSString stringWithFormat:@"%@",[tmpDic objectForKey:@"name"]]];
+               // [self.webViewController.webView loadRequest:request];
+                //[self.webViewController.storeName setText:[NSString stringWithFormat:@"%@",[tmpDic objectForKey:@"name"]]];
             }
                 break;
                 
             case 1:
             {
-                NSLog(@"case 1");
                 CosjiLoginViewController *loginViewController=[CosjiLoginViewController shareCosjiLoginViewController];
                 [self presentViewController:loginViewController animated:YES completion:nil];
                 
             }
                 break;
         }
-    }else
+    }else if(alertView.tag==10)
+        {
+            if (buttonIndex==1) {
+                NSURL *url =[NSURL URLWithString:@"http://www.zhemai.com"];
+                [[UIApplication sharedApplication] openURL:url];
+            }
+        }else
     {
         if (buttonIndex==1) {
             CosjiLoginViewController *loginViewController=[CosjiLoginViewController shareCosjiLoginViewController];
@@ -557,35 +632,10 @@ void TopImageFromURL( NSURL * URL, void (^imageBlock)(UIImage * image), void (^e
         }
     }
 }
--(void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
-{
-    switch (buttonIndex) {
-        case 0:{
-            NSLog(@"case 0");
-            NSDictionary *tmpDic=[NSDictionary dictionaryWithDictionary:[storeListArray objectAtIndex:selectedIndex]];
-            NSString *storeUrl=[NSString stringWithFormat:@"%@",[tmpDic objectForKey:@"yiqifaurl"]];
-            NSLog(@"%@",[storeUrl stringByReplacingOccurrencesOfString:@"\"" withString:@""]);
-            NSURL *url =[NSURL URLWithString:[storeUrl stringByReplacingOccurrencesOfString:@"\"" withString:@""]];
-            NSURLRequest *request =[NSURLRequest requestWithURL:url];
-            [self.navigationController pushViewController:self.storeBrowseViewController animated:YES];
-            [self.storeBrowseViewController.webView loadRequest:request];
-            [self.storeBrowseViewController.storeName setText:[NSString stringWithFormat:@"%@",[tmpDic objectForKey:@"name"]]];
-            
-        }
-            break;
-            
-        case 1:
-        {
-            CosjiLoginViewController *loginViewController=[CosjiLoginViewController shareCosjiLoginViewController];
-            [self presentViewController:loginViewController animated:YES completion:nil];
-            NSLog(@"case 1");
-        }
-            break;
-    }
-}
+
+
 -(void)presentStoreBrowseViewController:(id)sender
 {
-    NSLog(@"%d",[sender tag]);
     switch ([sender tag]) {
         case 0:
         {
@@ -597,18 +647,18 @@ void TopImageFromURL( NSURL * URL, void (^imageBlock)(UIImage * image), void (^e
         {
             NSURL *url =[NSURL URLWithString:@"http://ju.m.taobao.com"];
             NSURLRequest *request =[NSURLRequest requestWithURL:url];
-            [self.navigationController pushViewController:self.storeBrowseViewController animated:YES];
-            [self.storeBrowseViewController.webView loadRequest:request];
-            [self.storeBrowseViewController.storeName setText:@"已进入聚划算"];
+            CosjiWebViewController *webViewC=[[CosjiWebViewController alloc] init];
+            UINavigationController *tmpNavController=[[UINavigationController alloc] initWithRootViewController:webViewC];
+            [self  presentViewController:tmpNavController animated:YES completion:nil];
+            [webViewC setThisWebViewWithName:request name:[NSString stringWithFormat:@"已进入聚划算"]];
         }
             break;
         case 2:
         {
-            NSURL *url =[NSURL URLWithString:@"http://m.tmall.com"];
-            NSURLRequest *request =[NSURLRequest requestWithURL:url];
-             [self.navigationController pushViewController:self.storeBrowseViewController animated:YES];
-            [self.storeBrowseViewController.webView loadRequest:request];
-            [self.storeBrowseViewController.storeName setText:@"已进入天猫"];
+            UIAlertView *alert=[[UIAlertView alloc] initWithTitle:@"提示" message:@"折买网(zhemai.com)每天上新数百款优质商品，一折起全场包邮，确定现在访问？" delegate:self cancelButtonTitle:@"稍后" otherButtonTitles:@"访问", nil];
+            alert.tag=10;
+            [alert show];
+
         }
             break;
     }
@@ -638,56 +688,89 @@ void TopImageFromURL( NSURL * URL, void (^imageBlock)(UIImage * image), void (^e
 -(void)searchItemFrom:(UITextField*)textField
 {
     [textField resignFirstResponder];
-    if ([[[NSUserDefaults standardUserDefaults] objectForKey:@"logined"]isEqualToString:@"YES"])
+    if ([[NSUserDefaults standardUserDefaults] boolForKey:@"havelogined"])
     {
         if (textField!=nil&&![textField.text isEqualToString:@""])
         {
             NSLog(@"开始搜索");
+            
             CosjiServerHelper *serverHelper=[CosjiServerHelper shareCosjiServerHelper];
-            switch ([serverHelper getSearchItemType:searchField.text]) {
-                case 0:
+            if ([self isPureInt:searchField.text])
+            {
+                NSString *num_iid=[NSString stringWithFormat:@"%@",searchField.text];
+                NSDictionary *infoDic=[serverHelper getItemFromTop:num_iid];
+                if (infoDic==nil)
                 {
-                    NSLog(@"这个是地址");
-                    int location=[[NSString stringWithFormat:@"%@",searchField.text] rangeOfString:@"id="].location;
-                    NSString *num_iid=[[NSString stringWithFormat:@"%@",searchField.text] substringWithRange:NSMakeRange(location+3, 11)];
-                    NSDictionary *infoDic=[NSDictionary dictionaryWithDictionary:[serverHelper getItemFromTop:num_iid]];
-                    if (infoDic==nil)
-                    {
-                        [SVProgressHUD showErrorWithStatus:@"搜索不到该商品或该商品没有返利" duration:3];
-                    }else
-                    {
-                        CosjiItemFanliDetailViewController *fanliDetailVC=[CosjiItemFanliDetailViewController shareCosjiItemFanliDetailViewController];
-
-                        [self presentViewController:fanliDetailVC animated:YES completion:nil];
-                        [fanliDetailVC loadItemInfoWithDic:infoDic];
-                    }
+                    [SVProgressHUD showErrorWithStatus:@"搜索不到该商品或该商品没有返利" duration:3];
+                }else
+                {
+                    CosjiItemFanliDetailViewController *fanliDetailVC=[CosjiItemFanliDetailViewController shareCosjiItemFanliDetailViewController];
+                    
+                    [self presentViewController:fanliDetailVC animated:YES completion:nil];
+                    [fanliDetailVC loadItemInfoWithDic:infoDic];
                 }
-                    break;
-                case 1:
+            }else
+            {
+                NSDictionary *resultDic=[CosjiUrlFilter filterUrl:searchField.text];
+                if (resultDic == nil)
                 {
-                    NSLog(@"这个是ID");
-                    NSString *num_iid=[NSString stringWithFormat:@"%@",searchField.text];
-                    NSDictionary *infoDic=[NSDictionary dictionaryWithDictionary:[serverHelper getItemFromTop:num_iid]];
-                    if (infoDic==nil)
+                    return;
+                }
+                NSNumber *resultNumber=[resultDic objectForKey:@"UrlType"];
+                NSLog(@"%@",[resultDic objectForKey:@"UrlType"]);
+                switch ([resultNumber intValue]) {
+                    case 0:
                     {
-                        [SVProgressHUD showErrorWithStatus:@"搜索不到该商品或该商品没有返利" duration:3];
-                    }else
+                        NSLog(@"//普通链接");
+                        [self presentViewController:self.storeBrowse animated:YES completion:nil];
+                        NSURL *url=[NSURL URLWithString:[NSString stringWithFormat:@"%@",[resultDic objectForKey:@"url"]]];
+                        [self.webViewController setThisWebViewWithName:[NSURLRequest requestWithURL:url] name:@"查找返利"];
+                    }
+                        break;
+                    case 1://混合链接
                     {
-                        CosjiItemFanliDetailViewController *fanliDetailVC=[CosjiItemFanliDetailViewController shareCosjiItemFanliDetailViewController];
+                        NSLog(@"//混合链接");
+                        [self presentViewController:self.storeBrowse animated:YES completion:nil];
+                        NSURL *url=[NSURL URLWithString:[NSString stringWithFormat:@"%@",[resultDic objectForKey:@"url"]]];
+                        [self.webViewController setThisWebViewWithName:[NSURLRequest requestWithURL:url] name:@"查找返利"];
+                    }
+                        break;
+                    case 2://特别链接（带有淘宝推广的链接）
+                    {
+                        NSLog(@"//特别链接");
                         
-                        [self presentViewController:fanliDetailVC animated:YES completion:nil];
-                        [fanliDetailVC loadItemInfoWithDic:infoDic];
+                        [self presentFanliDetailVCWithNumID:[resultDic objectForKey:@"num_iid"]];
                     }
+                        break;
+                    case 3://淘宝商品链接
+                    {
+                        NSLog(@"//淘宝链接");
+                        
+                        [self presentFanliDetailVCWithNumID:[resultDic objectForKey:@"num_iid"]];
+                        
+                    }
+                        break;
+                    case 4://天猫商品链接
+                    {
+                        NSLog(@"//天猫链接");
+                        
+                        [self presentFanliDetailVCWithNumID:[resultDic objectForKey:@"num_iid"]];
+                        
+                    }
+                        break;
+                    case 5:
+                    {
+                        NSLog(@"//纯文本");
+                        [self presentItemList:[NSString stringWithFormat:@"%@",[resultDic objectForKey:@"String"]]];
+                    }
+                        break;
+                    case 6:
+                    {
+                        [self presentFanliDetailVCWithNumID:[resultDic objectForKey:@"num_iid"]];
+                    }
+                        break;
                 }
-                    break;
-                case 2:
-                {
-                    CosjiItemListViewController *itemsListViewController=[CosjiItemListViewController shareCosjiItemListViewController];
-                    [self presentViewController:itemsListViewController animated:YES completion:nil];
-                    [itemsListViewController loadInfoWith:[NSString stringWithFormat:@"%@",searchField.text] atPage:1];
-                }
-                default:
-                    break;
+                
             }
 
         }else
@@ -695,7 +778,6 @@ void TopImageFromURL( NSURL * URL, void (^imageBlock)(UIImage * image), void (^e
             UIAlertView *alert=[[UIAlertView alloc] initWithTitle:@"错误" message:@"请输入您想要搜索的商品或查询的网址" delegate:nil cancelButtonTitle:@"好的" otherButtonTitles: nil];
             [alert show];
         }
-
     }else
     {
         UIAlertView *alert=[[UIAlertView alloc] initWithTitle:@"提示" message:@"登录查询获取返利" delegate:self cancelButtonTitle:@"跳过" otherButtonTitles:@"登陆",nil];
@@ -703,42 +785,86 @@ void TopImageFromURL( NSURL * URL, void (^imageBlock)(UIImage * image), void (^e
         [alert show];
     }
 }
--(void)showApiResponse:(id)data
+//-(void)showApiResponse:(id)data
+//{
+//    if ([data isKindOfClass:[TopApiResponse class]])
+//    {
+//        TopApiResponse *response = (TopApiResponse *)data;
+//        
+//        if ([response content])
+//        {
+//            NSLog(@"%@",[response content]);
+//        }
+//        else {
+//            NSLog(@"%@",[(NSError *)[response error] userInfo]);
+//        }
+//        
+//        NSDictionary *dictionary = (NSDictionary *)[response reqParams];
+//        
+//        for (id key in dictionary) {
+//            
+//            NSLog(@"key: %@, value: %@", key, [dictionary objectForKey:key]);
+//            
+//        }
+//    }
+//    
+//}
+- (void)textFieldDidBeginEditing:(UITextField *)textField           // became first responder
 {
-    if ([data isKindOfClass:[TopApiResponse class]])
-    {
-        TopApiResponse *response = (TopApiResponse *)data;
-        
-        if ([response content])
-        {
-            NSLog(@"%@",[response content]);
-        }
-        else {
-            NSLog(@"%@",[(NSError *)[response error] userInfo]);
-        }
-        
-        NSDictionary *dictionary = (NSDictionary *)[response reqParams];
-        
-        for (id key in dictionary) {
-            
-            NSLog(@"key: %@, value: %@", key, [dictionary objectForKey:key]);
-            
-        }
-    }
-    
+    [textField.window makeKeyAndVisible];
 }
-
+-(void)detailRemoteNotification:(NSDictionary*)infoDic
+{
+    if ([infoDic objectForKey:@"openUrl"]!=nil)
+    {
+        NSString *openUrl=[NSMutableString stringWithFormat:@"%@",[infoDic objectForKey:@"openUrl"]];
+        NSURL *url =[NSURL URLWithString:[openUrl stringByReplacingOccurrencesOfString:@"\"" withString:@""]];
+        NSDictionary *apsDic=[NSDictionary dictionaryWithDictionary:[infoDic objectForKey:@"aps"]];
+        NSURLRequest *request =[NSURLRequest requestWithURL:url];
+        [self  presentViewController:self.storeBrowse animated:YES completion:nil];
+        [self.webViewController setThisWebViewWithName:request name:[NSString stringWithFormat:@"%@",[apsDic objectForKey:@"alert"]]];
+    }
+}
 - (void)allMalls
 {
     if (self.mallsListViewController==nil) {
         self.mallsListViewController=[[CosjiMallsListViewController alloc] init];
     }
-    [self presentViewController:self.mallsListViewController animated:YES completion:nil];
+    [self.navigationController pushViewController:self.mallsListViewController animated:YES];
 }
--(void)closeAuthView{
-    [nc dismissModalViewControllerAnimated:YES];
-    nc = nil;
+-(void)presentItemList:(NSString*)keyword
+{
+    CosjiItemListViewController *itemsListViewController=[CosjiItemListViewController shareCosjiItemListViewController];
+    if (self.itemsListNavCon==nil)
+    {
+        self.itemsListNavCon=[[UINavigationController alloc] initWithRootViewController:itemsListViewController];
+        self.itemsListNavCon.navigationBarHidden=YES;
+    }
+    [self presentViewController:self.itemsListNavCon animated:YES completion:nil];
+    [itemsListViewController loadInfoWith:keyword atPage:1];
 }
+-(void)presentFanliDetailVCWithNumID:(NSString*)num_id
+{
+    CosjiServerHelper *serverHelper=[CosjiServerHelper shareCosjiServerHelper];
+    NSDictionary *infoDic=[serverHelper getItemFromTop:num_id];
+    if (infoDic==nil)
+    {
+        [SVProgressHUD showErrorWithStatus:@"搜索不到该商品或该商品没有返利" duration:6];
+    }else
+    {
+        CosjiItemFanliDetailViewController *fanliDetailVC=[CosjiItemFanliDetailViewController shareCosjiItemFanliDetailViewController];
+        [self presentViewController:fanliDetailVC animated:YES completion:nil];
+        [fanliDetailVC loadItemInfoWithDic:infoDic];
+    }
+    
+}
+
+- (BOOL)isPureInt:(NSString*)string{
+    NSScanner* scan = [NSScanner scannerWithString:string];
+    int val;
+    return[scan scanInt:&val] && [scan isAtEnd];
+}
+
 - (IBAction)exitKeyboard:(id)sender {
     [sender resignFirstResponder];
 }
