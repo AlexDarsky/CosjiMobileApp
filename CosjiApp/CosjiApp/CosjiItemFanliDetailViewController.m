@@ -128,7 +128,7 @@ static CosjiItemFanliDetailViewController* shareCosjiItemFanliDetailViewControll
     tishiLabel.backgroundColor=[UIColor clearColor];
     tishiLabel.text=@"根据淘宝最新规则，查询返利将不显示返利比例，且跳转到淘宝客户端购买，但返利仍正常发放，具体金额以到账时为准。";
     [self.view addSubview:tishiLabel];
-    _webView=[[UIWebView alloc] initWithFrame:CGRectMake(0, 45, 320, [UIScreen mainScreen].bounds.size.height-45-20)];
+    _webView=[[UIWebView alloc] initWithFrame:CGRectMake(0, 65, 320, [UIScreen mainScreen].bounds.size.height-45-20)];
     [self.view addSubview:_webView];
     _webView.delegate=self;
     _webView.hidden=YES;
@@ -229,33 +229,11 @@ void ItemFanliImageFromURL( NSURL * URL, void (^imageBlock)(UIImage * image), vo
 }
 -(void)gotoFanli
 {
-    if ([self checkTaoAppinstalled])
-    {
-        [SVProgressHUD showWithStatus:@"正在跳转，安装最新淘宝客户端才能返利..."];
-        NSURL *url =[NSURL  URLWithString:self.clickURLString];
-        NSURLRequest *request =[NSURLRequest requestWithURL:url];
-        [_webView loadRequest:request];
-        NSLog(@"正在打开链接%@",self.clickURLString);
-
-    }else
-    {
-        int alerShows=[[NSUserDefaults standardUserDefaults] integerForKey:@"alertHaveShow"];
-        NSLog(@"alertHaveShow %d",alerShows);
-        if (alerShows>5) {
-            [SVProgressHUD showWithStatus:@"正在跳转，安装最新淘宝客户端才能返利..."];
-            NSURL *url =[NSURL  URLWithString:self.clickURLString];
-            NSURLRequest *request =[NSURLRequest requestWithURL:url];
-            [_webView loadRequest:request];
-            NSLog(@"正在打开链接%@",self.clickURLString);
-        }else
-        {
-            alerShows++;
-        [[NSUserDefaults standardUserDefaults] setInteger:alerShows forKey:@"alertHaveShow"];
-        UIAlertView *alert=[[UIAlertView alloc] initWithTitle:@"温馨提示" message:@"您即将自动跳转至淘宝客户端进行支付以获取返利，若无法自动跳转请确定是否已安装淘宝最新客户端（3.1.3版本以上）" delegate:self cancelButtonTitle:@"关闭" otherButtonTitles:@"去购物拿返利",nil];
-        alert.tag=1;
-        [alert show];
-        }
-    }
+    NSURL *url =[NSURL  URLWithString:self.clickURLString];
+    NSURLRequest *request =[NSURLRequest requestWithURL:url];
+    [_webView loadRequest:request];
+    _webView.hidden = NO;
+    NSLog(@"正在打开链接%@",self.clickURLString);
 }
 -(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
@@ -270,6 +248,8 @@ void ItemFanliImageFromURL( NSURL * URL, void (^imageBlock)(UIImage * image), vo
                 NSURL *url =[NSURL  URLWithString:self.clickURLString];
                 NSURLRequest *request =[NSURLRequest requestWithURL:url];
                 [_webView loadRequest:request];
+                _webView.hidden = NO;
+
             }
                 break;
         }

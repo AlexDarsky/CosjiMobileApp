@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import <QuartzCore/QuartzCore.h>
 #import "StoreKit/SKProductsRequest.h"
-#import "CosjiWebViewController.h"
+#import "CosjiNewWebViewController.h"
 #import "CosjiMallsListViewController.h"
 #import "CosjiUrlFilter.h"
 

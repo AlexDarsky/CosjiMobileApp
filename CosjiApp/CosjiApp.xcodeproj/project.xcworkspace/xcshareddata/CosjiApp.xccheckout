@@ -10,26 +10,30 @@
 	<string>CosjiApp</string>
 	<key>IDESourceControlProjectOriginsDictionary</key>
 	<dict>
+		<key>161DE8363D3EAA34FFE61EB8D9B12555C57619C0</key>
+		<string>github.com:AlexDarsky/CosjiMobileApp.git</string>
 		<key>EAE81DB2-ECA2-4D4B-80E2-9953BE536C59</key>
 		<string>ssh://github.com/AlexDarsky/CosjiMobileApp.git</string>
 		<key>FD961DB1-15FE-43E8-B8B9-875FAD7CA8F9</key>
 		<string>https://github.com/AlexDarsky/MyWorkSpace.git</string>
 	</dict>
 	<key>IDESourceControlProjectPath</key>
-	<string>CosjiMobileApp/CosjiApp/CosjiApp.xcodeproj/project.xcworkspace</string>
+	<string>CosjiApp/CosjiApp.xcodeproj</string>
 	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
 	<dict>
-		<key>EAE81DB2-ECA2-4D4B-80E2-9953BE536C59</key>
+		<key>161DE8363D3EAA34FFE61EB8D9B12555C57619C0</key>
 		<string>../../..</string>
-		<key>FD961DB1-15FE-43E8-B8B9-875FAD7CA8F9</key>
+		<key>EAE81DB2-ECA2-4D4B-80E2-9953BE536C59</key>
 		<string>../../../..</string>
+		<key>FD961DB1-15FE-43E8-B8B9-875FAD7CA8F9</key>
+		<string>../../../../MyWorkSpace</string>
 	</dict>
 	<key>IDESourceControlProjectURL</key>
-	<string>https://github.com/AlexDarsky/MyWorkSpace.git</string>
+	<string>github.com:AlexDarsky/CosjiMobileApp.git</string>
 	<key>IDESourceControlProjectVersion</key>
-	<integer>110</integer>
+	<integer>111</integer>
 	<key>IDESourceControlProjectWCCIdentifier</key>
-	<string>FD961DB1-15FE-43E8-B8B9-875FAD7CA8F9</string>
+	<string>161DE8363D3EAA34FFE61EB8D9B12555C57619C0</string>
 	<key>IDESourceControlProjectWCConfigurations</key>
 	<array>
 		<dict>
@@ -37,6 +41,14 @@
 			<string>public.vcs.git</string>
 			<key>IDESourceControlWCCIdentifierKey</key>
 			<string>EAE81DB2-ECA2-4D4B-80E2-9953BE536C59</string>
+			<key>IDESourceControlWCCName</key>
+			<string></string>
+		</dict>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>161DE8363D3EAA34FFE61EB8D9B12555C57619C0</string>
 			<key>IDESourceControlWCCName</key>
 			<string>CosjiMobileApp</string>
 		</dict>

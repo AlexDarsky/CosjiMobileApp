@@ -42,7 +42,7 @@ static CosjiGuideViewController *shareCosjiGuideViewController = nil;
 
     IntroModel *model1 = [[IntroModel alloc] initWithTitle:nil description:nil image:@"tab1.jpg"];
     
-    IntroModel *model2 = [[IntroModel alloc] initWithTitle:nil description:nil image:@"tab2"];
+    IntroModel *model2 = [[IntroModel alloc] initWithTitle:nil description:nil image:@"tab2.jpg"];
     
     IntroModel *model3 = [[IntroModel alloc] initWithTitle:nil description:nil image:@"tab3.jpg"];
     IntroModel *model4 = [[IntroModel alloc] initWithTitle:nil description:nil image:@"tab4.jpg"];

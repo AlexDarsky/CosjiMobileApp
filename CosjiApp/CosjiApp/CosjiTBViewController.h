@@ -10,16 +10,13 @@
 #import "CosjiWebViewController.h"
 #import "CosjiUrlFilter.h"
 
-@interface CosjiTBViewController : UIViewController<UITableViewDataSource,UITableViewDelegate,UITextFieldDelegate,NSURLConnectionDelegate>
+@interface CosjiTBViewController : UIViewController<UITextFieldDelegate,NSURLConnectionDelegate>
 {
-    NSMutableArray *subjectsArray;
+    UIView *_hotWordView;
 }
-@property (strong, nonatomic)  UITableView *tableView;
 @property (strong, nonatomic)  UIView *customNavBar;
 @property (strong,nonatomic) UITextField *searchField;
-@property (strong,nonatomic) UIButton *taoBtn;
-@property (strong,nonatomic) UIButton *tmallBtn;
-@property (strong,nonatomic) UIButton *juBtn;
+
 @property (strong,nonatomic) UINavigationController *storeBrowse;
 @property (strong,nonatomic) UINavigationController *itemsListNavCon;
 @property (strong,nonatomic) CosjiWebViewController *webViewController;

@@ -295,6 +295,7 @@ static CosjiServerHelper *shareCosjiServerHelper=nil;
         return NO;
     }
 }
+
 - (BOOL) connectedToNetwork
 {
     [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];

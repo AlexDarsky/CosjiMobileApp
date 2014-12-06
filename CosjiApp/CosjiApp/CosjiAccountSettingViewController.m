@@ -368,7 +368,7 @@
                 [SVProgressHUD showSuccessWithStatus:@"修改成功" duration:1.0];
             }else
             {
-                [SVProgressHUD dismissWithError:@"修改失败" afterDelay:1.0];
+                [SVProgressHUD showErrorWithStatus:[headDic objectForKey:@"msg"] duration:1.0];
                 
             }
         }

@@ -20,6 +20,7 @@
 #import "CosjiItemFanliDetailViewController.h"
 #import "TopAttachment.h"
 #import "CosjiWelcomeViewController.h"
+#import "CosjiFanLiListViewController.h"
 
 
 @interface CosjiViewController ()
@@ -90,7 +91,7 @@ static UINavigationController* nc;
     searchField.contentHorizontalAlignment=UIControlContentHorizontalAlignmentCenter;
     searchField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
     searchField.backgroundColor=[UIColor clearColor];
-    searchField.font=[UIFont fontWithName:@"Arial" size:18];
+    searchField.font=[UIFont fontWithName:@"Arial" size:16];
     searchField.placeholder=@"粘贴商品全名或输入关键字，拿返利";
     [searchView addSubview:searchField];
     [searchField addTarget:self action:@selector(searchItemFrom:) forControlEvents:UIControlEventEditingDidEndOnExit];
@@ -138,19 +139,20 @@ static UINavigationController* nc;
     [backgroundView addSubview:shulineImage2];
     
     UIButton *juhuasuanBtn=[UIButton buttonWithType:UIButtonTypeCustom];
-    juhuasuanBtn.frame=CGRectMake(300-12-155/2, 20, 155/2, 109/2);
-    [juhuasuanBtn addTarget:self action:@selector(presentStoreBrowseViewController:) forControlEvents:UIControlEventTouchUpInside];
-    [juhuasuanBtn setImage:[UIImage imageNamed:@"新首页聚划算"] forState:UIControlStateNormal];
-    UILabel *juhuasuanLabel=[[UILabel alloc] initWithFrame:CGRectMake(0, juhuasuanBtn.frame.size.height-10, 150/2, 40/2)];
-    juhuasuanLabel.text=@"聚划算";
+    juhuasuanBtn.frame=CGRectMake(300-12-155/2, 10, 155/2, 109/2);
+    [juhuasuanBtn addTarget:self action:@selector(showBuTie) forControlEvents:UIControlEventTouchUpInside];
+    [juhuasuanBtn setImage:[UIImage imageNamed:@"button_butie"] forState:UIControlStateNormal];
+    UILabel *juhuasuanLabel=[[UILabel alloc] initWithFrame:CGRectMake(0, juhuasuanBtn.frame.size.height, 150/2, 40/2)];
+    juhuasuanLabel.text=@"领取补贴";
     juhuasuanLabel.textAlignment=NSTextAlignmentCenter;
     juhuasuanLabel.backgroundColor=[UIColor clearColor];
     juhuasuanLabel.font=[UIFont fontWithName:@"Arial" size:10];
     [juhuasuanBtn addSubview:juhuasuanLabel];
     juhuasuanBtn.tag=1;
     [backgroundView addSubview:juhuasuanBtn];
-    
 }
+
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -618,13 +620,15 @@ void TopImageFromURL( NSURL * URL, void (^imageBlock)(UIImage * image), void (^e
             }
                 break;
         }
-    }else if(alertView.tag==10)
+    }
+    else if(alertView.tag==10)
         {
             if (buttonIndex==1) {
                 NSURL *url =[NSURL URLWithString:@"http://www.zhemai.com"];
                 [[UIApplication sharedApplication] openURL:url];
             }
-        }else
+        }
+    else
     {
         if (buttonIndex==1) {
             CosjiLoginViewController *loginViewController=[CosjiLoginViewController shareCosjiLoginViewController];
@@ -692,90 +696,91 @@ void TopImageFromURL( NSURL * URL, void (^imageBlock)(UIImage * image), void (^e
     {
         if (textField!=nil&&![textField.text isEqualToString:@""])
         {
-            NSLog(@"开始搜索");
-            
-            CosjiServerHelper *serverHelper=[CosjiServerHelper shareCosjiServerHelper];
-            if ([self isPureInt:searchField.text])
-            {
-                NSString *num_iid=[NSString stringWithFormat:@"%@",searchField.text];
-                NSDictionary *infoDic=[serverHelper getItemFromTop:num_iid];
-                if (infoDic==nil)
-                {
-                    [SVProgressHUD showErrorWithStatus:@"搜索不到该商品或该商品没有返利" duration:3];
-                }else
-                {
-                    CosjiItemFanliDetailViewController *fanliDetailVC=[CosjiItemFanliDetailViewController shareCosjiItemFanliDetailViewController];
-                    
-                    [self presentViewController:fanliDetailVC animated:YES completion:nil];
-                    [fanliDetailVC loadItemInfoWithDic:infoDic];
-                }
-            }else
-            {
-                NSDictionary *resultDic=[CosjiUrlFilter filterUrl:searchField.text];
-                if (resultDic == nil)
-                {
-                    return;
-                }
-                NSNumber *resultNumber=[resultDic objectForKey:@"UrlType"];
-                NSLog(@"%@",[resultDic objectForKey:@"UrlType"]);
-                switch ([resultNumber intValue]) {
-                    case 0:
-                    {
-                        NSLog(@"//普通链接");
-                        [self presentViewController:self.storeBrowse animated:YES completion:nil];
-                        NSURL *url=[NSURL URLWithString:[NSString stringWithFormat:@"%@",[resultDic objectForKey:@"url"]]];
-                        [self.webViewController setThisWebViewWithName:[NSURLRequest requestWithURL:url] name:@"查找返利"];
-                    }
-                        break;
-                    case 1://混合链接
-                    {
-                        NSLog(@"//混合链接");
-                        [self presentViewController:self.storeBrowse animated:YES completion:nil];
-                        NSURL *url=[NSURL URLWithString:[NSString stringWithFormat:@"%@",[resultDic objectForKey:@"url"]]];
-                        [self.webViewController setThisWebViewWithName:[NSURLRequest requestWithURL:url] name:@"查找返利"];
-                    }
-                        break;
-                    case 2://特别链接（带有淘宝推广的链接）
-                    {
-                        NSLog(@"//特别链接");
-                        
-                        [self presentFanliDetailVCWithNumID:[resultDic objectForKey:@"num_iid"]];
-                    }
-                        break;
-                    case 3://淘宝商品链接
-                    {
-                        NSLog(@"//淘宝链接");
-                        
-                        [self presentFanliDetailVCWithNumID:[resultDic objectForKey:@"num_iid"]];
-                        
-                    }
-                        break;
-                    case 4://天猫商品链接
-                    {
-                        NSLog(@"//天猫链接");
-                        
-                        [self presentFanliDetailVCWithNumID:[resultDic objectForKey:@"num_iid"]];
-                        
-                    }
-                        break;
-                    case 5:
-                    {
-                        NSLog(@"//纯文本");
-                        [self presentItemList:[NSString stringWithFormat:@"%@",[resultDic objectForKey:@"String"]]];
-                    }
-                        break;
-                    case 6:
-                    {
-                        [self presentFanliDetailVCWithNumID:[resultDic objectForKey:@"num_iid"]];
-                    }
-                        break;
-                }
-                
-            }
-
+            [self showFanliDetailWebView:textField.text];
+//            NSLog(@"开始搜索");
+//            
+//            CosjiServerHelper *serverHelper=[CosjiServerHelper shareCosjiServerHelper];
+//            if ([self isPureInt:searchField.text])
+//            {
+//                NSString *num_iid=[NSString stringWithFormat:@"%@",searchField.text];
+//                NSDictionary *infoDic=[serverHelper getItemFromTop:num_iid];
+//                if (infoDic==nil)
+//                {
+//                    [SVProgressHUD showErrorWithStatus:@"搜索不到该商品或该商品没有返利" duration:3];
+//                }else
+//                {
+//                    CosjiItemFanliDetailViewController *fanliDetailVC=[CosjiItemFanliDetailViewController shareCosjiItemFanliDetailViewController];
+//                    
+//                    [self presentViewController:fanliDetailVC animated:YES completion:nil];
+//                    [fanliDetailVC loadItemInfoWithDic:infoDic];
+//                }
+//            }else
+//            {
+//                NSDictionary *resultDic=[CosjiUrlFilter filterUrl:searchField.text];
+//                if (resultDic == nil)
+//                {
+//                    return;
+//                }
+//                NSNumber *resultNumber=[resultDic objectForKey:@"UrlType"];
+//                NSLog(@"%@",[resultDic objectForKey:@"UrlType"]);
+//                switch ([resultNumber intValue]) {
+//                    case 0:
+//                    {
+//                        NSLog(@"//普通链接");
+//                        [self presentViewController:self.storeBrowse animated:YES completion:nil];
+//                        NSURL *url=[NSURL URLWithString:[NSString stringWithFormat:@"%@",[resultDic objectForKey:@"url"]]];
+//                        [self.webViewController setThisWebViewWithName:[NSURLRequest requestWithURL:url] name:@"查找返利"];
+//                    }
+//                        break;
+//                    case 1://混合链接
+//                    {
+//                        NSLog(@"//混合链接");
+//                        [self presentViewController:self.storeBrowse animated:YES completion:nil];
+//                        NSURL *url=[NSURL URLWithString:[NSString stringWithFormat:@"%@",[resultDic objectForKey:@"url"]]];
+//                        [self.webViewController setThisWebViewWithName:[NSURLRequest requestWithURL:url] name:@"查找返利"];
+//                    }
+//                        break;
+//                    case 2://特别链接（带有淘宝推广的链接）
+//                    {
+//                        NSLog(@"//特别链接");
+//                        
+//                        [self presentFanliDetailVCWithNumID:[resultDic objectForKey:@"num_iid"]];
+//                    }
+//                        break;
+//                    case 3://淘宝商品链接
+//                    {
+//                        NSLog(@"//淘宝链接");
+//                        
+//                        [self presentFanliDetailVCWithNumID:[resultDic objectForKey:@"num_iid"]];
+//                        
+//                    }
+//                        break;
+//                    case 4://天猫商品链接
+//                    {
+//                        NSLog(@"//天猫链接");
+//                        
+//                        [self presentFanliDetailVCWithNumID:[resultDic objectForKey:@"num_iid"]];
+//                        
+//                    }
+//                        break;
+//                    case 5:
+//                    {
+//                        NSLog(@"//纯文本");
+//                        [self presentItemList:[NSString stringWithFormat:@"%@",[resultDic objectForKey:@"String"]]];
+//                    }
+//                        break;
+//                    case 6:
+//                    {
+//                        [self presentFanliDetailVCWithNumID:[resultDic objectForKey:@"num_iid"]];
+//                    }
+//                        break;
+//                }
+//                
+//            }
+//
         }else
         {
-            UIAlertView *alert=[[UIAlertView alloc] initWithTitle:@"错误" message:@"请输入您想要搜索的商品或查询的网址" delegate:nil cancelButtonTitle:@"好的" otherButtonTitles: nil];
+            UIAlertView *alert=[[UIAlertView alloc] initWithTitle:@"错误" message:@"请输入您想要搜索的商品" delegate:nil cancelButtonTitle:@"好的" otherButtonTitles: nil];
             [alert show];
         }
     }else
@@ -809,6 +814,64 @@ void TopImageFromURL( NSURL * URL, void (^imageBlock)(UIImage * image), void (^e
 //    }
 //    
 //}
+
+- (void)showBuTie
+{
+    if ([[NSUserDefaults standardUserDefaults] boolForKey:@"havelogined"])
+    {
+        CosjiFanLiListViewController *viewController = [[CosjiFanLiListViewController alloc] init];
+        [self presentViewController:viewController animated:YES completion:nil];
+    }
+    else
+    {
+        UIAlertView *alert=[[UIAlertView alloc] initWithTitle:@"提示" message:@"登录获取返利" delegate:self cancelButtonTitle:@"跳过" otherButtonTitles:@"登陆",nil];
+        alert.tag=110;
+        [alert show];
+        return;
+    }
+}
+
+- (void)showFanliDetailWebView:(NSString*)keyWord
+{
+    if ([[NSUserDefaults standardUserDefaults] boolForKey:@"havelogined"])
+    {
+        NSDictionary *tmpDic=[NSDictionary dictionaryWithDictionary:[[NSUserDefaults standardUserDefaults] objectForKey:@"userInfo"]];
+        NSDictionary *infoDic=[NSDictionary dictionaryWithDictionary:[tmpDic objectForKey:@"body"]];
+        NSString *userID = [NSString stringWithFormat:@"%@",[infoDic objectForKey:@"userId"]];
+        
+        
+        NSString *prepareUrlString = [NSString stringWithFormat:@"http://ai.m.taobao.com/search.html?back=true&q=%@&pid=mm_26039255_8350334_28114441&unid=%@",[self URLEncodedString:keyWord],userID];
+        
+        
+        
+        CosjiNewWebViewController *storeWebViewController=[[CosjiNewWebViewController alloc] init];
+        
+        UINavigationController *tmpNav=[[UINavigationController alloc] initWithRootViewController:storeWebViewController];
+        tmpNav.navigationBarHidden=YES;
+        [self presentViewController:tmpNav animated:YES completion:nil];
+        storeWebViewController.itemName = keyWord;
+        storeWebViewController.urlStirng = prepareUrlString;
+    }
+    else
+    {
+        UIAlertView *alert=[[UIAlertView alloc] initWithTitle:@"提示" message:@"登录获取返利" delegate:self cancelButtonTitle:@"跳过" otherButtonTitles:@"登陆",nil];
+        alert.tag=110;
+        [alert show];
+        return;
+    }
+    
+}
+
+- (NSString *)URLEncodedString:(NSString*)target{
+    NSString *result = (NSString *)CFBridgingRelease(CFURLCreateStringByAddingPercentEscapes(kCFAllocatorDefault,
+                                                                                             (CFStringRef)target,
+                                                                                             NULL,
+                                                                                             CFSTR("!*'();:@&=+$,/?%#[]"),
+                                                                                             kCFStringEncodingUTF8));
+    return result;
+}
+
+
 - (void)textFieldDidBeginEditing:(UITextField *)textField           // became first responder
 {
     [textField.window makeKeyAndVisible];
