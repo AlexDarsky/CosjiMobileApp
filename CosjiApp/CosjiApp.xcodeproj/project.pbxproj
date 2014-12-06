@@ -44,11 +44,6 @@
 		183474AB1875025D001EB207 /* youfanli@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 183474A51875025D001EB207 /* youfanli@2x.png */; };
 		183474AC1875025D001EB207 /* zanwufanli .png in Resources */ = {isa = PBXBuildFile; fileRef = 183474A61875025D001EB207 /* zanwufanli .png */; };
 		183474B018751358001EB207 /* tab1.png in Resources */ = {isa = PBXBuildFile; fileRef = 183474AF18751358001EB207 /* tab1.png */; };
-		183474C318753550001EB207 /* BaiduSocialShare.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 183474B218753550001EB207 /* BaiduSocialShare.framework */; };
-		183474C418753550001EB207 /* BaiduSocialShareSource.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 183474B318753550001EB207 /* BaiduSocialShareSource.bundle */; };
-		183474C518753550001EB207 /* TencentOpenAPI in Frameworks */ = {isa = PBXBuildFile; fileRef = 183474BB18753550001EB207 /* TencentOpenAPI */; };
-		183474C618753550001EB207 /* libWeiboSDK in Frameworks */ = {isa = PBXBuildFile; fileRef = 183474BD18753550001EB207 /* libWeiboSDK */; };
-		183474C718753550001EB207 /* libWeChatSDK in Frameworks */ = {isa = PBXBuildFile; fileRef = 183474C018753550001EB207 /* libWeChatSDK */; };
 		183474C918753573001EB207 /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 183474C818753573001EB207 /* MessageUI.framework */; };
 		183474CB1875358F001EB207 /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 183474CA1875358F001EB207 /* CoreTelephony.framework */; };
 		183474CD1875359F001EB207 /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 183474CC1875359F001EB207 /* libsqlite3.dylib */; };
@@ -297,20 +292,6 @@
 		183474A51875025D001EB207 /* youfanli@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "youfanli@2x.png"; sourceTree = "<group>"; };
 		183474A61875025D001EB207 /* zanwufanli .png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "zanwufanli .png"; sourceTree = "<group>"; };
 		183474AF18751358001EB207 /* tab1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = tab1.png; sourceTree = "<group>"; };
-		183474B218753550001EB207 /* BaiduSocialShare.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = BaiduSocialShare.framework; sourceTree = "<group>"; };
-		183474B318753550001EB207 /* BaiduSocialShareSource.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = BaiduSocialShareSource.bundle; sourceTree = "<group>"; };
-		183474B518753550001EB207 /* QQApi.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QQApi.h; sourceTree = "<group>"; };
-		183474B618753550001EB207 /* QQApiInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QQApiInterface.h; sourceTree = "<group>"; };
-		183474B718753550001EB207 /* QQApiInterfaceObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QQApiInterfaceObject.h; sourceTree = "<group>"; };
-		183474B818753550001EB207 /* sdkdef.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sdkdef.h; sourceTree = "<group>"; };
-		183474B918753550001EB207 /* TencentOAuth.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TencentOAuth.h; sourceTree = "<group>"; };
-		183474BA18753550001EB207 /* TencentOAuthObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TencentOAuthObject.h; sourceTree = "<group>"; };
-		183474BB18753550001EB207 /* TencentOpenAPI */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = TencentOpenAPI; sourceTree = "<group>"; };
-		183474BD18753550001EB207 /* libWeiboSDK */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libWeiboSDK; sourceTree = "<group>"; };
-		183474BE18753550001EB207 /* WeiboSDK.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WeiboSDK.h; sourceTree = "<group>"; };
-		183474C018753550001EB207 /* libWeChatSDK */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libWeChatSDK; sourceTree = "<group>"; };
-		183474C118753550001EB207 /* WXApi.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WXApi.h; sourceTree = "<group>"; };
-		183474C218753550001EB207 /* WXApiObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WXApiObject.h; sourceTree = "<group>"; };
 		183474C818753573001EB207 /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS6.1.sdk/System/Library/Frameworks/MessageUI.framework; sourceTree = DEVELOPER_DIR; };
 		183474CA1875358F001EB207 /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS6.1.sdk/System/Library/Frameworks/CoreTelephony.framework; sourceTree = DEVELOPER_DIR; };
 		183474CC1875359F001EB207 /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS6.1.sdk/usr/lib/libsqlite3.dylib; sourceTree = DEVELOPER_DIR; };
@@ -545,13 +526,9 @@
 				183474CB1875358F001EB207 /* CoreTelephony.framework in Frameworks */,
 				183474C918753573001EB207 /* MessageUI.framework in Frameworks */,
 				18CE135317E3413700D67A26 /* CoreTelephony.framework in Frameworks */,
-				183474C718753550001EB207 /* libWeChatSDK in Frameworks */,
-				183474C618753550001EB207 /* libWeiboSDK in Frameworks */,
-				183474C518753550001EB207 /* TencentOpenAPI in Frameworks */,
 				18ED3A311A32C8FF00FA582E /* libMobClickLibrary.a in Frameworks */,
 				18E207DB17C732C300D849F5 /* AudioToolbox.framework in Frameworks */,
 				1814F6F11798FE7B00CC2ECD /* QuartzCore.framework in Frameworks */,
-				183474C318753550001EB207 /* BaiduSocialShare.framework in Frameworks */,
 				60927B8A178E2C6D0058CFD9 /* StoreKit.framework in Frameworks */,
 				60927B84178E2B1F0058CFD9 /* libz.dylib in Frameworks */,
 				6093424F178E24F500761FB6 /* SystemConfiguration.framework in Frameworks */,
@@ -674,47 +651,9 @@
 		183474B118753550001EB207 /* BaiduSocialShare */ = {
 			isa = PBXGroup;
 			children = (
-				183474B218753550001EB207 /* BaiduSocialShare.framework */,
-				183474B318753550001EB207 /* BaiduSocialShareSource.bundle */,
-				183474B418753550001EB207 /* QQ */,
-				183474BC18753550001EB207 /* WB */,
-				183474BF18753550001EB207 /* WX */,
 			);
 			name = BaiduSocialShare;
 			path = "../../../Baidu-SocialShare-SDK-iOS-L3-2.0.4/BaiduSocialShare";
-			sourceTree = "<group>";
-		};
-		183474B418753550001EB207 /* QQ */ = {
-			isa = PBXGroup;
-			children = (
-				183474B518753550001EB207 /* QQApi.h */,
-				183474B618753550001EB207 /* QQApiInterface.h */,
-				183474B718753550001EB207 /* QQApiInterfaceObject.h */,
-				183474B818753550001EB207 /* sdkdef.h */,
-				183474B918753550001EB207 /* TencentOAuth.h */,
-				183474BA18753550001EB207 /* TencentOAuthObject.h */,
-				183474BB18753550001EB207 /* TencentOpenAPI */,
-			);
-			path = QQ;
-			sourceTree = "<group>";
-		};
-		183474BC18753550001EB207 /* WB */ = {
-			isa = PBXGroup;
-			children = (
-				183474BD18753550001EB207 /* libWeiboSDK */,
-				183474BE18753550001EB207 /* WeiboSDK.h */,
-			);
-			path = WB;
-			sourceTree = "<group>";
-		};
-		183474BF18753550001EB207 /* WX */ = {
-			isa = PBXGroup;
-			children = (
-				183474C018753550001EB207 /* libWeChatSDK */,
-				183474C118753550001EB207 /* WXApi.h */,
-				183474C218753550001EB207 /* WXApiObject.h */,
-			);
-			path = WX;
 			sourceTree = "<group>";
 		};
 		183D0BE018516690006D5BE2 /* 教程 */ = {
@@ -1265,7 +1204,6 @@
 				182A81B617A39E70003BEBFA /* userImage.jpg in Resources */,
 				18E82C2B17C5EF3C009A2902 /* Default-568h@2x.png in Resources */,
 				183D0BE918516C23006D5BE2 /* tab3.jpg in Resources */,
-				183474C418753550001EB207 /* BaiduSocialShareSource.bundle in Resources */,
 				183D0BF318517ACE006D5BE2 /* gerenzhonxin shez@2x.png in Resources */,
 				18E82C2D17C5EFD8009A2902 /* Default.png in Resources */,
 				18E82C2F17C5EFDA009A2902 /* Default@2x.png in Resources */,
