@@ -9,7 +9,7 @@
 #import "CosjiTBViewController.h"
 #import <QuartzCore/QuartzCore.h>
 #import "CosjiNewWebViewController.h"
-#import "MobileProbe.h"
+#import "MobClick.h"
 #import "CosjiItemListViewController.h"
 #import "CosjiServerHelper.h"
 #import "SVProgressHUD.h"
@@ -38,11 +38,11 @@
 }
 -(void)viewDidAppear:(BOOL)animated
 {
-    [MobileProbe pageBeginWithName:@"返利通道"];
+    [MobClick beginLogPageView:@"返利通道"];
 }
 - (void)viewDidDisappear:(BOOL)animated
 {
-    [MobileProbe pageEndWithName:@"返利通道"];
+    [MobClick endLogPageView:@"返利通道"];
     [self.searchField resignFirstResponder];
 }
 -(void)loadView

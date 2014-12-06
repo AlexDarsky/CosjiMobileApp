@@ -8,7 +8,7 @@
 
 #import "CosjiSpecialActivityViewController.h"
 
-#import "MobileProbe.h"
+#import "MobClick.h"
 #import "CosjiServerHelper.h"
 #import "CosjiWebViewController.h"
 #import "SVProgressHUD.h"
@@ -47,11 +47,11 @@
 }
 -(void)viewDidAppear:(BOOL)animated
 {
-    [MobileProbe pageBeginWithName:@"折买团购"];
+    [MobClick beginLogPageView:@"折买团购"];
 }
 - (void)viewDidDisappear:(BOOL)animated
 {
-    [MobileProbe pageEndWithName:@"折买团购"];
+    [MobClick endLogPageView:@"折买团购"];
 }
 -(void)loadView
 {

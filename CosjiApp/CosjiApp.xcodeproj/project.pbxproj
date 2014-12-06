@@ -129,7 +129,6 @@
 		18CB7981187AADD600F938E0 /* 引导页2@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 18CB797D187AADD600F938E0 /* 引导页2@2x.png */; };
 		18CB7982187AADD600F938E0 /* 引导页3@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 18CB797E187AADD600F938E0 /* 引导页3@2x.png */; };
 		18CB7983187AADD600F938E0 /* 引导页4@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 18CB797F187AADD600F938E0 /* 引导页4@2x.png */; };
-		18CE135117E3403D00D67A26 /* MobileProbe.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 18CE135017E3403D00D67A26 /* MobileProbe.a */; };
 		18CE135317E3413700D67A26 /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 18CE135217E3413700D67A26 /* CoreTelephony.framework */; };
 		18CF8F0C1855B3C400EC635C /* CosjiFileManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 18CF8F0B1855B3C400EC635C /* CosjiFileManager.m */; };
 		18DCC6D2179AC0A600FA5B4A /* fuzhuangfushi.png in Resources */ = {isa = PBXBuildFile; fileRef = 18DCC6BE179AC0A600FA5B4A /* fuzhuangfushi.png */; };
@@ -163,6 +162,7 @@
 		18E8ECE81846DA4000AEBA16 /* Icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 18E8ECE61846DA4000AEBA16 /* Icon@2x.png */; };
 		18ED3A2C1A32C19E00FA582E /* tab2.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 18ED3A2B1A32C19E00FA582E /* tab2.jpg */; };
 		18ED3A2E1A32C24F00FA582E /* button_butie@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 18ED3A2D1A32C24F00FA582E /* button_butie@2x.png */; };
+		18ED3A311A32C8FF00FA582E /* libMobClickLibrary.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 18ED3A2F1A32C8FF00FA582E /* libMobClickLibrary.a */; };
 		18F0589D18A6052F004CD13E /* 折买团购@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 18F0589C18A6052F004CD13E /* 折买团购@2x.png */; };
 		18F0CD26179268E40031995E /* CosjiSpecialActivityViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 18F0CD24179268E40031995E /* CosjiSpecialActivityViewController.m */; };
 		18F0CD2C179269DA0031995E /* CosjiUserViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 18F0CD2A179269DA0031995E /* CosjiUserViewController.m */; };
@@ -230,10 +230,6 @@
 		18F6E9F417D9C0270046526C /* 首页-默认@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 18F6E9B417D9C0270046526C /* 首页-默认@2x.png */; };
 		18F8F0DA180CE7E100B74F67 /* CosjiUserHelpViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 18F8F0D8180CE7E100B74F67 /* CosjiUserHelpViewController.m */; };
 		18FD9ADE18A8BE09001BACEE /* CosjiUrlFilter.m in Sources */ = {isa = PBXBuildFile; fileRef = 18FD9ADD18A8BE09001BACEE /* CosjiUrlFilter.m */; };
-		18FD9AED18A8BE24001BACEE /* libBPush.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 18FD9AE318A8BE24001BACEE /* libBPush.a */; };
-		18FD9AEE18A8BE24001BACEE /* Base64.m in Sources */ = {isa = PBXBuildFile; fileRef = 18FD9AE618A8BE24001BACEE /* Base64.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		18FD9AEF18A8BE24001BACEE /* GzipCompressor.m in Sources */ = {isa = PBXBuildFile; fileRef = 18FD9AE918A8BE24001BACEE /* GzipCompressor.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		18FD9AF018A8BE24001BACEE /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 18FD9AEB18A8BE24001BACEE /* Reachability.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		18FD9B1B18A8C00C001BACEE /* libTOPIOSSdk.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 18FD9B1718A8C00C001BACEE /* libTOPIOSSdk.a */; };
 		18FD9B1C18A8C00C001BACEE /* libTOPIOSSdk.s.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 18FD9B1818A8C00C001BACEE /* libTOPIOSSdk.s.a */; };
 		18FD9B1D18A8C00C001BACEE /* barImg.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 18FD9B1A18A8C00C001BACEE /* barImg.bundle */; };
@@ -412,8 +408,6 @@
 		18CB797D187AADD600F938E0 /* 引导页2@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "引导页2@2x.png"; sourceTree = "<group>"; };
 		18CB797E187AADD600F938E0 /* 引导页3@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "引导页3@2x.png"; sourceTree = "<group>"; };
 		18CB797F187AADD600F938E0 /* 引导页4@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "引导页4@2x.png"; sourceTree = "<group>"; };
-		18CE134F17E3403D00D67A26 /* MobileProbe.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MobileProbe.h; sourceTree = "<group>"; };
-		18CE135017E3403D00D67A26 /* MobileProbe.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = MobileProbe.a; sourceTree = "<group>"; };
 		18CE135217E3413700D67A26 /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
 		18CF8F0A1855B3C400EC635C /* CosjiFileManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CosjiFileManager.h; path = ../CosjiFileManager.h; sourceTree = "<group>"; };
 		18CF8F0B1855B3C400EC635C /* CosjiFileManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CosjiFileManager.m; path = ../CosjiFileManager.m; sourceTree = "<group>"; };
@@ -450,6 +444,8 @@
 		18E8ECE61846DA4000AEBA16 /* Icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon@2x.png"; sourceTree = "<group>"; };
 		18ED3A2B1A32C19E00FA582E /* tab2.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = tab2.jpg; sourceTree = "<group>"; };
 		18ED3A2D1A32C24F00FA582E /* button_butie@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "button_butie@2x.png"; sourceTree = "<group>"; };
+		18ED3A2F1A32C8FF00FA582E /* libMobClickLibrary.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libMobClickLibrary.a; sourceTree = "<group>"; };
+		18ED3A301A32C8FF00FA582E /* MobClick.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MobClick.h; sourceTree = "<group>"; };
 		18F0589C18A6052F004CD13E /* 折买团购@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "折买团购@2x.png"; sourceTree = "<group>"; };
 		18F0CD23179268E40031995E /* CosjiSpecialActivityViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CosjiSpecialActivityViewController.h; sourceTree = "<group>"; };
 		18F0CD24179268E40031995E /* CosjiSpecialActivityViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CosjiSpecialActivityViewController.m; sourceTree = "<group>"; };
@@ -521,15 +517,6 @@
 		18F8F0D8180CE7E100B74F67 /* CosjiUserHelpViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CosjiUserHelpViewController.m; sourceTree = "<group>"; };
 		18FD9ADC18A8BE09001BACEE /* CosjiUrlFilter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CosjiUrlFilter.h; sourceTree = "<group>"; };
 		18FD9ADD18A8BE09001BACEE /* CosjiUrlFilter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CosjiUrlFilter.m; sourceTree = "<group>"; };
-		18FD9AE018A8BE24001BACEE /* BPush.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BPush.h; sourceTree = "<group>"; };
-		18FD9AE318A8BE24001BACEE /* libBPush.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libBPush.a; sourceTree = "<group>"; };
-		18FD9AE518A8BE24001BACEE /* Base64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Base64.h; sourceTree = "<group>"; };
-		18FD9AE618A8BE24001BACEE /* Base64.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Base64.m; sourceTree = "<group>"; };
-		18FD9AE718A8BE24001BACEE /* Base64Defines.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Base64Defines.h; sourceTree = "<group>"; };
-		18FD9AE818A8BE24001BACEE /* GzipCompressor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GzipCompressor.h; sourceTree = "<group>"; };
-		18FD9AE918A8BE24001BACEE /* GzipCompressor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GzipCompressor.m; sourceTree = "<group>"; };
-		18FD9AEA18A8BE24001BACEE /* Reachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Reachability.h; sourceTree = "<group>"; };
-		18FD9AEB18A8BE24001BACEE /* Reachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Reachability.m; sourceTree = "<group>"; };
 		18FD9AF318A8C00C001BACEE /* DebuggingTools.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DebuggingTools.h; sourceTree = "<group>"; };
 		18FD9AF418A8C00C001BACEE /* JDY_ItemManagement.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JDY_ItemManagement.h; sourceTree = "<group>"; };
 		18FD9AF518A8C00C001BACEE /* JDY_MsgCenterManagement.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JDY_MsgCenterManagement.h; sourceTree = "<group>"; };
@@ -600,6 +587,7 @@
 				183474C718753550001EB207 /* libWeChatSDK in Frameworks */,
 				183474C618753550001EB207 /* libWeiboSDK in Frameworks */,
 				183474C518753550001EB207 /* TencentOpenAPI in Frameworks */,
+				18ED3A311A32C8FF00FA582E /* libMobClickLibrary.a in Frameworks */,
 				18E207DB17C732C300D849F5 /* AudioToolbox.framework in Frameworks */,
 				1814F6F11798FE7B00CC2ECD /* QuartzCore.framework in Frameworks */,
 				18FD9B1B18A8C00C001BACEE /* libTOPIOSSdk.a in Frameworks */,
@@ -611,8 +599,6 @@
 				609341FE178E1EB600761FB6 /* UIKit.framework in Frameworks */,
 				60934200178E1EB600761FB6 /* Foundation.framework in Frameworks */,
 				60934202178E1EB600761FB6 /* CoreGraphics.framework in Frameworks */,
-				18FD9AED18A8BE24001BACEE /* libBPush.a in Frameworks */,
-				18CE135117E3403D00D67A26 /* MobileProbe.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -928,6 +914,8 @@
 		18CF8F0D1855B3D300EC635C /* Other Classes */ = {
 			isa = PBXGroup;
 			children = (
+				18ED3A2F1A32C8FF00FA582E /* libMobClickLibrary.a */,
+				18ED3A301A32C8FF00FA582E /* MobClick.h */,
 				18FD9AF118A8C00C001BACEE /* TOPSDK */,
 				18FD9ADF18A8BE24001BACEE /* 百度云推送 */,
 				18FD9ADC18A8BE09001BACEE /* CosjiUrlFilter.h */,
@@ -1115,26 +1103,9 @@
 		18FD9ADF18A8BE24001BACEE /* 百度云推送 */ = {
 			isa = PBXGroup;
 			children = (
-				18FD9AE018A8BE24001BACEE /* BPush.h */,
-				18FD9AE318A8BE24001BACEE /* libBPush.a */,
-				18FD9AE418A8BE24001BACEE /* opensource */,
 			);
 			name = "百度云推送";
 			path = "../../../百度云推送";
-			sourceTree = "<group>";
-		};
-		18FD9AE418A8BE24001BACEE /* opensource */ = {
-			isa = PBXGroup;
-			children = (
-				18FD9AE518A8BE24001BACEE /* Base64.h */,
-				18FD9AE618A8BE24001BACEE /* Base64.m */,
-				18FD9AE718A8BE24001BACEE /* Base64Defines.h */,
-				18FD9AE818A8BE24001BACEE /* GzipCompressor.h */,
-				18FD9AE918A8BE24001BACEE /* GzipCompressor.m */,
-				18FD9AEA18A8BE24001BACEE /* Reachability.h */,
-				18FD9AEB18A8BE24001BACEE /* Reachability.m */,
-			);
-			path = opensource;
 			sourceTree = "<group>";
 		};
 		18FD9AF118A8C00C001BACEE /* TOPSDK */ = {
@@ -1248,8 +1219,6 @@
 				183D0BE018516690006D5BE2 /* 教程 */,
 				181A336817FE7FA100D8C55F /* LoginView */,
 				1893116617F80B550009C08F /* 首页 */,
-				18CE134F17E3403D00D67A26 /* MobileProbe.h */,
-				18CE135017E3403D00D67A26 /* MobileProbe.a */,
 				182A81B517A39E70003BEBFA /* userImage.jpg */,
 				18F6E97317D9C0270046526C /* Resource */,
 				18F0CD28179269C10031995E /* 我的可及 */,
@@ -1569,7 +1538,6 @@
 				185F69A31A32B04500F9116F /* CosjiNewWebViewController.m in Sources */,
 				18F0CD2C179269DA0031995E /* CosjiUserViewController.m in Sources */,
 				182A81B317A39D91003BEBFA /* CosjiWebViewController.m in Sources */,
-				18FD9AEE18A8BE24001BACEE /* Base64.m in Sources */,
 				185790DA1876A87A00272882 /* CosjiAccountSettingField.m in Sources */,
 				18E207E317C736CA00D849F5 /* CosjiMP3Player.m in Sources */,
 				18E208AA17C7551300D849F5 /* CosjiTBViewController.m in Sources */,
@@ -1580,10 +1548,8 @@
 				185790EE1876B6C900272882 /* CosjiWelcomeViewController.m in Sources */,
 				181A639F18599E2200A165FA /* CosjiMessagCell.m in Sources */,
 				18B3C1091801034300F496E4 /* CosjiItemListViewController.m in Sources */,
-				18FD9AEF18A8BE24001BACEE /* GzipCompressor.m in Sources */,
 				183441A5189351E8005EAB15 /* MJRefreshConst.m in Sources */,
 				188BDB0B184742F90027A832 /* CosjiAccountItemView.m in Sources */,
-				18FD9AF018A8BE24001BACEE /* Reachability.m in Sources */,
 				182667D01801279A00ED9CC8 /* SVProgressHUD.m in Sources */,
 				18864CA51856B49000AFD48F /* IntroModel.m in Sources */,
 				18B7301618A61D9F006FF27B /* CosjiTimerView.m in Sources */,
@@ -1679,10 +1645,7 @@
 		6093421E178E1EB600761FB6 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = (
-					armv7s,
-					armv7,
-				);
+				ARCHS = "$(ARCHS_STANDARD)";
 				CODE_SIGN_IDENTITY = "iPhone Developer: Sheng Zhou (8F29FUSYL2)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
@@ -1704,13 +1667,15 @@
 					"Users/apple/MyWorkSpace/CosjiMobileApp/CosjiApp/CosjiApp/百度云推送",
 					"/Users/apple/MyWorkSpace/百度云推送",
 					/Users/apple/MyWorkSpace/TOPSDK,
+					"$(PROJECT_DIR)/CosjiApp",
 				);
 				ONLY_ACTIVE_ARCH = YES;
-				OTHER_LDFLAGS = "-ObjC";
+				OTHER_LDFLAGS = "";
 				PRODUCT_NAME = CosjiApp;
 				PROVISIONING_PROFILE = "6b96c32e-ad60-412f-95b6-6f574cd4c75c";
-				SDKROOT = iphoneos8.0;
+				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = 1;
+				VALID_ARCHS = "arm64 armv7";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -1718,10 +1683,7 @@
 		6093421F178E1EB600761FB6 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = (
-					armv7s,
-					armv7,
-				);
+				ARCHS = "$(ARCHS_STANDARD)";
 				CODE_SIGN_IDENTITY = "iPhone Developer: Sheng Zhou (8F29FUSYL2)";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1742,13 +1704,15 @@
 					"Users/apple/MyWorkSpace/CosjiMobileApp/CosjiApp/CosjiApp/百度云推送",
 					"/Users/apple/MyWorkSpace/百度云推送",
 					/Users/apple/MyWorkSpace/TOPSDK,
+					"$(PROJECT_DIR)/CosjiApp",
 				);
 				ONLY_ACTIVE_ARCH = NO;
-				OTHER_LDFLAGS = "-ObjC";
+				OTHER_LDFLAGS = "";
 				PRODUCT_NAME = CosjiApp;
 				PROVISIONING_PROFILE = "6b96c32e-ad60-412f-95b6-6f574cd4c75c";
-				SDKROOT = iphoneos8.0;
+				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = 1;
+				VALID_ARCHS = "arm64 armv7";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;

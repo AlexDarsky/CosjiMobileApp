@@ -9,7 +9,7 @@
 #import "CosjiViewController.h"
 #import "StoreKit/StoreKit.h"
 #import "CosjiMP3Player.h"
-#import "MobileProbe.h"
+#import "MobClick.h"
 #import "CosjiNormalWebViewController.h"
 #import "CosjiServerHelper.h"
 #import "CosjiLoginViewController.h"
@@ -177,11 +177,11 @@ static UINavigationController* nc;
 }
 -(void)viewDidAppear:(BOOL)animated
 {
-    [MobileProbe pageBeginWithName:@"首页"];
+    [MobClick beginLogPageView:@"首页"];
 }
 -(void)viewDidDisappear:(BOOL)animated
 {
-    [MobileProbe pageEndWithName:@"首页"];
+    [MobClick endLogPageView:@"首页"];
     [searchField resignFirstResponder];
 }
 -(void)viewWillAppear:(BOOL)animated

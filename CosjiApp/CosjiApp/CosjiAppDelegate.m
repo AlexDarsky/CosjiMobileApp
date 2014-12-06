@@ -7,7 +7,7 @@
 //
 
 #import "CosjiAppDelegate.h"
-#import "MobileProbe.h"
+#import "MobClick.h"
 #import "BPush.h"
 #import "TopAppConnector.h"
 #import "CosjiViewController.h"
@@ -54,7 +54,7 @@
     [userViewController.tabBarItem setTitle:@"我的可及"];
     [rootTabBarController.tabBar setBackgroundImage:[UIImage imageNamed:@"新导航"]];
     [rootTabBarController.tabBar setSelectionIndicatorImage:nil];
-    [MobileProbe initWithAppKey:@"cnzz.i_fmgf4sxqars5re7in5qrcg63" channel:@"iOSChannel"];
+    [MobClick startWithAppkey:@"54828f99fd98c56609000014" reportPolicy:BATCH   channelId:@"Web"];
     //add transaction observer
     self.window.rootViewController = rootTabBarController;
    [self initCustomTabBarView];

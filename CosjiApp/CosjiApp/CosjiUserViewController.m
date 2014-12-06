@@ -8,7 +8,7 @@
 
 #import "CosjiUserViewController.h"
 #import "CosjiMP3Player.h"
-#import "MobileProbe.h"
+#import "MobClick.h"
 #import "CosjiServerHelper.h"
 #import "CosjiLoginViewController.h"
 #import "CosjiSettingViewController.h"
@@ -52,7 +52,7 @@ static CosjiUserViewController *CosjiUserRootController;
 }
 -(void)viewDidAppear:(BOOL)animated
 {
-    [MobileProbe pageBeginWithName:@"我的可及"];
+    [MobClick beginLogPageView:@"我的可及"];
     if (![[NSUserDefaults standardUserDefaults] boolForKey:@"haveRated"])
     {
         int openTime=[[NSUserDefaults standardUserDefaults] integerForKey:@"openTime"];
@@ -70,7 +70,9 @@ static CosjiUserViewController *CosjiUserRootController;
 }
 - (void)viewDidDisappear:(BOOL)animated
 {
-    [MobileProbe pageEndWithName:@"我的可及"];
+    [super viewDidDisappear:animated];
+    
+    [MobClick endLogPageView:@"我的可及"];
 }
 -(void)loadView
 {
