@@ -12,7 +12,9 @@
 #import "CosjiSpecialActivityViewController.h"
 #import "CosjiTBViewController.h"
 #import "CosjiUserViewController.h"
-#import <BaiduSocialShare/BDSocialShareSDK.h>
+#import <Frontia/Frontia.h>
+#define APP_KEY @"4OrkK82k7o41mwYFsWAw4WYd"
+
 //#define CosjiAppKey             @"21602410"
 //#define CosjiAppSecret          @"40b803eb95d919f230118ad0095bf55d"
 //#define CosjiAppRedirectURI     @"http://cosjii.com"
@@ -72,11 +74,22 @@
     }
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         [application registerForRemoteNotificationTypes:UIRemoteNotificationTypeAlert| UIRemoteNotificationTypeBadge| UIRemoteNotificationTypeSound];
-        NSArray *platforms = [NSArray arrayWithObjects:kBD_SOCIAL_SHARE_PLATFORM_SINAWEIBO,kBD_SOCIAL_SHARE_PLATFORM_QQWEIBO,kBD_SOCIAL_SHARE_PLATFORM_QQZONE,kBD_SOCIAL_SHARE_PLATFORM_KAIXIN,kBD_SOCIAL_SHARE_PLATFORM_WEIXIN_SESSION,kBD_SOCIAL_SHARE_PLATFORM_WEIXIN_TIMELINE,kBD_SOCIAL_SHARE_PLATFORM_QQFRIEND,kBD_SOCIAL_SHARE_PLATFORM_EMAIL,kBD_SOCIAL_SHARE_PLATFORM_SMS,kBD_SOCIAL_SHARE_PLATFORM_RENREN,nil];
-        //初始化社交组件,supportPlatform 参数可以是 nil,代表支持所有平台
-        [BDSocialShareSDK registerApiKey:@"4OrkK82k7o41mwYFsWAw4WYd" andSupportPlatforms:platforms];
-        [BDSocialShareSDK registerWXApp:@"wxd566dac57b6b1f5f"];
+        
+        [Frontia initWithApiKey:APP_KEY];
+        
+        FrontiaShare *share = [Frontia getShare];
+        
 
+        
+        //初始化社交组件,supportPlatform 参数可以是 nil,代表支持所有平台
+        
+        [share registerWeixinAppId:@"wxd566dac57b6b1f5f"];
+        
+        
+        
+        NSArray * platforms = [NSArray arrayWithObjects:FRONTIA_SOCIAL_SHARE_PLATFORM_SINAWEIBO,FRONTIA_SOCIAL_SHARE_PLATFORM_WEIXIN_SESSION,FRONTIA_SOCIAL_SHARE_PLATFORM_WEIXIN_TIMELINE, nil];
+        [share setSupportPlatforms:platforms];
+        
         CosjiServerHelper *serverHelper=[CosjiServerHelper shareCosjiServerHelper];
         if ([[NSUserDefaults standardUserDefaults] boolForKey:@"AutoLogin"])
         {
@@ -200,7 +213,7 @@
 //    TopAppConnector *appConnector = [TopAppConnector getAppConnectorbyAppKey:CosjiAppKey];
 //    [appConnector receiveMessageFromApp:[url absoluteString]];
 //    return YES;
-   return [BDSocialShareSDK handleOpenURL:url];
+    return [[Frontia getShare] handleOpenURL:url];
 }
 
 

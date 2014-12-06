@@ -10,7 +10,7 @@
 #import "CosjiUserHelpViewController.h"
 #import "CosjiGuideViewController.h"
 #import "CosjiUserViewController.h"
-#import <BaiduSocialShare/BDSocialShareSDK.h>
+#import <Frontia/Frontia.h>
 
 @interface CosjiSettingViewController ()
 
@@ -225,14 +225,50 @@
                     break;
                 case 3:
                 {
-                    BDSocialShareContent *content = [BDSocialShareContent shareContentWithDescription:@"可及网是淘宝省钱助手，通过可及网进入淘宝等商城购物最高可返利50%，推荐你也来试一试吧" url:CosjiAppiTunesAddress title:@"可及网"];
-                    [content addImageWithImageSource:[UIImage imageNamed:@"Icon"] imageUrl:nil];
-                    [BDSocialShareSDK showShareMenuWithShareContent:content menuStyle:BD_SOCIAL_SHARE_MENU_BLACK_STYLE supportedInterfaceOrientations:UIInterfaceOrientationMaskAllButUpsideDown result:^(BD_SOCIAL_RESULT requestResult,NSString *platformType,id response,NSError *error) {
-                        if (requestResult == BD_SOCIAL_SUCCESS) { //分享成功的处理
-                        } else if (requestResult == BD_SOCIAL_CANCEL){ //用户取消分享的处理
-                        } else if (requestResult == BD_SOCIAL_FAIL){ //分享发生错误的处理
-                        }
+                    FrontiaShareContent *content = [[FrontiaShareContent alloc] init];
+                    content.url = CosjiAppiTunesAddress;
+                    content.description = @"可及网是淘宝省钱助手，通过可及网进入淘宝等商城购物最高可返利50%，推荐你也来试一试吧。";
+                    content.title = @"可及网";
+                    content.imageObj = [UIImage imageNamed:@"Icon"];
+                    
+                    FrontiaShareCancelCallback onCancel = ^(){
+                        NSLog(@"OnCancel: share is cancelled");
+                    };
+                    
+                    //分享失败回调函数
+                    FrontiaShareFailureCallback onFailure = ^(int errorCode, NSString *errorMessage){
+                        NSLog(@"OnFailure: %d  %@", errorCode, errorMessage);
+                    };
+                    
+                    //分享成功回调函数
+                    FrontiaMultiShareResultCallback onResult = ^(NSDictionary *respones){
+                        NSArray *successPlatforms = [respones objectForKey:@"success"];
+                        NSArray *failPlatforms = [respones objectForKey:@"fail"];
+                        
+                    };
+                    
+                    
+                    NSArray * sharePlatforms = [NSArray arrayWithObjects:FRONTIA_SOCIAL_SHARE_PLATFORM_SINAWEIBO,FRONTIA_SOCIAL_SHARE_PLATFORM_WEIXIN_SESSION,FRONTIA_SOCIAL_SHARE_PLATFORM_WEIXIN_TIMELINE, nil];
+                    
+                    FrontiaShare *share = [Frontia getShare];
+                    
+                    
+                    
+                    [share showShareMenuWithShareContent:content displayPlatforms:sharePlatforms supportedInterfaceOrientations:UIInterfaceOrientationMaskAllButUpsideDown
+                                       isStatusBarHidden:NO
+                                        targetViewForPad:nil
+                                          cancelListener:^{
+                        
+                    }
+                                         failureListener:^(int errorCode, NSString *errorMessage) {
+                        
+                    }
+                                          resultListener:^(NSDictionary *respones)
+                    {
+                        
                     }];
+
+                    
 
                 }
                     break;

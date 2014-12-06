@@ -16,9 +16,7 @@
 #import "SVProgressHUD.h"
 #import "CosjiGuideViewController.h"
 #import "CosjiItemListViewController.h"
-#import "TopIOSClient.h"
 #import "CosjiItemFanliDetailViewController.h"
-#import "TopAttachment.h"
 #import "CosjiWelcomeViewController.h"
 #import "CosjiFanLiListViewController.h"
 

@@ -8,8 +8,6 @@
 
 #import "CosjiItemFanliDetailViewController.h"
 #import "CosjiWebViewController.h"
-#import "TopIOSClient.h"
-#import "TopAppService.h"
 #import <sys/sysctl.h>
 @interface CosjiItemFanliDetailViewController ()
 {
