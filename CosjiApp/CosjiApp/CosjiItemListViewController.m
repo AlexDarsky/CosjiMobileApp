@@ -10,8 +10,6 @@
 #import "CosjiServerHelper.h"
 #import "CosjiWebViewController.h"
 #import "SVProgressHUD.h"
-#import "TopIOSClient.h"
-#import "TopAttachment.h"
 #import "JSONKit.h"
 #import "CosjiLoginViewController.h"
 #import "MJRefresh.h"

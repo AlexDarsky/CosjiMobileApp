@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		180E82341A3360CC003DEA18 /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 180E82331A3360CC003DEA18 /* Reachability.m */; };
 		180EE5D5186024380078665B /* 我的可及_置_背景@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 180EE5D4186024380078665B /* 我的可及_置_背景@2x.png */; };
 		180EE5DA18603E2B0078665B /* CosjiMallsListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 180EE5D918603E2B0078665B /* CosjiMallsListViewController.m */; };
 		1811E320195C7B01002AFA3F /* 新返利通道-动态@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1811E31E195C7B01002AFA3F /* 新返利通道-动态@2x.png */; };
@@ -230,9 +231,6 @@
 		18F6E9F417D9C0270046526C /* 首页-默认@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 18F6E9B417D9C0270046526C /* 首页-默认@2x.png */; };
 		18F8F0DA180CE7E100B74F67 /* CosjiUserHelpViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 18F8F0D8180CE7E100B74F67 /* CosjiUserHelpViewController.m */; };
 		18FD9ADE18A8BE09001BACEE /* CosjiUrlFilter.m in Sources */ = {isa = PBXBuildFile; fileRef = 18FD9ADD18A8BE09001BACEE /* CosjiUrlFilter.m */; };
-		18FD9B1B18A8C00C001BACEE /* libTOPIOSSdk.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 18FD9B1718A8C00C001BACEE /* libTOPIOSSdk.a */; };
-		18FD9B1C18A8C00C001BACEE /* libTOPIOSSdk.s.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 18FD9B1818A8C00C001BACEE /* libTOPIOSSdk.s.a */; };
-		18FD9B1D18A8C00C001BACEE /* barImg.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 18FD9B1A18A8C00C001BACEE /* barImg.bundle */; };
 		60927B84178E2B1F0058CFD9 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 60927B83178E2B1F0058CFD9 /* libz.dylib */; };
 		60927B8A178E2C6D0058CFD9 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 60927B89178E2C6D0058CFD9 /* StoreKit.framework */; };
 		609341FE178E1EB600761FB6 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 609341FD178E1EB600761FB6 /* UIKit.framework */; };
@@ -246,6 +244,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		180E82321A3360CC003DEA18 /* Reachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Reachability.h; sourceTree = "<group>"; };
+		180E82331A3360CC003DEA18 /* Reachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Reachability.m; sourceTree = "<group>"; };
 		180EE5D4186024380078665B /* 我的可及_置_背景@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "我的可及_置_背景@2x.png"; sourceTree = "<group>"; };
 		180EE5D818603E2B0078665B /* CosjiMallsListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CosjiMallsListViewController.h; sourceTree = "<group>"; };
 		180EE5D918603E2B0078665B /* CosjiMallsListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CosjiMallsListViewController.m; sourceTree = "<group>"; };
@@ -517,45 +517,6 @@
 		18F8F0D8180CE7E100B74F67 /* CosjiUserHelpViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CosjiUserHelpViewController.m; sourceTree = "<group>"; };
 		18FD9ADC18A8BE09001BACEE /* CosjiUrlFilter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CosjiUrlFilter.h; sourceTree = "<group>"; };
 		18FD9ADD18A8BE09001BACEE /* CosjiUrlFilter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CosjiUrlFilter.m; sourceTree = "<group>"; };
-		18FD9AF318A8C00C001BACEE /* DebuggingTools.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DebuggingTools.h; sourceTree = "<group>"; };
-		18FD9AF418A8C00C001BACEE /* JDY_ItemManagement.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JDY_ItemManagement.h; sourceTree = "<group>"; };
-		18FD9AF518A8C00C001BACEE /* JDY_MsgCenterManagement.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JDY_MsgCenterManagement.h; sourceTree = "<group>"; };
-		18FD9AF618A8C00C001BACEE /* JDY_PlugInEntry.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JDY_PlugInEntry.h; sourceTree = "<group>"; };
-		18FD9AF718A8C00C001BACEE /* JDY_Protocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JDY_Protocol.h; sourceTree = "<group>"; };
-		18FD9AF818A8C00C001BACEE /* JDY_ProtocolConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JDY_ProtocolConstants.h; sourceTree = "<group>"; };
-		18FD9AF918A8C00C001BACEE /* JDY_TradeManagement.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JDY_TradeManagement.h; sourceTree = "<group>"; };
-		18FD9AFA18A8C00C001BACEE /* JDY_WangWangCommunication.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JDY_WangWangCommunication.h; sourceTree = "<group>"; };
-		18FD9AFB18A8C00C001BACEE /* JDYSharedService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JDYSharedService.h; sourceTree = "<group>"; };
-		18FD9AFC18A8C00C001BACEE /* MacrosDefine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MacrosDefine.h; sourceTree = "<group>"; };
-		18FD9AFD18A8C00C001BACEE /* TopApiResponse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TopApiResponse.h; sourceTree = "<group>"; };
-		18FD9AFE18A8C00C001BACEE /* TopAppConnector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TopAppConnector.h; sourceTree = "<group>"; };
-		18FD9AFF18A8C00C001BACEE /* TopAppEntity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TopAppEntity.h; sourceTree = "<group>"; };
-		18FD9B0018A8C00C001BACEE /* TopAppEvent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TopAppEvent.h; sourceTree = "<group>"; };
-		18FD9B0118A8C00C001BACEE /* TopAppService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TopAppService.h; sourceTree = "<group>"; };
-		18FD9B0218A8C00C001BACEE /* TopAppSession.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TopAppSession.h; sourceTree = "<group>"; };
-		18FD9B0318A8C00C001BACEE /* TopAttachment.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TopAttachment.h; sourceTree = "<group>"; };
-		18FD9B0418A8C00C001BACEE /* TopAuth.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TopAuth.h; sourceTree = "<group>"; };
-		18FD9B0518A8C00C001BACEE /* TopAuthCallback.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TopAuthCallback.h; sourceTree = "<group>"; };
-		18FD9B0618A8C00C001BACEE /* TopAuthWebView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TopAuthWebView.h; sourceTree = "<group>"; };
-		18FD9B0718A8C00C001BACEE /* TopBridgeWebview.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TopBridgeWebview.h; sourceTree = "<group>"; };
-		18FD9B0818A8C00C001BACEE /* TopConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TopConstants.h; sourceTree = "<group>"; };
-		18FD9B0918A8C00C001BACEE /* TopCrashHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TopCrashHandler.h; sourceTree = "<group>"; };
-		18FD9B0A18A8C00C001BACEE /* TopEventCallback.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TopEventCallback.h; sourceTree = "<group>"; };
-		18FD9B0B18A8C00C001BACEE /* TopIOSClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TopIOSClient.h; sourceTree = "<group>"; };
-		18FD9B0C18A8C00C001BACEE /* TopIOSSdk.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TopIOSSdk.h; sourceTree = "<group>"; };
-		18FD9B0D18A8C00C001BACEE /* TopIOSSdkExt.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TopIOSSdkExt.h; sourceTree = "<group>"; };
-		18FD9B0E18A8C00C001BACEE /* TopIOSUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TopIOSUtil.h; sourceTree = "<group>"; };
-		18FD9B0F18A8C00C001BACEE /* TopOpenUDID.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TopOpenUDID.h; sourceTree = "<group>"; };
-		18FD9B1018A8C00C001BACEE /* TopPluginServiceType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TopPluginServiceType.h; sourceTree = "<group>"; };
-		18FD9B1118A8C00C001BACEE /* TopReachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TopReachability.h; sourceTree = "<group>"; };
-		18FD9B1218A8C00C001BACEE /* TopSDKBundle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TopSDKBundle.h; sourceTree = "<group>"; };
-		18FD9B1318A8C00C001BACEE /* TopServiceError.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TopServiceError.h; sourceTree = "<group>"; };
-		18FD9B1418A8C00C001BACEE /* TopSimpleCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TopSimpleCache.h; sourceTree = "<group>"; };
-		18FD9B1518A8C00C001BACEE /* TopToolBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TopToolBar.h; sourceTree = "<group>"; };
-		18FD9B1618A8C00C001BACEE /* TopTracker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TopTracker.h; sourceTree = "<group>"; };
-		18FD9B1718A8C00C001BACEE /* libTOPIOSSdk.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libTOPIOSSdk.a; sourceTree = "<group>"; };
-		18FD9B1818A8C00C001BACEE /* libTOPIOSSdk.s.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libTOPIOSSdk.s.a; sourceTree = "<group>"; };
-		18FD9B1A18A8C00C001BACEE /* barImg.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = barImg.bundle; sourceTree = "<group>"; };
 		60927B83178E2B1F0058CFD9 /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
 		60927B89178E2C6D0058CFD9 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		609341FA178E1EB600761FB6 /* CosjiApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CosjiApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -590,9 +551,7 @@
 				18ED3A311A32C8FF00FA582E /* libMobClickLibrary.a in Frameworks */,
 				18E207DB17C732C300D849F5 /* AudioToolbox.framework in Frameworks */,
 				1814F6F11798FE7B00CC2ECD /* QuartzCore.framework in Frameworks */,
-				18FD9B1B18A8C00C001BACEE /* libTOPIOSSdk.a in Frameworks */,
 				183474C318753550001EB207 /* BaiduSocialShare.framework in Frameworks */,
-				18FD9B1C18A8C00C001BACEE /* libTOPIOSSdk.s.a in Frameworks */,
 				60927B8A178E2C6D0058CFD9 /* StoreKit.framework in Frameworks */,
 				60927B84178E2B1F0058CFD9 /* libz.dylib in Frameworks */,
 				6093424F178E24F500761FB6 /* SystemConfiguration.framework in Frameworks */,
@@ -914,10 +873,10 @@
 		18CF8F0D1855B3D300EC635C /* Other Classes */ = {
 			isa = PBXGroup;
 			children = (
+				180E82321A3360CC003DEA18 /* Reachability.h */,
+				180E82331A3360CC003DEA18 /* Reachability.m */,
 				18ED3A2F1A32C8FF00FA582E /* libMobClickLibrary.a */,
 				18ED3A301A32C8FF00FA582E /* MobClick.h */,
-				18FD9AF118A8C00C001BACEE /* TOPSDK */,
-				18FD9ADF18A8BE24001BACEE /* 百度云推送 */,
 				18FD9ADC18A8BE09001BACEE /* CosjiUrlFilter.h */,
 				18FD9ADD18A8BE09001BACEE /* CosjiUrlFilter.m */,
 				18344198189351E8005EAB15 /* MJRefresh */,
@@ -1100,77 +1059,6 @@
 			path = "刷新 动态（里外两个圈不同速度旋转）";
 			sourceTree = "<group>";
 		};
-		18FD9ADF18A8BE24001BACEE /* 百度云推送 */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = "百度云推送";
-			path = "../../../百度云推送";
-			sourceTree = "<group>";
-		};
-		18FD9AF118A8C00C001BACEE /* TOPSDK */ = {
-			isa = PBXGroup;
-			children = (
-				18FD9AF218A8C00C001BACEE /* Header */,
-				18FD9B1718A8C00C001BACEE /* libTOPIOSSdk.a */,
-				18FD9B1818A8C00C001BACEE /* libTOPIOSSdk.s.a */,
-				18FD9B1918A8C00C001BACEE /* Resource */,
-			);
-			name = TOPSDK;
-			path = ../../../TOPSDK;
-			sourceTree = "<group>";
-		};
-		18FD9AF218A8C00C001BACEE /* Header */ = {
-			isa = PBXGroup;
-			children = (
-				18FD9AF318A8C00C001BACEE /* DebuggingTools.h */,
-				18FD9AF418A8C00C001BACEE /* JDY_ItemManagement.h */,
-				18FD9AF518A8C00C001BACEE /* JDY_MsgCenterManagement.h */,
-				18FD9AF618A8C00C001BACEE /* JDY_PlugInEntry.h */,
-				18FD9AF718A8C00C001BACEE /* JDY_Protocol.h */,
-				18FD9AF818A8C00C001BACEE /* JDY_ProtocolConstants.h */,
-				18FD9AF918A8C00C001BACEE /* JDY_TradeManagement.h */,
-				18FD9AFA18A8C00C001BACEE /* JDY_WangWangCommunication.h */,
-				18FD9AFB18A8C00C001BACEE /* JDYSharedService.h */,
-				18FD9AFC18A8C00C001BACEE /* MacrosDefine.h */,
-				18FD9AFD18A8C00C001BACEE /* TopApiResponse.h */,
-				18FD9AFE18A8C00C001BACEE /* TopAppConnector.h */,
-				18FD9AFF18A8C00C001BACEE /* TopAppEntity.h */,
-				18FD9B0018A8C00C001BACEE /* TopAppEvent.h */,
-				18FD9B0118A8C00C001BACEE /* TopAppService.h */,
-				18FD9B0218A8C00C001BACEE /* TopAppSession.h */,
-				18FD9B0318A8C00C001BACEE /* TopAttachment.h */,
-				18FD9B0418A8C00C001BACEE /* TopAuth.h */,
-				18FD9B0518A8C00C001BACEE /* TopAuthCallback.h */,
-				18FD9B0618A8C00C001BACEE /* TopAuthWebView.h */,
-				18FD9B0718A8C00C001BACEE /* TopBridgeWebview.h */,
-				18FD9B0818A8C00C001BACEE /* TopConstants.h */,
-				18FD9B0918A8C00C001BACEE /* TopCrashHandler.h */,
-				18FD9B0A18A8C00C001BACEE /* TopEventCallback.h */,
-				18FD9B0B18A8C00C001BACEE /* TopIOSClient.h */,
-				18FD9B0C18A8C00C001BACEE /* TopIOSSdk.h */,
-				18FD9B0D18A8C00C001BACEE /* TopIOSSdkExt.h */,
-				18FD9B0E18A8C00C001BACEE /* TopIOSUtil.h */,
-				18FD9B0F18A8C00C001BACEE /* TopOpenUDID.h */,
-				18FD9B1018A8C00C001BACEE /* TopPluginServiceType.h */,
-				18FD9B1118A8C00C001BACEE /* TopReachability.h */,
-				18FD9B1218A8C00C001BACEE /* TopSDKBundle.h */,
-				18FD9B1318A8C00C001BACEE /* TopServiceError.h */,
-				18FD9B1418A8C00C001BACEE /* TopSimpleCache.h */,
-				18FD9B1518A8C00C001BACEE /* TopToolBar.h */,
-				18FD9B1618A8C00C001BACEE /* TopTracker.h */,
-			);
-			path = Header;
-			sourceTree = "<group>";
-		};
-		18FD9B1918A8C00C001BACEE /* Resource */ = {
-			isa = PBXGroup;
-			children = (
-				18FD9B1A18A8C00C001BACEE /* barImg.bundle */,
-			);
-			path = Resource;
-			sourceTree = "<group>";
-		};
 		609341F1178E1EB600761FB6 = {
 			isa = PBXGroup;
 			children = (
@@ -1338,7 +1226,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				18FD9B1D18A8C00C001BACEE /* barImg.bundle in Resources */,
 				60934208178E1EB600761FB6 /* InfoPlist.strings in Resources */,
 				18DCC6D2179AC0A600FA5B4A /* fuzhuangfushi.png in Resources */,
 				18DCC6D3179AC0A600FA5B4A /* fuzhuangfushi@2x.png in Resources */,
@@ -1562,6 +1449,7 @@
 				1813C69C18570BBF008741C9 /* CosjiGetCashViewController.m in Sources */,
 				18152A31181E183C00225B18 /* CosjiFanLiListViewController.m in Sources */,
 				18CF8F0C1855B3C400EC635C /* CosjiFileManager.m in Sources */,
+				180E82341A3360CC003DEA18 /* Reachability.m in Sources */,
 				184841571860214B002F1BFA /* CosjiAccountSettingViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

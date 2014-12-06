@@ -8,13 +8,10 @@
 
 #import "CosjiAppDelegate.h"
 #import "MobClick.h"
-#import "BPush.h"
-#import "TopAppConnector.h"
 #import "CosjiViewController.h"
 #import "CosjiSpecialActivityViewController.h"
 #import "CosjiTBViewController.h"
 #import "CosjiUserViewController.h"
-#import "TopIOSClient.h"
 #import <BaiduSocialShare/BDSocialShareSDK.h>
 //#define CosjiAppKey             @"21602410"
 //#define CosjiAppSecret          @"40b803eb95d919f230118ad0095bf55d"
@@ -74,13 +71,12 @@
         [[NSUserDefaults standardUserDefaults] setInteger:openTime forKey:@"openTime"];
     }
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        [BPush setupChannel:launchOptions];
         [application registerForRemoteNotificationTypes:UIRemoteNotificationTypeAlert| UIRemoteNotificationTypeBadge| UIRemoteNotificationTypeSound];
         NSArray *platforms = [NSArray arrayWithObjects:kBD_SOCIAL_SHARE_PLATFORM_SINAWEIBO,kBD_SOCIAL_SHARE_PLATFORM_QQWEIBO,kBD_SOCIAL_SHARE_PLATFORM_QQZONE,kBD_SOCIAL_SHARE_PLATFORM_KAIXIN,kBD_SOCIAL_SHARE_PLATFORM_WEIXIN_SESSION,kBD_SOCIAL_SHARE_PLATFORM_WEIXIN_TIMELINE,kBD_SOCIAL_SHARE_PLATFORM_QQFRIEND,kBD_SOCIAL_SHARE_PLATFORM_EMAIL,kBD_SOCIAL_SHARE_PLATFORM_SMS,kBD_SOCIAL_SHARE_PLATFORM_RENREN,nil];
         //初始化社交组件,supportPlatform 参数可以是 nil,代表支持所有平台
         [BDSocialShareSDK registerApiKey:@"4OrkK82k7o41mwYFsWAw4WYd" andSupportPlatforms:platforms];
         [BDSocialShareSDK registerWXApp:@"wxd566dac57b6b1f5f"];
-        [TopIOSClient registerIOSClient:CosjiAppKey appSecret:CosjiAppSecret callbackUrl:CosjiAppRedirectURI needAutoRefreshToken:TRUE];
+
         CosjiServerHelper *serverHelper=[CosjiServerHelper shareCosjiServerHelper];
         if ([[NSUserDefaults standardUserDefaults] boolForKey:@"AutoLogin"])
         {
@@ -207,20 +203,9 @@
    return [BDSocialShareSDK handleOpenURL:url];
 }
 
-- (void) onMethod:(NSString*)method response:(NSDictionary*)data
-{
-    if ([BPushRequestMethod_Bind isEqualToString:method]) {
-        NSDictionary* res = [[NSDictionary alloc] initWithDictionary:data]; NSString *appid = [res valueForKey:BPushRequestAppIdKey];
-        NSString *userid = [res valueForKey:BPushRequestUserIdKey];
-        NSString *channelid = [res valueForKey:BPushRequestChannelIdKey];
-        int returnCode = [[res valueForKey:BPushRequestErrorCodeKey] intValue]; NSString *requestid = [res valueForKey:BPushRequestRequestIdKey];
-    }
-}
+
 - (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
-    // 必须
-    [BPush registerDeviceToken:deviceToken];
-    // 必须。可以在其它时机调用,只有在该方法返回(通过 onMethod:response:回调)绑定成功时,app 才能接收到 Push 消息。一个 app 绑定成功至少一次即可(如 果 access token 变更请重新绑定)。
-    [BPush bindChannel];
+
 }
 
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo
@@ -231,9 +216,6 @@
 - (BOOL)application:(UIApplication *)application handleOpenURL:(NSURL*)url
 {
     
-    TopIOSClient *iosClient = [TopIOSClient getIOSClientByAppKey:CosjiAppKey];
-    NSLog(@"handleOpenURL %@",url);
-    [iosClient authCallback:[NSString stringWithFormat:@"%@",url]];
     return YES;
 }
 @end

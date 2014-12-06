@@ -7,10 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "BPush.h"
 @class CosjiViewController;
 
-@interface CosjiAppDelegate : UIResponder <UIApplicationDelegate, BPushDelegate>
+@interface CosjiAppDelegate : UIResponder <UIApplicationDelegate>
 {
     UITabBarController *rootTabBarController;
     UIView *customTabBarView;

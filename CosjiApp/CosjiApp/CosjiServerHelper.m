@@ -8,8 +8,6 @@
 
 #import "CosjiServerHelper.h"
 #import "JSONKit.h"
-#import "TopIOSClient.h"
-#import "TopAttachment.h"
 #import "Reachability.h"
 
 #define login @"http://192.168.1.110"
@@ -88,42 +86,10 @@ static CosjiServerHelper *shareCosjiServerHelper=nil;
 {
     if ([self connectedToNetwork])
     {
-        NSDictionary *tmpDic=[NSDictionary dictionaryWithDictionary:[[NSUserDefaults standardUserDefaults] objectForKey:@"userInfo"]];
-        NSLog(@"userInfo is %@",tmpDic);
-        NSDictionary *infoDic=[NSDictionary dictionaryWithDictionary:[tmpDic objectForKey:@"body"]];
-        NSString *uid =[NSString stringWithFormat:@"%@",[infoDic objectForKey:@"userId"]];
-        NSMutableDictionary *params = [[NSMutableDictionary alloc]init];
-        [params setObject:@"taobao.tbk.items.get"
-                   forKey:@"method"];
-        [params setObject:@"num_iid,title,price,volume,pic_url,item_url,click_url"
-                   forKey:@"fields"];
-        [params setObject:@"1"
-                   forKey:@"start_price"];
-        [params setObject:[NSString stringWithFormat:@"%d",pageNO]
-                   forKey:@"page_no"];
-        [params setObject:keyword
-                   forKey:@"keyword"];
-        [params setObject:@"20"
-                   forKey:@"page_size"];
-        [params setObject:@"1000"
-                   forKey:@"start_commissionRate"];
-        [params setObject:@"5000"
-                   forKey:@"end_commissionRate"];
-        TopIOSClient *iosClient = [TopIOSClient getIOSClientByAppKey:CosjiAppKey];
-        TopApiResponse * response = [iosClient tql:@"GET" params:params userId:uid];
-        NSDictionary *responeDic =[[response content]  objectFromJSONString];
-        NSDictionary *respone_getDIC=[responeDic objectForKey:@"tbk_items_get_response"];
-        NSDictionary *tbk_items_IDC=[respone_getDIC objectForKey:@"tbk_items"];
-        [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
-        NSLog(@"%@",[tbk_items_IDC objectForKey:@"tbk_item"]);
-        if ([[tbk_items_IDC objectForKey:@"tbk_item"] isKindOfClass:[NSArray class]])
-        {
-            return [tbk_items_IDC objectForKey:@"tbk_item"];
-        }
-        else
         return nil;
     }
-    else{
+    else
+    {
         [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
         return nil;
     }
@@ -133,36 +99,8 @@ static CosjiServerHelper *shareCosjiServerHelper=nil;
     if ([self connectedToNetwork])
     {
         
-        NSDictionary *tmpDic=[NSDictionary dictionaryWithDictionary:[[NSUserDefaults standardUserDefaults] objectForKey:@"userInfo"]];
-        NSDictionary *infoDic=[NSDictionary dictionaryWithDictionary:[tmpDic objectForKey:@"body"]];
-        NSString *uid =[NSString stringWithFormat:@"%@",[infoDic objectForKey:@"userId"]];
-        NSMutableDictionary *params = [[NSMutableDictionary alloc]init];
-        [params setObject:@"taobao.tbk.items.detail.get"
-                   forKey:@"method"];
-        [params setObject:numiids
-                   forKey:@"num_iids"];
-        [params setObject:@"num_iid,title,price,volume,pic_url,item_url,click_url"
-                   forKey:@"fields"];
-        TopIOSClient *iosClient = [TopIOSClient getIOSClientByAppKey:CosjiAppKey];
-        TopApiResponse * response = [iosClient tql:@"GET"
-                                            params:params
-                                            userId:uid];
-        NSDictionary *responeDic =[[response content]  objectFromJSONString];
-        NSDictionary *respone_getDIC=[responeDic objectForKey:@"tbk_items_detail_get_response"];
-        NSDictionary *tbk_items_DIC=[respone_getDIC objectForKey:@"tbk_items"];
-        NSDictionary *tbk_item_DIC=[[NSArray arrayWithArray:[tbk_items_DIC objectForKey:@"tbk_item"]] lastObject];
-        if (tbk_item_DIC!=nil)
-        {
-            NSLog(@"responeDic is %@",tbk_item_DIC);
-            [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
-            return tbk_item_DIC;
-        }else
-        {
-            NSLog(@"没有返利");
-            [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+        return nil;
 
-            return nil;
-        }
     }
     else
     {
@@ -174,46 +112,7 @@ static CosjiServerHelper *shareCosjiServerHelper=nil;
 {
     if ([self connectedToNetwork])
     {
-        
-        NSDictionary *tmpDic=[NSDictionary dictionaryWithDictionary:[[NSUserDefaults standardUserDefaults] objectForKey:@"userInfo"]];
-        NSDictionary *infoDic=[NSDictionary dictionaryWithDictionary:[tmpDic objectForKey:@"body"]];
-        
-        NSString *uid =[NSString stringWithFormat:@"%@",[infoDic objectForKey:@"userId"]];
-        
-        NSMutableDictionary *params = [[NSMutableDictionary alloc]init];
-        
-        [params setObject:@"taobao.tbk.mobile.items.convert"
-                   forKey:@"method"];
-        [params setObject:@"click_url"
-                   forKey:@"fields"];
-        [params setObject:numiids
-                   forKey:@"num_iids"];
-        [params setObject:uid
-                   forKey:@"outer_code"];
-        [params setObject:@"1"
-                   forKey:@"refer_type"];
-        // [params setValue:@"http://www.cosji.com" forKey:@"callbackurl"];
-        
-        NSLog(@"输入参数%@",params);
-        TopIOSClient *iosClient = [TopIOSClient getIOSClientByAppKey:CosjiAppKey];
-        TopApiResponse * response = [iosClient tql:@"GET"
-                                            params:params
-                                            userId:uid];
-        NSDictionary *responeDic =[[response content]  objectFromJSONString];
-        NSDictionary *respone_getDIC=[responeDic objectForKey:@"tbk_mobile_items_convert_response"];
-        NSDictionary *tbk_items_DIC=[respone_getDIC objectForKey:@"tbk_items"];
-        NSDictionary *tbk_item_DIC=[[NSArray arrayWithArray:[tbk_items_DIC objectForKey:@"tbk_item"]]lastObject];
-        // NSLog(@"%@",[NSString stringWithFormat:@"%@",[[NSArray arrayWithArray:[tbk_items_DIC objectForKey:@"tbk_item"]]lastObject]]);
-        if([tbk_item_DIC objectForKey:@"click_url"]==nil)
-        {
-            [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
-            return nil;
-        }else
-        {
-            NSLog(@"click_url is %@",[tbk_item_DIC objectForKey:@"click_url"]);
-            [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
-            return [tbk_item_DIC objectForKey:@"click_url"];
-        }
+        return nil;
     }else
     {
         [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
