@@ -10,7 +10,7 @@
 #import "CosjiWebViewController.h"
 #import "CosjiUrlFilter.h"
 
-@interface CosjiTBViewController : UIViewController<UITextFieldDelegate,NSURLConnectionDelegate>
+@interface CosjiTBViewController : UIViewController<UITextFieldDelegate,NSURLConnectionDelegate,UIGestureRecognizerDelegate>
 {
     UIView *_hotWordView;
 }

@@ -19,8 +19,10 @@
 @interface CosjiTBViewController ()
 {
     UIImageView *searchFieldBG;
-    UIButton *exitBtn;
     int preSelected;
+    UIImageView *_fanli_alert2;
+    UIButton    *_showFanliButton;
+    UIScrollView *_contentScrollView;
 }
 @end
 
@@ -94,6 +96,19 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
     self.navigationController.navigationBarHidden=YES;
+    
+    _contentScrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0,
+                                                                       self.customNavBar.frame.size.height,
+                                                                       self.view.frame.size.width,
+                                                                        self.view.frame.size.height-self.customNavBar.frame.size.height)];
+    [_contentScrollView setBackgroundColor:[UIColor clearColor]];
+    _contentScrollView.showsHorizontalScrollIndicator = NO;
+    _contentScrollView.showsVerticalScrollIndicator = NO;
+    
+    [self.view addSubview:_contentScrollView];
+    [_contentScrollView setContentSize:CGSizeMake(_contentScrollView.frame.size.width, self.view.frame.size.height+50)];
+    
+    
     self.searchField=[[UITextField alloc] initWithFrame:CGRectMake(35, 43/2-35/2, 260, 35)];
     self.searchField.delegate=self;
     self.searchField.borderStyle=UITextBorderStyleNone;
@@ -106,7 +121,7 @@
     self.searchField.font=[UIFont fontWithName:@"Arial" size:16];
     self.searchField.placeholder=@"粘贴商品全名或输入关键字，拿返利";
     [self.searchField addTarget:self action:@selector(searchItemFrom:) forControlEvents:UIControlEventEditingDidEndOnExit];
-    searchFieldBG=[[UIImageView alloc] initWithFrame:CGRectMake(320/2-598/4, self.customNavBar.frame.size.height+ 15, 598/2, 86/2)];
+    searchFieldBG=[[UIImageView alloc] initWithFrame:CGRectMake(320/2-598/4, 15, 598/2, 86/2)];
     [searchFieldBG setImage:[UIImage imageNamed:@"淘宝返利搜索框"]];
     searchFieldBG.userInteractionEnabled=YES;
     UIImageView *imgv=[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"搜索框放大镜"]];
@@ -114,18 +129,50 @@
     [searchFieldBG addSubview:imgv];
     [searchFieldBG addSubview:self.searchField];
     
-    [self.view addSubview:searchFieldBG];
+    [_contentScrollView addSubview:searchFieldBG];
     self.webViewController=[[CosjiWebViewController alloc] init];
-    exitBtn=[UIButton buttonWithType:UIButtonTypeCustom];
-    exitBtn.frame=CGRectMake(0,110,320,[UIScreen mainScreen].bounds.size.height-45-20-49-110);
-    [exitBtn addTarget:self action:@selector(hideKeyBoard) forControlEvents:UIControlEventTouchDown];
-    [self.view addSubview:exitBtn];
-    exitBtn.hidden=YES;
     
-    _hotWordView = [[UIView alloc] initWithFrame:CGRectMake(0, searchFieldBG.frame.size.height+searchFieldBG.frame.origin.y+20, self.view.frame.size.width, self.view.frame.size.height-self.customNavBar.frame.size.height-searchFieldBG.frame.size.height-20)];
-    _hotWordView.backgroundColor = [UIColor whiteColor];
     
-    [self.view addSubview:_hotWordView];
+    UIView *fanli_alertView = [[UIView alloc] initWithFrame:CGRectMake(0, searchFieldBG.frame.size.height+searchFieldBG.frame.origin.y+20, self.view.frame.size.width, self.view.frame.size.height-self.customNavBar.frame.size.height-searchFieldBG.frame.size.height-20)];
+    fanli_alertView.backgroundColor = [UIColor whiteColor];
+    [_contentScrollView addSubview:fanli_alertView];
+    
+    UIImageView *fanli_alert1 = [[UIImageView alloc] initWithFrame:CGRectMake(0,
+                                                                            0,
+                                                                              320,
+                                                                              278/2)];
+    [fanli_alert1 setImage:[UIImage imageNamed:@"fanli_alert02"]];
+    [fanli_alertView addSubview:fanli_alert1];
+    
+    _showFanliButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    _showFanliButton.frame = CGRectMake(self.view.frame.size.width/2-210/2,
+                                        fanli_alert1.frame.size.height+fanli_alert1.frame.origin.y,
+                                        210,
+                                        30);
+    [_showFanliButton setTitle:@"小贴士：如何复制商品标题>" forState:UIControlStateNormal];
+    [_showFanliButton setTitle:@"知道了！>" forState:UIControlStateSelected];
+    [_showFanliButton setBackgroundColor:[UIColor clearColor]];
+    [_showFanliButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    _showFanliButton.titleLabel.font = [UIFont systemFontOfSize:15];
+    [_showFanliButton addTarget:self
+                         action:@selector(didShowFanliButtonTouch:)
+               forControlEvents:UIControlEventTouchUpInside];
+    [fanli_alertView addSubview:_showFanliButton];
+    
+    _fanli_alert2 = [[UIImageView alloc] initWithFrame:CGRectMake(0,
+                                                                  _showFanliButton.frame.origin.y+_showFanliButton.frame.size.height,
+                                                                  320,
+                                                                  515/2)];
+    [_fanli_alert2 setImage:[UIImage imageNamed:@"fanli_alert01"]];
+    [fanli_alertView addSubview:_fanli_alert2];
+    _fanli_alert2.hidden = YES;
+    
+    [self initHotWordView];
+    
+    UITapGestureRecognizer *tapGesturer = [[UITapGestureRecognizer alloc] initWithTarget:self
+                                                                                  action:@selector(closeKeyBoard)];
+    tapGesturer.delegate = self;
+    [_contentScrollView addGestureRecognizer:tapGesturer];
 }
 -(void)viewWillAppear:(BOOL)animated
 {
@@ -279,11 +326,24 @@ void subjectItemImage( NSURL * URL, void (^imageBlock)(UIImage * image), void (^
                        });
                    });
 }
+
+- (void)didShowFanliButtonTouch:(UIButton*)sender
+{
+    if (sender.selected)
+    {
+        sender.selected = NO;
+        _fanli_alert2.hidden = YES;
+    }
+    else
+    {
+        sender.selected = YES;
+        _fanli_alert2.hidden = NO;
+    }
+}
 -(void)searchItemFrom:(UITextField*)textField
 {
     [textField resignFirstResponder];
     //下面执行webView的操作
-    exitBtn.hidden=YES;
     if (textField!=nil&&![textField.text isEqualToString:@""])
     {
         NSLog(@"开始搜索");
@@ -389,11 +449,37 @@ void subjectItemImage( NSURL * URL, void (^imageBlock)(UIImage * image), void (^
     [self presentItemList:[NSString stringWithFormat:@"%@",senderBtn.titleLabel.text]];
 
 }
--(void)hideKeyBoard
+
+#pragma mark UIGestureRecognizer Method
+- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch
 {
-    exitBtn.hidden=YES;
-    [self.searchField resignFirstResponder];
+    if ([touch.view isKindOfClass:[UIButton class]])
+    {
+        return NO;
+    }
+    return YES;
 }
+
+- (void)closeKeyBoard
+{
+    [[self findFirstResponder:self.view] resignFirstResponder];
+    _hotWordView.hidden = YES;
+}
+
+- (UIView*)findFirstResponder:(UIView*)view
+{
+    for ( UIView *childView in view.subviews )
+    {
+        if ([childView respondsToSelector:@selector(isFirstResponder)] && [childView isFirstResponder])
+        {
+            return childView;
+        }
+        UIView *result = [self findFirstResponder:childView];
+        if (result) return result;
+    }
+    return nil;
+}
+
 -(void)presentItemList:(NSString*)keyword
 {
     CosjiItemListViewController *itemsListViewController=[[CosjiItemListViewController alloc] init];
@@ -421,7 +507,7 @@ void subjectItemImage( NSURL * URL, void (^imageBlock)(UIImage * image), void (^
 {
     [textField.window makeKeyAndVisible];
     NSLog(@"显示");
-    exitBtn.hidden=NO;
+    _hotWordView.hidden = NO;
 }
 - (BOOL)isPureInt:(NSString*)string{
     NSScanner* scan = [NSScanner scannerWithString:string];
@@ -441,6 +527,70 @@ void subjectItemImage( NSURL * URL, void (^imageBlock)(UIImage * image), void (^
                                                                            CFSTR("!*'();:@&=+$,/?%#[]"),
                                                                            kCFStringEncodingUTF8));
     return result;
+}
+
+- (void)initHotWordView
+{
+    _hotWordView = [[UIView alloc] initWithFrame:CGRectMake(0, searchFieldBG.frame.size.height+searchFieldBG.frame.origin.y+20, self.view.frame.size.width, self.view.frame.size.height-self.customNavBar.frame.size.height-searchFieldBG.frame.size.height-20)];
+    _hotWordView.backgroundColor = [UIColor colorWithRed:229.0/255.0
+                                                   green:229.0/255.0
+                                                    blue:229.0/255.0
+                                                   alpha:100];
+    
+    UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(10, 0, 100, 16)];
+    titleLabel.backgroundColor = [UIColor clearColor];
+    titleLabel.text = @"热门搜索:";
+    titleLabel.textColor = [UIColor blackColor];
+    [_hotWordView addSubview:titleLabel];
+    
+    NSArray *hotWordArray = @[@"羽绒衣",@"保暖内衣",@"雪地靴",@"毛呢大衣",
+                              @"男士外套",@"新款棉衣",@"时尚保温杯",@"秋冬童装",
+                              @"时尚女包",@"马丁靴",@"新款男鞋",@"围巾",@"内衣"];
+    float preLength = 0;
+    for (int x = 0 ;x<hotWordArray.count ;x++)
+    {
+        UIButton *hotButton = [UIButton buttonWithType:UIButtonTypeCustom];
+        NSString *title = hotWordArray[x];
+        [hotButton setTitle:title forState:UIControlStateNormal];
+        [hotButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+        [hotButton addTarget:self
+                      action:@selector(didHotButtonTouch:)
+            forControlEvents:UIControlEventTouchUpInside];
+        [hotButton.titleLabel setFont:[UIFont systemFontOfSize:14]];
+        
+        NSLog(@"%d",title.length);
+        if (x <= 3)
+        {
+            hotButton.frame = CGRectMake(preLength, 37.5, title.length*16+11.5, 16);
+        }
+        else if (x <= 7)
+        {
+            hotButton.frame = CGRectMake(preLength, 53.5+17.5, title.length*16+11.5, 16);
+        }
+        else
+        {
+            hotButton.frame = CGRectMake(preLength, 53.5+16+17.5+17.5, title.length*16+11.5, 16);
+        }
+        [_hotWordView addSubview:hotButton];
+        if ( x == 3 ||x == 7)
+        {
+            preLength = 0;
+        }
+        else
+        {
+            preLength += title.length*16+11.5;
+        }
+        
+    }
+    [_contentScrollView addSubview:_hotWordView];
+    _hotWordView.hidden = YES;
+}
+
+- (void)didHotButtonTouch:(UIButton*)sender
+{
+    [self.searchField resignFirstResponder];
+    _hotWordView.hidden = YES;
+    [self showFanliDetailWebView:sender.titleLabel.text];
 }
 
 

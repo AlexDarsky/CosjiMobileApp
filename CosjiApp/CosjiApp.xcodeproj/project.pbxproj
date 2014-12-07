@@ -170,6 +170,8 @@
 		18F0CD2C179269DA0031995E /* CosjiUserViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 18F0CD2A179269DA0031995E /* CosjiUserViewController.m */; };
 		18F2B3D31885366F00EA1D43 /* 淘宝返利标题虚线@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 18F2B3D21885366F00EA1D43 /* 淘宝返利标题虚线@2x.png */; };
 		18F2B3D51885386E00EA1D43 /* 淘宝返利搜索框@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 18F2B3D41885386E00EA1D43 /* 淘宝返利搜索框@2x.png */; };
+		18F683EB1A338153002F04FD /* fanli_alert01@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 18F683E91A338153002F04FD /* fanli_alert01@2x.png */; };
+		18F683EC1A338153002F04FD /* fanli_alert02@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 18F683EA1A338153002F04FD /* fanli_alert02@2x.png */; };
 		18F6E9B517D9C0270046526C /* vip.png in Resources */ = {isa = PBXBuildFile; fileRef = 18F6E97417D9C0270046526C /* vip.png */; };
 		18F6E9B617D9C0270046526C /* 九元购-动态@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 18F6E97517D9C0270046526C /* 九元购-动态@2x.png */; };
 		18F6E9B717D9C0270046526C /* 九元购-默认@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 18F6E97617D9C0270046526C /* 九元购-默认@2x.png */; };
@@ -459,6 +461,8 @@
 		18F0CD2A179269DA0031995E /* CosjiUserViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CosjiUserViewController.m; sourceTree = "<group>"; };
 		18F2B3D21885366F00EA1D43 /* 淘宝返利标题虚线@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "淘宝返利标题虚线@2x.png"; sourceTree = "<group>"; };
 		18F2B3D41885386E00EA1D43 /* 淘宝返利搜索框@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "淘宝返利搜索框@2x.png"; sourceTree = "<group>"; };
+		18F683E91A338153002F04FD /* fanli_alert01@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "fanli_alert01@2x.png"; sourceTree = "<group>"; };
+		18F683EA1A338153002F04FD /* fanli_alert02@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "fanli_alert02@2x.png"; sourceTree = "<group>"; };
 		18F6E97417D9C0270046526C /* vip.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = vip.png; sourceTree = "<group>"; };
 		18F6E97517D9C0270046526C /* 九元购-动态@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "九元购-动态@2x.png"; sourceTree = "<group>"; };
 		18F6E97617D9C0270046526C /* 九元购-默认@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "九元购-默认@2x.png"; sourceTree = "<group>"; };
@@ -981,6 +985,8 @@
 		18F6E97317D9C0270046526C /* Resource */ = {
 			isa = PBXGroup;
 			children = (
+				18F683E91A338153002F04FD /* fanli_alert01@2x.png */,
+				18F683EA1A338153002F04FD /* fanli_alert02@2x.png */,
 				18ED3A2D1A32C24F00FA582E /* button_butie@2x.png */,
 				18ED3A2B1A32C19E00FA582E /* tab2.jpg */,
 				1812FFE018A8812A008FE97B /* naoz@2x.png */,
@@ -1264,6 +1270,7 @@
 				18DCC6D9179AC0A600FA5B4A /* meironghufu@2x.png in Resources */,
 				18DCC6DA179AC0A600FA5B4A /* muyingyongpin.png in Resources */,
 				180E82541A336355003DEA18 /* TencentOpenApi_IOS_Bundle.bundle in Resources */,
+				18F683EB1A338153002F04FD /* fanli_alert01@2x.png in Resources */,
 				18DCC6DB179AC0A600FA5B4A /* muyingyongpin@2x.png in Resources */,
 				18DCC6DC179AC0A600FA5B4A /* shenghuofuwu.png in Resources */,
 				18DCC6DD179AC0A600FA5B4A /* shenghuofuwu@2x.png in Resources */,
@@ -1334,6 +1341,7 @@
 				18F6E9D017D9C0270046526C /* 更多列表@2x.png in Resources */,
 				18B7301E18A61DAA006FF27B /* 倒计时背景@2x.png in Resources */,
 				1811E320195C7B01002AFA3F /* 新返利通道-动态@2x.png in Resources */,
+				18F683EC1A338153002F04FD /* fanli_alert02@2x.png in Resources */,
 				18F6E9D217D9C0270046526C /* 流量节省模式@2x.png in Resources */,
 				18F6E9D317D9C0270046526C /* 淘宝-动态@2x.png in Resources */,
 				18F6E9D417D9C0270046526C /* 淘宝-默认@2x.png in Resources */,
