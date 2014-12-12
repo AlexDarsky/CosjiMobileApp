@@ -1610,7 +1610,7 @@
 					armv7s,
 					armv7,
 				);
-				CODE_SIGN_IDENTITY = "iPhone Developer: Sheng Zhou (8F29FUSYL2)";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Chengdu Keji Technology Co.,Ltd (8HDM4NC496)";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"/Users/apple/MyWorkSpace/Baidu-SocialShare-SDK-iOS-L3-2.0.4/BaiduSocialShare",
@@ -1639,7 +1639,7 @@
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = "";
 				PRODUCT_NAME = CosjiApp;
-				PROVISIONING_PROFILE = "6b96c32e-ad60-412f-95b6-6f574cd4c75c";
+				PROVISIONING_PROFILE = "b91ed952-4c2b-4a4a-bb9a-bf601cf3de22";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = 1;
 				VALID_ARCHS = "armv7s armv7";

@@ -300,7 +300,7 @@
     }
     else
     {
-        UIAlertView *alert=[[UIAlertView alloc] initWithTitle:@"提示" message:@"登录获取返利" delegate:self cancelButtonTitle:@"跳过" otherButtonTitles:@"登陆",nil];
+        UIAlertView *alert=[[UIAlertView alloc] initWithTitle:@"提示" message:@"登录获取返利" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"登陆",nil];
         alert.tag=110;
         [alert show];
         return;
